@@ -19,7 +19,7 @@ exports.weeksInYear = {
     },
 
     "weeksInYear doy/dow = 1/4": function (test) {
-        frozenMoment.lang('1/4', {week: {dow: 1, doy: 4}});
+        frozenMoment.locale('1/4', {week: {dow: 1, doy: 4}});
 
         test.equal(frozenMoment([2004]).weeksInYear(), 53, "2004 has 53 weeks");
         test.equal(frozenMoment([2005]).weeksInYear(), 52, "2005 has 53 weeks");
@@ -38,7 +38,7 @@ exports.weeksInYear = {
     },
 
     "weeksInYear doy/dow = 6/12": function (test) {
-        frozenMoment.lang('6/12', {week: {dow: 6, doy: 12}});
+        frozenMoment.locale('6/12', {week: {dow: 6, doy: 12}});
 
         test.equal(frozenMoment([2004]).weeksInYear(), 53, "2004 has 53 weeks");
         test.equal(frozenMoment([2005]).weeksInYear(), 52, "2005 has 53 weeks");
@@ -57,7 +57,7 @@ exports.weeksInYear = {
     },
 
     "weeksInYear doy/dow = 1/7": function (test) {
-        frozenMoment.lang('1/7', {week: {dow: 1, doy: 7}});
+        frozenMoment.locale('1/7', {week: {dow: 1, doy: 7}});
 
         test.equal(frozenMoment([2004]).weeksInYear(), 52, "2004 has 53 weeks");
         test.equal(frozenMoment([2005]).weeksInYear(), 52, "2005 has 53 weeks");
@@ -76,7 +76,7 @@ exports.weeksInYear = {
     },
 
     "weeksInYear doy/dow = 0/6": function (test) {
-        frozenMoment.lang('0/6', {week: {dow: 0, doy: 6}});
+        frozenMoment.locale('0/6', {week: {dow: 0, doy: 6}});
 
         test.equal(frozenMoment([2004]).weeksInYear(), 52, "2004 has 53 weeks");
         test.equal(frozenMoment([2005]).weeksInYear(), 53, "2005 has 53 weeks");

@@ -2,7 +2,7 @@ var frozenMoment = require("../../frozen-moment");
 
 exports.minMax = {
     setUp : function (cb) {
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
         frozenMoment.createFromInputFallback = function () {
             throw new Error("input not handled by frozenMoment");
         };
@@ -10,7 +10,7 @@ exports.minMax = {
     },
 
     tearDown : function (cb) {
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
         cb();
     },
 

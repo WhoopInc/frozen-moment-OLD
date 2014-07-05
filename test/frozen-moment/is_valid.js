@@ -89,7 +89,7 @@ exports.isValid = {
     "string with bad month name" : function (test) {
         test.expect(2);
 
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
 
         test.equal(frozenMoment('01-Nam-2012', 'DD-MMM-YYYY').isValid(), false, '"Nam" is an invalid month');
         test.equal(frozenMoment('01-Aug-2012', 'DD-MMM-YYYY').isValid(), true, '"Aug" is a valid month');

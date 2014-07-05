@@ -178,7 +178,7 @@ exports.gettersSetters = {
     "setters strings" : function (test) {
         test.expect(7);
 
-        var a = momentBuilder([2012]).lang('en');
+        var a = momentBuilder([2012]).locale('en');
         test.equal(a.day(0).day('Wednesday').freeze().day(), 3, 'day full name');
         test.equal(a.day(0).day('Wed').freeze().day(), 3, 'day short name');
         test.equal(a.day(0).day('We').freeze().day(), 3, 'day minimal name');

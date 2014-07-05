@@ -2,7 +2,7 @@ var frozenMoment = require("../../frozen-moment");
 
 exports.utc = {
     setUp : function (done) {
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
         frozenMoment.createFromInputFallback = function () {
             throw new Error("input not handled by frozenMoment");
         };
@@ -11,7 +11,7 @@ exports.utc = {
     },
 
     tearDown : function (cb) {
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
         cb();
     },
 
