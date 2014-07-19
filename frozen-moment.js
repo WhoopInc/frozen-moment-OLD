@@ -399,11 +399,11 @@
             seconds * 1e3 + // 1000
             minutes * 6e4 + // 1000 * 60
             hours * 36e5; // 1000 * 60 * 60
-        // Because of dateAddRemove treats 24 hours as different from a
+        // Because dateAddRemove treats 24 hours as different from a
         // day when working around DST, we need to store them separately
         this._days = +days +
             weeks * 7;
-        // It is impossible translate months into days without knowing
+        // It is impossible to translate months into days without knowing
         // which months you are are talking about, so we have to store
         // it separately.
         this._months = +months +
@@ -694,7 +694,8 @@
         return key ? key.toLowerCase().replace('_', '-') : key;
     }
 
-    // Return a frozenMoment from input, that is local/utc/zone equivalent to model.
+    // Return a frozenMoment from input, that is local/utc/zone equivalent to
+    // model.
     function makeAs(input, model) {
         return model._isUTC ? frozenMoment(input).zone(model._offset || 0) :
             frozenMoment(input).local();
@@ -805,8 +806,8 @@
         },
 
         isPM : function (input) {
-            // IE8 Quirks Mode & IE7 Standards Mode do not allow accessing strings like arrays
-            // Using charAt should be more compatible.
+            // IE8 Quirks Mode & IE7 Standards Mode do not allow accessing
+            // strings like arrays.  Using charAt should be more compatible.
             return ((input + '').toLowerCase().charAt(0) === 'p');
         },
 
@@ -1271,9 +1272,9 @@
             dow = 1;
             doy = 4;
 
-            // TODO: We need to take the current isoWeekYear, but that depends on
-            // how we interpret now (local, utc, fixed offset). So create
-            // a now version of current config (take local/utc/offset flags, and
+            // TODO: We need to take the current isoWeekYear, but that depends
+            // on how we interpret now (local, utc, fixed offset). So create a
+            // now version of current config (take local/utc/offset flags, and
             // create now).
             weekYear = dfl(w.GG, config._a[YEAR], weekOfYear(frozenMoment(), 1, 4).year);
             week = dfl(w.W, 1);
@@ -1308,8 +1309,9 @@
 
     // convert an array to a date.
     // the array should mirror the parameters below
-    // note: all values past the year are optional and will default to the lowest possible value.
-    // [year, month, day , hour, minute, second, millisecond]
+    // note: all values past the year are optional and will default to the
+    // lowest possible value.
+    // [year, month, day, hour, minute, second, millisecond]
     function dateFromConfig(config) {
         var i, date, input = [], currentDate, yearToUse;
 
@@ -1403,7 +1405,8 @@
         config._a = [];
         config._pf.empty = true;
 
-        // This array is used to make a Date, either with `new Date` or `Date.UTC`
+        // This array is used to make a Date, either with `new Date` or
+        // `Date.UTC`
         var lang = getLangDefinition(config._l),
             string = '' + config._i,
             i, parsedInput, tokens, token, skipped,
@@ -1494,10 +1497,11 @@
                 continue;
             }
 
-            // if there is any input that was not parsed add a penalty for that format
+            // if there is any input that was not parsed, add a penalty for that
+            // format
             currentScore += tempConfig._pf.charsLeftOver;
 
-            //or tokens
+            // or tokens
             currentScore += tempConfig._pf.unusedTokens.length * 10;
 
             tempConfig._pf.score = currentScore;
@@ -1574,11 +1578,11 @@
     }
 
     function makeDate(y, m, d, h, M, s, ms) {
-        //can't just apply() to create a date:
-        //http://stackoverflow.com/questions/181348/instantiating-a-javascript-object-by-calling-prototype-constructor-apply
+        // can't just apply() to create a date:
+        // http://stackoverflow.com/questions/181348/instantiating-a-javascript-object-by-calling-prototype-constructor-apply
         var date = new Date(y, m, d, h, M, s, ms);
 
-        //the date constructor doesn't accept years < 1970
+        // the date constructor doesn't accept years < 1970
         if (y < 1970) {
             date.setFullYear(y);
         }
@@ -1749,11 +1753,11 @@
 
     frozenMoment.suppressDeprecationWarnings = false;
 
-    // Pick a frozenMoment m from frozenMoments so that m[fn](other) is true for all
-    // other. This relies on the function fn to be transitive.
+    // Pick a frozenMoment m from frozenMoments so that m[fn](other) is true
+    // for all other. This relies on the function fn to be transitive.
     //
-    // frozenMoments should either be an array of frozenMoment objects or an array, whose
-    // first element is an array of frozenMoment objects.
+    // frozenMoments should either be an array of frozenMoment objects or an
+    // array, whose first element is an array of frozenMoment objects.
     function pickBy(fn, frozenMoments) {
         var res, i;
         if (frozenMoments.length === 1 && isArray(frozenMoments[0])) {
@@ -2435,8 +2439,6 @@
     }
 
     function yearsToDays (years) {
-        // years * 365 + absRound(years / 4) -
-        //     absRound(years / 100) + absRound(years / 400);
         return years * 146097 / 400;
     }
 
