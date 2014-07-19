@@ -501,12 +501,6 @@
     function createAdder(direction, name) {
         return function (val, period) {
             var dur, tmp;
-            //invert the arguments, but complain about it
-            if (period !== null && !isNaN(+period)) {
-                deprecateSimple(name, "frozenMoment()." + name  + "(period, number) is deprecated. Please use frozenMoment()." + name + "(number, period).");
-                tmp = val; val = period; period = tmp;
-            }
-
             val = typeof val === 'string' ? +val : val;
             dur = frozenMoment.duration(val, period);
             addOrSubtractDurationFromMoment(this, dur, direction);
@@ -1755,16 +1749,6 @@
 
     frozenMoment.suppressDeprecationWarnings = false;
 
-    frozenMoment.createFromInputFallback = deprecate(
-        'frozenMoment construction falls back to js Date. This is ' +
-        'discouraged and will be removed in upcoming major ' +
-        'release. Please refer to ' +
-        'https://github.com/moment/moment/issues/1407 for more info.',
-        function (config) {
-            config._d = new Date(config._i);
-        }
-    );
-
     // Pick a frozenMoment m from frozenMoments so that m[fn](other) is true for all
     // other. This relies on the function fn to be transitive.
     //
@@ -2228,22 +2212,6 @@
             return +this.clone().startOf(units) === +makeAs(input, this).startOf(units);
         },
 
-        min: deprecate(
-                 'frozenMoment().min is deprecated, use frozenMoment.min instead. https://github.com/moment/moment/issues/1548',
-                 function (other) {
-                     other = frozenMoment.apply(null, arguments);
-                     return other < this ? this : other;
-                 }
-         ),
-
-        max: deprecate(
-                'frozenMoment().max is deprecated, use frozenMoment.max instead. https://github.com/moment/moment/issues/1548',
-                function (other) {
-                    other = frozenMoment.apply(null, arguments);
-                    return other > this ? this : other;
-                }
-        ),
-
         // keepLocalTime = true means only change the timezone, without
         // affecting the local hour. So 5:31:26 +0300 --[zone(2, true)]-->
         // 5:31:26 +0200 It is possible that 5:31:26 doesn't exist int zone
@@ -2447,13 +2415,10 @@
     // this rule.
     frozenMoment.fn.hour = frozenMoment.fn.hours = makeAccessor('Hours', true);
     // frozenMoment.fn.month is defined separately
-    frozenMoment.fn.date = makeAccessor('Date', true);
-    frozenMoment.fn.dates = deprecate('dates accessor is deprecated. Use date instead.', makeAccessor('Date', true));
+    frozenMoment.fn.date = frozenMoment.fn.days = makeAccessor('Date', true);
     frozenMoment.fn.year = makeAccessor('FullYear', true);
-    frozenMoment.fn.years = deprecate('years accessor is deprecated. Use year instead.', makeAccessor('FullYear', true));
 
     // add plural methods
-    frozenMoment.fn.days = frozenMoment.fn.day;
     frozenMoment.fn.months = frozenMoment.fn.month;
     frozenMoment.fn.weeks = frozenMoment.fn.week;
     frozenMoment.fn.isoWeeks = frozenMoment.fn.isoWeek;
@@ -2610,14 +2575,6 @@
 
         lang : frozenMoment.fn.lang,
 
-        toIsoString : deprecate(
-            "toIsoString() is deprecated. Please use toISOString() instead " +
-            "(notice the capitals)",
-            function () {
-                return this.toISOString();
-            }
-        ),
-
         toISOString : function () {
             // inspired by https://github.com/dordille/moment-isoduration/blob/master/moment.isoduration.js
             var years = Math.abs(this.years()),
@@ -2705,27 +2662,12 @@
         Exposing Moment
     ************************************/
 
-    function makeGlobal(shouldDeprecate) {
-        /*global ender:false */
-        if (typeof ender !== 'undefined') {
-            return;
-        }
-        oldGlobalMoment = globalScope.frozenMoment;
-        if (shouldDeprecate) {
-            globalScope.frozenMoment = deprecate(
-                    'Accessing FrozenMoment through the global scope is ' +
-                    'deprecated, and will be removed in an upcoming ' +
-                    'release.',
-                    frozenMoment);
-        } else {
-            globalScope.frozenMoment = frozenMoment;
-        }
-    }
+    /*global ender:false*/
 
     // CommonJS module is defined
-    if (hasModule) {
+    if (hasModule) {  // node
         module.exports = frozenMoment;
-    } else if (typeof define === 'function' && define.amd) {
+    } else if (typeof define === 'function' && define.amd) {  // amd
         define('frozenMoment', function (require, exports, module) {
             if (module.config && module.config() && module.config().noGlobal === true) {
                 // release the global variable
@@ -2734,8 +2676,8 @@
 
             return frozenMoment;
         });
-        makeGlobal(true);
-    } else {
-        makeGlobal();
+    } else if (typeof ender === 'undefined') {  // browser
+        oldGlobalMoment = globalScope.frozenMoment;
+        globalScope.frozenMoment = frozenMoment;
     }
 }).call(this);

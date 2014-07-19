@@ -8,7 +8,7 @@ exports.add = {
         done();
     },
 
-    "add short reverse args" : function (test) {
+    "add short args" : function (test) {
         test.expect(16);
 
         var a = frozenMoment(), b, c, d;
@@ -44,7 +44,7 @@ exports.add = {
         test.done();
     },
 
-    "add long reverse args" : function (test) {
+    "add long args" : function (test) {
         test.expect(9);
 
         var a = frozenMoment();
@@ -68,7 +68,7 @@ exports.add = {
         test.done();
     },
 
-    "add long singular reverse args" : function (test) {
+    "add long singular args" : function (test) {
         test.expect(9);
 
         var a = frozenMoment();
@@ -92,85 +92,7 @@ exports.add = {
         test.done();
     },
 
-    "add string long reverse args" : function (test) {
-        test.expect(10);
-
-        var a = frozenMoment(), b;
-        a.year(2011);
-        a.month(9);
-        a.date(12);
-        a.hours(6);
-        a.minutes(7);
-        a.seconds(8);
-        a.milliseconds(500);
-
-        b = a.clone();
-
-        test.equal(a.add('millisecond', 50).milliseconds(), 550, 'Add milliseconds');
-        test.equal(a.add('second', 1).seconds(), 9, 'Add seconds');
-        test.equal(a.add('minute', 1).minutes(), 8, 'Add minutes');
-        test.equal(a.add('hour', 1).hours(), 7, 'Add hours');
-        test.equal(a.add('day', 1).date(), 13, 'Add date');
-        test.equal(a.add('week', 1).date(), 20, 'Add week');
-        test.equal(a.add('month', 1).month(), 10, 'Add month');
-        test.equal(a.add('year', 1).year(), 2012, 'Add year');
-        test.equal(b.add('day', '01').date(), 13, 'Add date');
-        test.equal(a.add('quarter', 1).month(), 1, 'Add quarter');
-        test.done();
-    },
-
-    "add string long singular reverse args" : function (test) {
-        test.expect(10);
-
-        var a = frozenMoment(), b;
-        a.year(2011);
-        a.month(9);
-        a.date(12);
-        a.hours(6);
-        a.minutes(7);
-        a.seconds(8);
-        a.milliseconds(500);
-
-        b = a.clone();
-
-        test.equal(a.add('milliseconds', 50).milliseconds(), 550, 'Add milliseconds');
-        test.equal(a.add('seconds', 1).seconds(), 9, 'Add seconds');
-        test.equal(a.add('minutes', 1).minutes(), 8, 'Add minutes');
-        test.equal(a.add('hours', 1).hours(), 7, 'Add hours');
-        test.equal(a.add('days', 1).date(), 13, 'Add date');
-        test.equal(a.add('weeks', 1).date(), 20, 'Add week');
-        test.equal(a.add('months', 1).month(), 10, 'Add month');
-        test.equal(a.add('years', 1).year(), 2012, 'Add year');
-        test.equal(b.add('days', '01').date(), 13, 'Add date');
-        test.equal(a.add('quarters', 1).month(), 1, 'Add quarter');
-        test.done();
-    },
-
-    "add string short reverse args" : function (test) {
-        test.expect(9);
-
-        var a = frozenMoment();
-        a.year(2011);
-        a.month(9);
-        a.date(12);
-        a.hours(6);
-        a.minutes(7);
-        a.seconds(8);
-        a.milliseconds(500);
-
-        test.equal(a.add('ms', 50).milliseconds(), 550, 'Add milliseconds');
-        test.equal(a.add('s', 1).seconds(), 9, 'Add seconds');
-        test.equal(a.add('m', 1).minutes(), 8, 'Add minutes');
-        test.equal(a.add('h', 1).hours(), 7, 'Add hours');
-        test.equal(a.add('d', 1).date(), 13, 'Add date');
-        test.equal(a.add('w', 1).date(), 20, 'Add week');
-        test.equal(a.add('M', 1).month(), 10, 'Add month');
-        test.equal(a.add('y', 1).year(), 2012, 'Add year');
-        test.equal(a.add('Q', 1).month(), 1, 'Add quarter');
-        test.done();
-    },
-
-    "add string long" : function (test) {
+    "add string long singular" : function (test) {
         test.expect(9);
 
         var a = frozenMoment();
@@ -194,7 +116,7 @@ exports.add = {
         test.done();
     },
 
-    "add string long singular" : function (test) {
+    "add string long" : function (test) {
         test.expect(9);
 
         var a = frozenMoment();
@@ -239,54 +161,6 @@ exports.add = {
         test.equal(a.add(1, 'M').month(), 10, 'Add month');
         test.equal(a.add(1, 'y').year(), 2012, 'Add year');
         test.equal(a.add(1, 'Q').month(), 1, 'Add quarter');
-        test.done();
-    },
-
-    "add strings string short args" : function (test) {
-        test.expect(9);
-
-        var a = frozenMoment();
-        a.year(2011);
-        a.month(9);
-        a.date(12);
-        a.hours(6);
-        a.minutes(7);
-        a.seconds(8);
-        a.milliseconds(500);
-
-        test.equal(a.add('ms', '50').milliseconds(), 550, 'Add milliseconds');
-        test.equal(a.add('s', '1').seconds(), 9, 'Add seconds');
-        test.equal(a.add('m', '1').minutes(), 8, 'Add minutes');
-        test.equal(a.add('h', '1').hours(), 7, 'Add hours');
-        test.equal(a.add('d', '1').date(), 13, 'Add date');
-        test.equal(a.add('w', '1').date(), 20, 'Add week');
-        test.equal(a.add('M', '1').month(), 10, 'Add month');
-        test.equal(a.add('y', '1').year(), 2012, 'Add year');
-        test.equal(a.add('Q', '1').month(), 1, 'Add quarter');
-        test.done();
-    },
-
-    "subtract strings string short args" : function (test) {
-        test.expect(9);
-
-        var a = frozenMoment();
-        a.year(2011);
-        a.month(9);
-        a.date(12);
-        a.hours(6);
-        a.minutes(7);
-        a.seconds(8);
-        a.milliseconds(500);
-
-        test.equal(a.subtract('ms', '50').milliseconds(), 450, 'Subtract milliseconds');
-        test.equal(a.subtract('s', '1').seconds(), 7, 'Subtract seconds');
-        test.equal(a.subtract('m', '1').minutes(), 6, 'Subtract minutes');
-        test.equal(a.subtract('h', '1').hours(), 5, 'Subtract hours');
-        test.equal(a.subtract('d', '1').date(), 11, 'Subtract date');
-        test.equal(a.subtract('w', '1').date(), 4, 'Subtract week');
-        test.equal(a.subtract('M', '1').month(), 8, 'Subtract month');
-        test.equal(a.subtract('y', '1').year(), 2010, 'Subtract year');
-        test.equal(a.subtract('Q', '1').month(), 5, 'Subtract quarter');
         test.done();
     },
 

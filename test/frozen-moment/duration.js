@@ -293,11 +293,6 @@ exports.duration = {
         test.done();
     },
 
-    "toIsoString deprecation" : function (test) {
-        test.equal(frozenMoment.duration({}).toIsoString(), frozenMoment.duration({}).toISOString(), "toIsoString delegates to toISOString");
-        test.done();
-    },
-
     "`isodate` (python) test cases" : function (test) {
         test.expect(24);
         test.equal(frozenMoment.duration("P18Y9M4DT11H9M8S").asSeconds(), frozenMoment.duration({y: 18, M: 9, d: 4, h: 11, m: 9, s: 8}).asSeconds(), "python isodate 1");
