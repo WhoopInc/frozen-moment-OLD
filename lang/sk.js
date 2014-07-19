@@ -1,17 +1,17 @@
-// moment.js language configuration
+// frozen-moment.js language configuration
 // language : slovak (sk)
 // author : Martin Minka : https://github.com/k2s
 // based on work of petrbela : https://github.com/petrbela
 
 (function (factory) {
     if (typeof define === 'function' && define.amd) {
-        define(['moment'], factory); // AMD
+        define(['frozenMoment'], factory); // AMD
     } else if (typeof exports === 'object') {
-        module.exports = factory(require('../moment')); // Node
+        module.exports = factory(require('../frozen-moment')); // Node
     } else {
-        factory(window.moment); // Browser global
+        factory(window.frozenMoment); // Browser global
     }
-}(function (moment) {
+}(function (frozenMoment) {
     var months = "január_február_marec_apríl_máj_jún_júl_august_september_október_november_december".split("_"),
         monthsShort = "jan_feb_mar_apr_máj_jún_júl_aug_sep_okt_nov_dec".split("_");
 
@@ -72,7 +72,7 @@
         }
     }
 
-    return moment.lang('sk', {
+    return frozenMoment.lang('sk', {
         months : months,
         monthsShort : monthsShort,
         monthsParse : (function (months, monthsShort) {

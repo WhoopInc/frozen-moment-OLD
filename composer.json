@@ -1,7 +1,8 @@
 {
-    "name": "moment/moment",
+    "name": "WhoopInc/frozen-moment",
     "description": "Parse, validate, manipulate, and display dates in javascript.",
     "keywords": [
+        "frozen",
         "moment",
         "date",
         "time",
@@ -12,8 +13,8 @@
         "l10n",
         "ender"
     ],
-    "homepage": "http://github.com/moment/moment/",
-    "authors": [{"name": "Tim Wood", "email": "washwithcare@gmail.com"}],
+    "homepage": "http://github.com/WhoopInc/frozen-moment/",
+    "authors": [{"name": "Lucas Sanders", "email": "sanders@whoop.com"}],
     "license": "MIT",
     "type": "component",
     "require": {
@@ -22,7 +23,7 @@
     "extra": {
         "component": {
             "scripts": [
-                "moment.js"
+                "frozen-moment.js"
             ],
             "files": [
                "min/*.js",

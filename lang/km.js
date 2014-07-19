@@ -1,17 +1,17 @@
-// moment.js language configuration
+// frozen-moment.js language configuration
 // language : khmer (km)
 // author : Kruy Vanna : https://github.com/kruyvanna
 
 (function (factory) {
     if (typeof define === 'function' && define.amd) {
-        define(['moment'], factory); // AMD
+        define(['frozenMoment'], factory); // AMD
     } else if (typeof exports === 'object') {
-        module.exports = factory(require('../moment')); // Node
+        module.exports = factory(require('../frozen-moment')); // Node
     } else {
-        factory(window.moment); // Browser global
+        factory(window.frozenMoment); // Browser global
     }
-}(function (moment) {
-    return moment.lang('km', {
+}(function (frozenMoment) {
+    return frozenMoment.lang('km', {
         months: "មករា_កុម្ភៈ_មិនា_មេសា_ឧសភា_មិថុនា_កក្កដា_សីហា_កញ្ញា_តុលា_វិច្ឆិកា_ធ្នូ".split("_"),
         monthsShort: "មករា_កុម្ភៈ_មិនា_មេសា_ឧសភា_មិថុនា_កក្កដា_សីហា_កញ្ញា_តុលា_វិច្ឆិកា_ធ្នូ".split("_"),
         weekdays: "អាទិត្យ_ច័ន្ទ_អង្គារ_ពុធ_ព្រហស្បតិ៍_សុក្រ_សៅរ៍".split("_"),

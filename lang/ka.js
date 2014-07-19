@@ -1,16 +1,16 @@
-// moment.js language configuration
+// frozen-moment.js language configuration
 // language : Georgian (ka)
 // author : Irakli Janiashvili : https://github.com/irakli-janiashvili
 
 (function (factory) {
     if (typeof define === 'function' && define.amd) {
-        define(['moment'], factory); // AMD
+        define(['frozenMoment'], factory); // AMD
     } else if (typeof exports === 'object') {
-        module.exports = factory(require('../moment')); // Node
+        module.exports = factory(require('../frozen-moment')); // Node
     } else {
-        factory(window.moment); // Browser global
+        factory(window.frozenMoment); // Browser global
     }
-}(function (moment) {
+}(function (frozenMoment) {
     function monthsCaseReplace(m, format) {
         var months = {
             'nominative': 'იანვარი_თებერვალი_მარტი_აპრილი_მაისი_ივნისი_ივლისი_აგვისტო_სექტემბერი_ოქტომბერი_ნოემბერი_დეკემბერი'.split('_'),
@@ -37,7 +37,7 @@
         return weekdays[nounCase][m.day()];
     }
 
-    return moment.lang('ka', {
+    return frozenMoment.lang('ka', {
         months : monthsCaseReplace,
         monthsShort : "იან_თებ_მარ_აპრ_მაი_ივნ_ივლ_აგვ_სექ_ოქტ_ნოე_დეკ".split("_"),
         weekdays : weekdaysCaseReplace,

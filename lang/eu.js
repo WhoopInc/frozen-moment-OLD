@@ -1,17 +1,17 @@
-// moment.js language configuration
+// frozen-moment.js language configuration
 // language : euskara (eu)
 // author : Eneko Illarramendi : https://github.com/eillarra
 
 (function (factory) {
     if (typeof define === 'function' && define.amd) {
-        define(['moment'], factory); // AMD
+        define(['frozenMoment'], factory); // AMD
     } else if (typeof exports === 'object') {
-        module.exports = factory(require('../moment')); // Node
+        module.exports = factory(require('../frozen-moment')); // Node
     } else {
-        factory(window.moment); // Browser global
+        factory(window.frozenMoment); // Browser global
     }
-}(function (moment) {
-    return moment.lang('eu', {
+}(function (frozenMoment) {
+    return frozenMoment.lang('eu', {
         months : "urtarrila_otsaila_martxoa_apirila_maiatza_ekaina_uztaila_abuztua_iraila_urria_azaroa_abendua".split("_"),
         monthsShort : "urt._ots._mar._api._mai._eka._uzt._abu._ira._urr._aza._abe.".split("_"),
         weekdays : "igandea_astelehena_asteartea_asteazkena_osteguna_ostirala_larunbata".split("_"),

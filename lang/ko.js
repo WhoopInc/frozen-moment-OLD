@@ -1,4 +1,4 @@
-// moment.js language configuration
+// frozen-moment.js language configuration
 // language : korean (ko)
 //
 // authors
@@ -7,14 +7,14 @@
 // - Jeeeyul Lee <jeeeyul@gmail.com>
 (function (factory) {
     if (typeof define === 'function' && define.amd) {
-        define(['moment'], factory); // AMD
+        define(['frozenMoment'], factory); // AMD
     } else if (typeof exports === 'object') {
-        module.exports = factory(require('../moment')); // Node
+        module.exports = factory(require('../frozen-moment')); // Node
     } else {
-        factory(window.moment); // Browser global
+        factory(window.frozenMoment); // Browser global
     }
-}(function (moment) {
-    return moment.lang('ko', {
+}(function (frozenMoment) {
+    return frozenMoment.lang('ko', {
         months : "1월_2월_3월_4월_5월_6월_7월_8월_9월_10월_11월_12월".split("_"),
         monthsShort : "1월_2월_3월_4월_5월_6월_7월_8월_9월_10월_11월_12월".split("_"),
         weekdays : "일요일_월요일_화요일_수요일_목요일_금요일_토요일".split("_"),

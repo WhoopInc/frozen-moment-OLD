@@ -1,4 +1,4 @@
-// moment.js language configuration
+// frozen-moment.js language configuration
 // language : belarusian (be)
 // author : Dmitry Demidov : https://github.com/demidov91
 // author: Praleska: http://praleska.pro/
@@ -6,13 +6,13 @@
 
 (function (factory) {
     if (typeof define === 'function' && define.amd) {
-        define(['moment'], factory); // AMD
+        define(['frozenMoment'], factory); // AMD
     } else if (typeof exports === 'object') {
-        module.exports = factory(require('../moment')); // Node
+        module.exports = factory(require('../frozen-moment')); // Node
     } else {
-        factory(window.moment); // Browser global
+        factory(window.frozenMoment); // Browser global
     }
-}(function (moment) {
+}(function (frozenMoment) {
     function plural(word, num) {
         var forms = word.split('_');
         return num % 10 === 1 && num % 100 !== 11 ? forms[0] : (num % 10 >= 2 && num % 10 <= 4 && (num % 100 < 10 || num % 100 >= 20) ? forms[1] : forms[2]);
@@ -63,7 +63,7 @@
         return weekdays[nounCase][m.day()];
     }
 
-    return moment.lang('be', {
+    return frozenMoment.lang('be', {
         months : monthsCaseReplace,
         monthsShort : 'студ_лют_сак_крас_трав_чэрв_ліп_жнів_вер_каст_ліст_снеж'.split('_'),
         weekdays : weekdaysCaseReplace,

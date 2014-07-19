@@ -1,17 +1,17 @@
-// moment.js language configuration
+// frozen-moment.js language configuration
 // language : macedonian (mk)
 // author : Borislav Mickov : https://github.com/B0k0
 
 (function (factory) {
     if (typeof define === 'function' && define.amd) {
-        define(['moment'], factory); // AMD
+        define(['frozenMoment'], factory); // AMD
     } else if (typeof exports === 'object') {
-        module.exports = factory(require('../moment')); // Node
+        module.exports = factory(require('../frozen-moment')); // Node
     } else {
-        factory(window.moment); // Browser global
+        factory(window.frozenMoment); // Browser global
     }
-}(function (moment) {
-    return moment.lang('mk', {
+}(function (frozenMoment) {
+    return frozenMoment.lang('mk', {
         months : "јануари_февруари_март_април_мај_јуни_јули_август_септември_октомври_ноември_декември".split("_"),
         monthsShort : "јан_фев_мар_апр_мај_јун_јул_авг_сеп_окт_ное_дек".split("_"),
         weekdays : "недела_понеделник_вторник_среда_четврток_петок_сабота".split("_"),

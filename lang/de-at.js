@@ -1,4 +1,4 @@
-// moment.js language configuration
+// frozen-moment.js language configuration
 // language : austrian german (de-at)
 // author : lluchs : https://github.com/lluchs
 // author: Menelion Elensúle: https://github.com/Oire
@@ -6,13 +6,13 @@
 
 (function (factory) {
     if (typeof define === 'function' && define.amd) {
-        define(['moment'], factory); // AMD
+        define(['frozenMoment'], factory); // AMD
     } else if (typeof exports === 'object') {
-        module.exports = factory(require('../moment')); // Node
+        module.exports = factory(require('../frozen-moment')); // Node
     } else {
-        factory(window.moment); // Browser global
+        factory(window.frozenMoment); // Browser global
     }
-}(function (moment) {
+}(function (frozenMoment) {
     function processRelativeTime(number, withoutSuffix, key, isFuture) {
         var format = {
             'm': ['eine Minute', 'einer Minute'],
@@ -27,7 +27,7 @@
         return withoutSuffix ? format[key][0] : format[key][1];
     }
 
-    return moment.lang('de-at', {
+    return frozenMoment.lang('de-at', {
         months : "Jänner_Februar_März_April_Mai_Juni_Juli_August_September_Oktober_November_Dezember".split("_"),
         monthsShort : "Jän._Febr._Mrz._Apr._Mai_Jun._Jul._Aug._Sept._Okt._Nov._Dez.".split("_"),
         weekdays : "Sonntag_Montag_Dienstag_Mittwoch_Donnerstag_Freitag_Samstag".split("_"),

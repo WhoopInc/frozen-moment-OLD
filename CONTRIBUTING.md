@@ -9,8 +9,8 @@ Contributing code
 To contribute, fork the library and install grunt and dependencies. You need [node](http://nodejs.org/); use [nvm](https://github.com/creationix/nvm) or [nenv](https://github.com/ryuone/nenv) to install it.
 
 ```bash
-git clone https://github.com/moment/moment.git
-cd moment
+git clone https://github.com/WhoopInc/frozen-moment.git
+cd frozen-moment
 npm install -g grunt-cli
 npm install
 git checkout develop  # all patches against develop branch, please!
@@ -21,7 +21,7 @@ Very important notes
 ====================
 
  * **Pull pull requests to the `master` branch will be closed.** Please submit all pull requests to the `develop` branch.
- * **Language translations will not be merged without unit tests.** See [the British English unit tests](https://github.com/moment/moment/blob/develop/test/lang/en-gb.js) for an example.
+ * **Language translations will not be merged without unit tests.** See [the British English unit tests](https://github.com/WhoopInc/frozen-moment/blob/master/test/lang/en-gb.js) for an example.
  * **Do not include the minified files in your pull request.** Don't worry, we'll build them when we cut a release.
 
 Grunt tasks

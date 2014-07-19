@@ -1,1 +1,1 @@
-$.ender({ moment: require('moment') })
+$.ender({ frozenMoment: require('frozen-moment') })

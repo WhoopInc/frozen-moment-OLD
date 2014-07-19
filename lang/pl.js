@@ -1,16 +1,16 @@
-// moment.js language configuration
+// frozen-moment.js language configuration
 // language : polish (pl)
 // author : Rafal Hirsz : https://github.com/evoL
 
 (function (factory) {
     if (typeof define === 'function' && define.amd) {
-        define(['moment'], factory); // AMD
+        define(['frozenMoment'], factory); // AMD
     } else if (typeof exports === 'object') {
-        module.exports = factory(require('../moment')); // Node
+        module.exports = factory(require('../frozen-moment')); // Node
     } else {
-        factory(window.moment); // Browser global
+        factory(window.frozenMoment); // Browser global
     }
-}(function (moment) {
+}(function (frozenMoment) {
     var monthsNominative = "styczeń_luty_marzec_kwiecień_maj_czerwiec_lipiec_sierpień_wrzesień_październik_listopad_grudzień".split("_"),
         monthsSubjective = "stycznia_lutego_marca_kwietnia_maja_czerwca_lipca_sierpnia_września_października_listopada_grudnia".split("_");
 
@@ -36,12 +36,12 @@
         }
     }
 
-    return moment.lang('pl', {
-        months : function (momentToFormat, format) {
+    return frozenMoment.lang('pl', {
+        months : function (frozenMomentToFormat, format) {
             if (/D MMMM/.test(format)) {
-                return monthsSubjective[momentToFormat.month()];
+                return monthsSubjective[frozenMomentToFormat.month()];
             } else {
-                return monthsNominative[momentToFormat.month()];
+                return monthsNominative[frozenMomentToFormat.month()];
             }
         },
         monthsShort : "sty_lut_mar_kwi_maj_cze_lip_sie_wrz_paź_lis_gru".split("_"),

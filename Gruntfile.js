@@ -1,8 +1,8 @@
 module.exports = function (grunt) {
     var embedOption = grunt.option('embedLanguages'),
         embedLanguageDest = embedOption ?
-            'min/moment-with-customlangs.js' :
-            'min/moment-with-langs.js',
+            'min/frozen-moment-with-customlangs.js' :
+            'min/frozen-moment-with-langs.js',
         embedLanguageLangs = 'lang/*.js';
 
     if (embedOption && embedOption.match(/,/)) {
@@ -22,7 +22,7 @@ module.exports = function (grunt) {
             tests: {
                 src: [
                     'test/browser-prefix.js',
-                    'test/moment/*.js',
+                    'test/frozen-moment/*.js',
                     'test/lang/*.js',
                     'test/browser-suffix.js'
                 ],
@@ -37,13 +37,13 @@ module.exports = function (grunt) {
             options: {
                 frameworks: ['nodeunit'],
                 files: [
-                    'min/moment-with-langs.js',
+                    'min/frozen-moment-with-langs.js',
                     'min/tests.js',
                     'test/browser.js'
                 ],
                 sauceLabs: {
                     startConnect: true,
-                    testName: 'MomentJS'
+                    testName: 'FrozenMoment'
                 },
                 customLaunchers: {
                     slChromeWinXp: {
@@ -102,10 +102,10 @@ module.exports = function (grunt) {
         uglify : {
             target: {
                 files: {
-                    'min/moment-with-langs.min.js'       : 'min/moment-with-langs.js',
-                    'min/moment-with-customlangs.min.js' : 'min/moment-with-customlangs.js',
-                    'min/langs.min.js'                   : 'min/langs.js',
-                    'min/moment.min.js'                  : 'moment.js'
+                    'min/frozen-moment-with-langs.min.js'       : 'min/frozen-moment-with-langs.js',
+                    'min/frozen-moment-with-customlangs.min.js' : 'min/frozen-moment-with-customlangs.js',
+                    'min/langs.min.js'                          : 'min/langs.js',
+                    'min/frozen-moment.min.js'                  : 'frozen-moment.js'
                 }
             },
             options: {
@@ -121,11 +121,11 @@ module.exports = function (grunt) {
             }
         },
         nodeunit : {
-            all : ["test/moment/**/*.js", "test/lang/**/*.js"]
+            all : ["test/frozen-moment/**/*.js", "test/lang/**/*.js"]
         },
         jshint: {
             all: [
-                "Gruntfile.js", "moment.js", "lang/**/*.js", "test/**/*.js",
+                "Gruntfile.js", "frozen-moment.js", "lang/**/*.js", "test/**/*.js",
                 "!test/browser*.js"
             ],
             options: {
@@ -161,7 +161,7 @@ module.exports = function (grunt) {
         },
         jscs: {
             all: [
-                "Gruntfile.js", "moment.js", "lang/**/*.js",
+                "Gruntfile.js", "frozen-moment.js", "lang/**/*.js",
                 "test/**/*.js", "!test/browser*.js"
             ],
             options: {
@@ -171,7 +171,7 @@ module.exports = function (grunt) {
         watch : {
             test : {
                 files : [
-                    'moment.js',
+                    'frozen-moment.js',
                     'lang/*.js',
                     'test/**/*.js'
                 ],
@@ -183,7 +183,7 @@ module.exports = function (grunt) {
             }
         },
         embedLanguages: {
-            moment: 'moment.js',
+            moment: 'frozen-moment.js',
             dest: embedLanguageDest,
             targetLangs: embedLanguageLangs
         }

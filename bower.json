@@ -1,7 +1,7 @@
 {
-  "name": "moment",
-  "version": "2.7.0",
-  "main": "moment.js",
+  "name": "frozen-moment",
+  "version": "3.0.0-alpha1",
+  "main": "frozen-moment.js",
   "ignore": [
     "**/.*",
     "node_modules",

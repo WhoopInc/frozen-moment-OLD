@@ -1,16 +1,16 @@
-// moment.js language configuration
+// frozen-moment.js language configuration
 // language : Lithuanian (lt)
 // author : Mindaugas Mozūras : https://github.com/mmozuras
 
 (function (factory) {
     if (typeof define === 'function' && define.amd) {
-        define(['moment'], factory); // AMD
+        define(['frozenMoment'], factory); // AMD
     } else if (typeof exports === 'object') {
-        module.exports = factory(require('../moment')); // Node
+        module.exports = factory(require('../frozen-moment')); // Node
     } else {
-        factory(window.moment); // Browser global
+        factory(window.frozenMoment); // Browser global
     }
-}(function (moment) {
+}(function (frozenMoment) {
     var units = {
         "m" : "minutė_minutės_minutę",
         "mm": "minutės_minučių_minutes",
@@ -60,14 +60,14 @@
         }
     }
 
-    function relativeWeekDay(moment, format) {
+    function relativeWeekDay(frozenMoment, format) {
         var nominative = format.indexOf('dddd HH:mm') === -1,
-            weekDay = weekDays[moment.day()];
+            weekDay = weekDays[frozenMoment.day()];
 
         return nominative ? weekDay : weekDay.substring(0, weekDay.length - 2) + "į";
     }
 
-    return moment.lang("lt", {
+    return frozenMoment.lang("lt", {
         months : "sausio_vasario_kovo_balandžio_gegužės_birželio_liepos_rugpjūčio_rugsėjo_spalio_lapkričio_gruodžio".split("_"),
         monthsShort : "sau_vas_kov_bal_geg_bir_lie_rgp_rgs_spa_lap_grd".split("_"),
         weekdays : relativeWeekDay,

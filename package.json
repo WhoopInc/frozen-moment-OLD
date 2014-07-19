@@ -1,10 +1,11 @@
 {
-    "name": "moment",
-    "version": "2.7.0",
+    "name": "frozen-moment",
+    "version": "3.0.0-alpha1",
     "description": "Parse, manipulate, and display dates.",
-    "homepage": "http://momentjs.com",
-    "author": "Iskren Ivov Chernev <iskren.chernev@gmail.com> (https://github.com/ichernev)",
+    "homepage": "http://whoopinc.github.io/frozen-moment",
+    "author": "Lucas Sanders <sanders@whoop.com> (https://butterflyhug.com)",
     "contributors": [
+        "Iskren Ivov Chernev <iskren.chernev@gmail.com> (https://github.com/ichernev)",
         "Tim Wood <washwithcare@gmail.com> (http://timwoodcreates.com/)",
         "Rocky Meza (http://rockymeza.com)",
         "Matt Johnson <mj1856@hotmail.com> (http://codeofmatt.com)",
@@ -12,6 +13,7 @@
         "Andre Polykanine <andre@oire.org> (https://github.com/oire)"
     ],
     "keywords": [
+        "frozen",
         "moment",
         "date",
         "time",
@@ -22,16 +24,16 @@
         "l10n",
         "ender"
     ],
-    "main": "./moment.js",
+    "main": "./frozen-moment.js",
     "engines": {
         "node": "*"
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/moment/moment.git"
+        "url": "https://github.com/WhoopInc/frozen-moment.git"
     },
     "bugs": {
-        "url": "https://github.com/moment/moment/issues"
+        "url": "https://github.com/WhoopInc/frozen-moment/issues"
     },
     "licenses" : [
         {
@@ -63,19 +65,17 @@
     "ender": "./ender.js",
     "dojoBuild": "package.js",
     "jspm": {
-        "files": ["moment.js", "lang"],
-        "map": {
-            "moment": "./moment"
-        },
+        "files": ["frozen-moment.js", "lang"],
         "buildConfig": {
             "uglify": true
         }
     },
     "spm": {
-        "main": "moment.js",
+        "main": "frozen-moment.js",
         "output": [
             "lang/ar-ma.js",
             "lang/ar.js",
+            "lang/be.js",
             "lang/bg.js",
             "lang/br.js",
             "lang/bs.js",

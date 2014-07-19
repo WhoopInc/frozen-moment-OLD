@@ -1,16 +1,16 @@
-// moment.js language configuration
+// frozen-moment.js language configuration
 // language : slovenian (sl)
 // author : Robert Sedovšek : https://github.com/sedovsek
 
 (function (factory) {
     if (typeof define === 'function' && define.amd) {
-        define(['moment'], factory); // AMD
+        define(['frozenMoment'], factory); // AMD
     } else if (typeof exports === 'object') {
-        module.exports = factory(require('../moment')); // Node
+        module.exports = factory(require('../frozen-moment')); // Node
     } else {
-        factory(window.moment); // Browser global
+        factory(window.frozenMoment); // Browser global
     }
-}(function (moment) {
+}(function (frozenMoment) {
     function translate(number, withoutSuffix, key) {
         var result = number + " ";
         switch (key) {
@@ -72,7 +72,7 @@
         }
     }
 
-    return moment.lang('sl', {
+    return frozenMoment.lang('sl', {
         months : "januar_februar_marec_april_maj_junij_julij_avgust_september_oktober_november_december".split("_"),
         monthsShort : "jan._feb._mar._apr._maj._jun._jul._avg._sep._okt._nov._dec.".split("_"),
         weekdays : "nedelja_ponedeljek_torek_sreda_četrtek_petek_sobota".split("_"),

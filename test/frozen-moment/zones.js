@@ -1,0 +1,531 @@
+var frozenMoment = require("../../frozen-moment");
+
+exports.zones = {
+    setUp : function (done) {
+        frozenMoment.lang('en');
+        frozenMoment.createFromInputFallback = function () {
+            throw new Error("input not handled by frozenMoment");
+        };
+
+        done();
+    },
+
+    tearDown : function (cb) {
+        frozenMoment.lang('en');
+        cb();
+    },
+
+    "set zone" : function (test) {
+        var zone = frozenMoment();
+
+        zone.zone(0);
+        test.equal(zone.zone(), 0, "should be able to set the zone to 0");
+
+        zone.zone(60);
+        test.equal(zone.zone(), 60, "should be able to set the zone to 60");
+
+        zone.zone(-60);
+        test.equal(zone.zone(), -60, "should be able to set the zone to -60");
+
+        test.done();
+    },
+
+    "set zone shorthand" : function (test) {
+        var zone = frozenMoment();
+
+        zone.zone(1);
+        test.equal(zone.zone(), 60, "setting the zone to 1 should imply hours and convert to 60");
+
+        zone.zone(-1);
+        test.equal(zone.zone(), -60, "setting the zone to -1 should imply hours and convert to -60");
+
+        zone.zone(15);
+        test.equal(zone.zone(), 900, "setting the zone to 15 should imply hours and convert to 900");
+
+        zone.zone(-15);
+        test.equal(zone.zone(), -900, "setting the zone to -15 should imply hours and convert to -900");
+
+        zone.zone(16);
+        test.equal(zone.zone(), 16, "setting the zone to 16 should imply minutes");
+
+        zone.zone(-16);
+        test.equal(zone.zone(), -16, "setting the zone to -16 should imply minutes");
+
+        test.done();
+    },
+
+    "set zone with string" : function (test) {
+        var zone = frozenMoment();
+
+        zone.zone("+00:00");
+        test.equal(zone.zone(), 0, "set the zone with a timezone string");
+
+        zone.zone("2013-03-07T07:00:00-08:00");
+        test.equal(zone.zone(), 480, "set the zone with a string that does not begin with the timezone");
+
+        zone.zone("2013-03-07T07:00:00+0100");
+        test.equal(zone.zone(), -60, "set the zone with a string that uses the +0000 syntax");
+
+        zone.zone("03-07-2013T07:00:00-08:00");
+        test.equal(zone.zone(), 480, "set the zone with a string with a non-ISO 8601 date");
+
+        test.done();
+    },
+
+    "change hours when changing the zone" : function (test) {
+        var zone = frozenMoment.utc([2000, 0, 1, 6]);
+
+        zone.zone(0);
+        test.equal(zone.hour(), 6, "UTC 6AM should be 6AM at +0000");
+
+        zone.zone(60);
+        test.equal(zone.hour(), 5, "UTC 6AM should be 5AM at -0100");
+
+        zone.zone(-60);
+        test.equal(zone.hour(), 7, "UTC 6AM should be 7AM at +0100");
+
+        test.done();
+    },
+
+    "change minutes when changing the zone" : function (test) {
+        var zone = frozenMoment.utc([2000, 0, 1, 6, 31]);
+
+        zone.zone(0);
+        test.equal(zone.format("HH:mm"), "06:31", "UTC 6:31AM should be 6:31AM at +0000");
+
+        zone.zone(30);
+        test.equal(zone.format("HH:mm"), "06:01", "UTC 6:31AM should be 6:01AM at -0030");
+
+        zone.zone(-30);
+        test.equal(zone.format("HH:mm"), "07:01", "UTC 6:31AM should be 7:01AM at +0030");
+
+        zone.zone(1380);
+        test.equal(zone.format("HH:mm"), "07:31", "UTC 6:31AM should be 7:31AM at +1380");
+
+        test.done();
+    },
+
+    "distance from the unix epoch" : function (test) {
+        var zoneA = frozenMoment(),
+            zoneB = frozenMoment(zoneA),
+            zoneC = frozenMoment(zoneA),
+            zoneD = frozenMoment(zoneA),
+            zoneE = frozenMoment(zoneA);
+
+        zoneB.utc();
+        test.equal(+zoneA, +zoneB, "frozenMoment should equal frozenMoment.utc");
+
+        zoneC.zone(-60);
+        test.equal(+zoneA, +zoneC, "frozenMoment should equal frozenMoment.zone(-60)");
+
+        zoneD.zone(480);
+        test.equal(+zoneA, +zoneD, "frozenMoment should equal frozenMoment.zone(480)");
+
+        zoneE.zone(1000);
+        test.equal(+zoneA, +zoneE, "frozenMoment should equal frozenMoment.zone(1000)");
+
+        test.done();
+    },
+
+    "update offset after changing any values" : function (test) {
+        var oldOffset = frozenMoment.updateOffset,
+            m = frozenMoment.utc([2000, 6, 1]);
+
+        frozenMoment.updateOffset = function (mom, keepTime) {
+            if (mom.__doChange) {
+                if (+mom > 962409600000) {
+                    mom.zone(120, keepTime);
+                } else {
+                    mom.zone(60, keepTime);
+                }
+            }
+        };
+
+        test.equal(m.format("ZZ"), "+0000", "should be at +0000");
+        test.equal(m.format("HH:mm"), "00:00", "should start 12AM at +0000 timezone");
+
+        m.__doChange = true;
+        m.add(1, 'h');
+
+        test.equal(m.format("ZZ"), "-0200", "should be at -0200");
+        test.equal(m.format("HH:mm"), "23:00", "1AM at +0000 should be 11PM at -0200 timezone");
+
+        m.subtract(1, 'h');
+
+        test.equal(m.format("ZZ"), "-0100", "should be at -0100");
+        test.equal(m.format("HH:mm"), "23:00", "12AM at +0000 should be 11PM at -0100 timezone");
+
+        frozenMoment.updateOffset = oldOffset;
+
+        test.done();
+    },
+
+    "getters and setters" : function (test) {
+        var a = frozenMoment([2011, 5, 20]);
+
+        test.equal(a.clone().zone(120).year(2012).year(), 2012, "should get and set year correctly");
+        test.equal(a.clone().zone(120).month(1).month(), 1, "should get and set month correctly");
+        test.equal(a.clone().zone(120).date(2).date(), 2, "should get and set date correctly");
+        test.equal(a.clone().zone(120).day(1).day(), 1, "should get and set day correctly");
+        test.equal(a.clone().zone(120).hour(1).hour(), 1, "should get and set hour correctly");
+        test.equal(a.clone().zone(120).minute(1).minute(), 1, "should get and set minute correctly");
+
+        test.done();
+    },
+
+    "getters" : function (test) {
+        var a = frozenMoment.utc([2012, 0, 1, 0, 0, 0]);
+
+        test.equal(a.clone().zone(120).year(),  2011, "should get year correctly");
+        test.equal(a.clone().zone(120).month(),   11, "should get month correctly");
+        test.equal(a.clone().zone(120).date(),    31, "should get date correctly");
+        test.equal(a.clone().zone(120).hour(),    22, "should get hour correctly");
+        test.equal(a.clone().zone(120).minute(),   0, "should get minute correctly");
+
+        test.equal(a.clone().zone(-120).year(),  2012, "should get year correctly");
+        test.equal(a.clone().zone(-120).month(),    0, "should get month correctly");
+        test.equal(a.clone().zone(-120).date(),     1, "should get date correctly");
+        test.equal(a.clone().zone(-120).hour(),     2, "should get hour correctly");
+        test.equal(a.clone().zone(-120).minute(),   0, "should get minute correctly");
+
+        test.equal(a.clone().zone(-90).year(),  2012, "should get year correctly");
+        test.equal(a.clone().zone(-90).month(),    0, "should get month correctly");
+        test.equal(a.clone().zone(-90).date(),     1, "should get date correctly");
+        test.equal(a.clone().zone(-90).hour(),     1, "should get hour correctly");
+        test.equal(a.clone().zone(-90).minute(),  30, "should get minute correctly");
+
+        test.done();
+    },
+
+    "from" : function (test) {
+        var zoneA = frozenMoment(),
+            zoneB = frozenMoment(zoneA).zone(720),
+            zoneC = frozenMoment(zoneA).zone(360),
+            zoneD = frozenMoment(zoneA).zone(-690),
+            other = frozenMoment(zoneA).add(35, 'm');
+
+        test.equal(zoneA.from(other), zoneB.from(other), "frozenMoment#from should be the same in all zones");
+        test.equal(zoneA.from(other), zoneC.from(other), "frozenMoment#from should be the same in all zones");
+        test.equal(zoneA.from(other), zoneD.from(other), "frozenMoment#from should be the same in all zones");
+
+        test.done();
+    },
+
+    "diff" : function (test) {
+        var zoneA = frozenMoment(),
+            zoneB = frozenMoment(zoneA).zone(720),
+            zoneC = frozenMoment(zoneA).zone(360),
+            zoneD = frozenMoment(zoneA).zone(-690),
+            other = frozenMoment(zoneA).add(35, 'm');
+
+        test.equal(zoneA.diff(other), zoneB.diff(other), "frozenMoment#diff should be the same in all zones");
+        test.equal(zoneA.diff(other), zoneC.diff(other), "frozenMoment#diff should be the same in all zones");
+        test.equal(zoneA.diff(other), zoneD.diff(other), "frozenMoment#diff should be the same in all zones");
+
+        test.equal(zoneA.diff(other, 'minute', true), zoneB.diff(other, 'minute', true), "frozenMoment#diff should be the same in all zones");
+        test.equal(zoneA.diff(other, 'minute', true), zoneC.diff(other, 'minute', true), "frozenMoment#diff should be the same in all zones");
+        test.equal(zoneA.diff(other, 'minute', true), zoneD.diff(other, 'minute', true), "frozenMoment#diff should be the same in all zones");
+
+        test.equal(zoneA.diff(other, 'hour', true), zoneB.diff(other, 'hour', true), "frozenMoment#diff should be the same in all zones");
+        test.equal(zoneA.diff(other, 'hour', true), zoneC.diff(other, 'hour', true), "frozenMoment#diff should be the same in all zones");
+        test.equal(zoneA.diff(other, 'hour', true), zoneD.diff(other, 'hour', true), "frozenMoment#diff should be the same in all zones");
+
+        test.done();
+    },
+
+    "unix offset and timestamp" : function (test) {
+        var zoneA = frozenMoment(),
+            zoneB = frozenMoment(zoneA).zone(720),
+            zoneC = frozenMoment(zoneA).zone(360),
+            zoneD = frozenMoment(zoneA).zone(-690);
+
+        test.equal(zoneA.unix(), zoneB.unix(), "frozenMoment#unix should be the same in all zones");
+        test.equal(zoneA.unix(), zoneC.unix(), "frozenMoment#unix should be the same in all zones");
+        test.equal(zoneA.unix(), zoneD.unix(), "frozenMoment#unix should be the same in all zones");
+
+        test.equal(+zoneA, +zoneB, "frozenMoment#valueOf should be the same in all zones");
+        test.equal(+zoneA, +zoneC, "frozenMoment#valueOf should be the same in all zones");
+        test.equal(+zoneA, +zoneD, "frozenMoment#valueOf should be the same in all zones");
+
+        test.done();
+    },
+
+    "cloning" : function (test) {
+        test.equal(frozenMoment().zone(120).clone().zone(),   120, "explicit cloning should retain the zone");
+        test.equal(frozenMoment().zone(-120).clone().zone(), -120, "explicit cloning should retain the zone");
+        test.equal(frozenMoment(frozenMoment().zone(120)).zone(),   120, "implicit cloning should retain the zone");
+        test.equal(frozenMoment(frozenMoment().zone(-120)).zone(), -120, "implicit cloning should retain the zone");
+
+        test.done();
+    },
+
+    "start of / end of" : function (test) {
+        var a = frozenMoment.utc([2010, 1, 2, 0, 0, 0]).zone(450);
+
+        test.equal(a.clone().startOf('day').hour(), 0, "start of day should work on frozenMoments with a zone");
+        test.equal(a.clone().startOf('day').minute(), 0, "start of day should work on frozenMoments with a zone");
+        test.equal(a.clone().startOf('hour').minute(), 0, "start of hour should work on frozenMoments with a zone");
+
+        test.equal(a.clone().endOf('day').hour(), 23, "end of day should work on frozenMoments with a zone");
+        test.equal(a.clone().endOf('day').minute(), 59, "end of day should work on frozenMoments with a zone");
+        test.equal(a.clone().endOf('hour').minute(), 59, "end of hour should work on frozenMoments with a zone");
+
+        test.done();
+    },
+
+    "reset zone with frozenMoment#utc" : function (test) {
+        var a = frozenMoment.utc([2012]).zone(480);
+
+        test.equal(a.clone().hour(),      16, "different zone should have different hour");
+        test.equal(a.clone().utc().hour(), 0, "calling frozenMoment#utc should reset the offset");
+
+        test.done();
+    },
+
+    "reset zone with frozenMoment#local" : function (test) {
+        var a = frozenMoment([2012]).zone(480);
+
+        test.equal(a.clone().local().hour(), 0, "calling frozenMoment#local should reset the offset");
+
+        test.done();
+    },
+
+    "toDate" : function (test) {
+        var zoneA = new Date(),
+            zoneB = frozenMoment(zoneA).zone(720).toDate(),
+            zoneC = frozenMoment(zoneA).zone(360).toDate(),
+            zoneD = frozenMoment(zoneA).zone(-690).toDate();
+
+        test.equal(+zoneA, +zoneB, "frozenMoment#toDate should output a date with the right unix timestamp");
+        test.equal(+zoneA, +zoneC, "frozenMoment#toDate should output a date with the right unix timestamp");
+        test.equal(+zoneA, +zoneD, "frozenMoment#toDate should output a date with the right unix timestamp");
+
+        test.done();
+    },
+
+    "same / before / after" : function (test) {
+        var zoneA = frozenMoment().utc(),
+            zoneB = frozenMoment(zoneA).zone(120),
+            zoneC = frozenMoment(zoneA).zone(-120);
+
+        test.ok(zoneA.isSame(zoneB), "two frozenMoments with different offsets should be the same");
+        test.ok(zoneA.isSame(zoneC), "two frozenMoments with different offsets should be the same");
+
+        test.ok(zoneA.isSame(zoneB, 'hour'), "two frozenMoments with different offsets should be the same hour");
+        test.ok(zoneA.isSame(zoneC, 'hour'), "two frozenMoments with different offsets should be the same hour");
+
+        zoneA.add(1, 'hour');
+
+        test.ok(zoneA.isAfter(zoneB), "isAfter should work with two frozenMoments with different offsets");
+        test.ok(zoneA.isAfter(zoneC), "isAfter should work with two frozenMoments with different offsets");
+
+        test.ok(zoneA.isAfter(zoneB, 'hour'), "isAfter:hour should work with two frozenMoments with different offsets");
+        test.ok(zoneA.isAfter(zoneC, 'hour'), "isAfter:hour should work with two frozenMoments with different offsets");
+
+        zoneA.subtract(2, 'hour');
+
+        test.ok(zoneA.isBefore(zoneB), "isBefore should work with two frozenMoments with different offsets");
+        test.ok(zoneA.isBefore(zoneC), "isBefore should work with two frozenMoments with different offsets");
+
+        test.ok(zoneA.isBefore(zoneB, 'hour'), "isBefore:hour should work with two frozenMoments with different offsets");
+        test.ok(zoneA.isBefore(zoneC, 'hour'), "isBefore:hour should work with two frozenMoments with different offsets");
+
+        test.done();
+    },
+
+    "add / subtract over dst" : function (test) {
+        var oldOffset = frozenMoment.updateOffset,
+            m = frozenMoment.utc([2000, 2, 31, 3]);
+
+        frozenMoment.updateOffset = function (mom, keepTime) {
+            if (mom.clone().utc().month() > 2) {
+                mom.zone(-60, keepTime);
+            } else {
+                mom.zone(0, keepTime);
+            }
+        };
+
+        test.equal(m.hour(), 3, "should start at 00:00");
+
+        m.add(24, 'hour');
+
+        test.equal(m.hour(), 4, "adding 24 hours should disregard dst");
+
+        m.subtract(24, 'hour');
+
+        test.equal(m.hour(), 3, "subtracting 24 hours should disregard dst");
+
+        m.add(1, 'day');
+
+        test.equal(m.hour(), 3, "adding 1 day should have the same hour");
+
+        m.subtract(1, 'day');
+
+        test.equal(m.hour(), 3, "subtracting 1 day should have the same hour");
+
+        m.add(1, 'month');
+
+        test.equal(m.hour(), 3, "adding 1 month should have the same hour");
+
+        m.subtract(1, 'month');
+
+        test.equal(m.hour(), 3, "subtracting 1 month should have the same hour");
+
+        frozenMoment.updateOffset = oldOffset;
+
+        test.done();
+    },
+
+    "isDST" : function (test) {
+        var oldOffset = frozenMoment.updateOffset;
+
+        frozenMoment.updateOffset = function (mom, keepTime) {
+            if (mom.month() > 2 && mom.month() < 9) {
+                mom.zone(-60, keepTime);
+            } else {
+                mom.zone(0, keepTime);
+            }
+        };
+
+        test.ok(!frozenMoment().month(0).isDST(),  "Jan should not be summer dst");
+        test.ok(frozenMoment().month(6).isDST(),   "Jul should be summer dst");
+        test.ok(!frozenMoment().month(11).isDST(), "Dec should not be summer dst");
+
+        frozenMoment.updateOffset = function (mom) {
+            if (mom.month() > 2 && mom.month() < 9) {
+                mom.zone(0);
+            } else {
+                mom.zone(-60);
+            }
+        };
+
+        test.ok(frozenMoment().month(0).isDST(),  "Jan should be winter dst");
+        test.ok(!frozenMoment().month(6).isDST(), "Jul should not be winter dst");
+        test.ok(frozenMoment().month(11).isDST(), "Dec should be winter dst");
+
+        frozenMoment.updateOffset = oldOffset;
+
+        test.done();
+    },
+
+    "zone names" : function (test) {
+        test.expect(8);
+
+        test.equal(frozenMoment().zoneAbbr(),   "", "Local zone abbr should be empty");
+        test.equal(frozenMoment().format('z'),  "", "Local zone formatted abbr should be empty");
+        test.equal(frozenMoment().zoneName(),   "", "Local zone name should be empty");
+        test.equal(frozenMoment().format('zz'), "", "Local zone formatted name should be empty");
+
+        test.equal(frozenMoment.utc().zoneAbbr(),   "UTC", "UTC zone abbr should be UTC");
+        test.equal(frozenMoment.utc().format('z'),  "UTC", "UTC zone formatted abbr should be UTC");
+        test.equal(frozenMoment.utc().zoneName(),   "Coordinated Universal Time", "UTC zone abbr should be Coordinated Universal Time");
+        test.equal(frozenMoment.utc().format('zz'), "Coordinated Universal Time", "UTC zone formatted abbr should be Coordinated Universal Time");
+
+        test.done();
+    },
+
+    "hours alignment with UTC" : function (test) {
+        test.expect(4);
+
+        test.equals(frozenMoment().zone(120).hasAlignedHourOffset(), true);
+        test.equals(frozenMoment().zone(-180).hasAlignedHourOffset(), true);
+        test.equals(frozenMoment().zone(90).hasAlignedHourOffset(), false);
+        test.equals(frozenMoment().zone(-90).hasAlignedHourOffset(), false);
+
+        test.done();
+    },
+
+    "hours alignment with other zone" : function (test) {
+        test.expect(16);
+
+        var m = frozenMoment().zone(120);
+
+        test.equals(m.hasAlignedHourOffset(frozenMoment().zone(180)), true);
+        test.equals(m.hasAlignedHourOffset(frozenMoment().zone(-180)), true);
+        test.equals(m.hasAlignedHourOffset(frozenMoment().zone(90)), false);
+        test.equals(m.hasAlignedHourOffset(frozenMoment().zone(-90)), false);
+
+        m = frozenMoment().zone(90);
+
+        test.equals(m.hasAlignedHourOffset(frozenMoment().zone(180)), false);
+        test.equals(m.hasAlignedHourOffset(frozenMoment().zone(-180)), false);
+        test.equals(m.hasAlignedHourOffset(frozenMoment().zone(30)), true);
+        test.equals(m.hasAlignedHourOffset(frozenMoment().zone(-30)), true);
+
+        m = frozenMoment().zone(-60);
+
+        test.equals(m.hasAlignedHourOffset(frozenMoment().zone(180)), true);
+        test.equals(m.hasAlignedHourOffset(frozenMoment().zone(-180)), true);
+        test.equals(m.hasAlignedHourOffset(frozenMoment().zone(90)), false);
+        test.equals(m.hasAlignedHourOffset(frozenMoment().zone(-90)), false);
+
+        m = frozenMoment().zone(25);
+
+        test.equals(m.hasAlignedHourOffset(frozenMoment().zone(-35)), true);
+        test.equals(m.hasAlignedHourOffset(frozenMoment().zone(85)), true);
+
+        test.equals(m.hasAlignedHourOffset(frozenMoment().zone(35)), false);
+        test.equals(m.hasAlignedHourOffset(frozenMoment().zone(-85)), false);
+
+        test.done();
+    },
+
+    "parse zone" : function (test) {
+        test.expect(2);
+        var m = frozenMoment("2013-01-01T00:00:00-13:00").parseZone();
+        test.equal(m.zone(), 13 * 60);
+        test.equal(m.hours(), 0);
+        test.done();
+    },
+
+    "parse zone static" : function (test) {
+        test.expect(2);
+        var m = frozenMoment.parseZone("2013-01-01T00:00:00-13:00");
+        test.equal(m.zone(), 13 * 60);
+        test.equal(m.hours(), 0);
+        test.done();
+    },
+
+    "parse zone with more arguments" : function (test) {
+        var m;
+        test.expect(3);
+
+        m = frozenMoment.parseZone("2013 01 01 05 -13:00", "YYYY MM DD HH ZZ");
+        test.equal(m.format(), "2013-01-01T05:00:00-13:00", "accept input and format");
+        m = frozenMoment.parseZone("2013-01-01-13:00", "YYYY MM DD ZZ", true);
+        test.equal(m.isValid(), false, "accept input, format and strict flag");
+        m = frozenMoment.parseZone("2013-01-01-13:00", ["DD MM YYYY ZZ", "YYYY MM DD ZZ"]);
+        test.equal(m.format(), "2013-01-01T00:00:00-13:00", "accept input and array of formats");
+
+        test.done();
+    },
+
+    "parse zone with a timezone from the format string" : function (test) {
+        test.expect(1);
+
+        var m = frozenMoment("11-12-2013 -0400 +1100", "DD-MM-YYYY ZZ #####").parseZone();
+
+        test.equal(m.zone(), 4 * 60);
+        test.done();
+    },
+
+    "parse zone without a timezone included in the format string" : function (test) {
+        test.expect(1);
+
+        var m = frozenMoment("11-12-2013 -0400 +1100", "DD-MM-YYYY").parseZone();
+
+        test.equal(m.zone(), -11 * 60);
+        test.done();
+    },
+
+    "timezone format" : function (test) {
+        test.equal(frozenMoment().zone(-60).format('ZZ'), "+0100", "-60 -> +0100");
+        test.equal(frozenMoment().zone(-90).format('ZZ'), "+0130", "-90 -> +0130");
+        test.equal(frozenMoment().zone(-120).format('ZZ'), "+0200", "-120 -> +0200");
+
+        test.equal(frozenMoment().zone(+60).format('ZZ'), "-0100", "+60 -> -0100");
+        test.equal(frozenMoment().zone(+90).format('ZZ'), "-0130", "+90 -> -0130");
+        test.equal(frozenMoment().zone(+120).format('ZZ'), "-0200", "+120 -> -0200");
+        test.done();
+    }
+};

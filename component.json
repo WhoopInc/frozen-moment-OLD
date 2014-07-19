@@ -1,14 +1,15 @@
 {
-  "name": "moment",
-  "version": "2.7.0",
-  "main": "moment.js",
+  "name": "frozen-moment",
+  "version": "3.0.0-alpha1",
+  "main": "frozen-moment.js",
   "description": "Parse, validate, manipulate, and display dates in javascript.",
   "files": [
-    "moment.js",
+    "frozen-moment.js",
     "lang/ar-ma.js",
     "lang/ar-sa.js",
     "lang/ar.js",
     "lang/az.js",
+    "lang/be.js",
     "lang/bg.js",
     "lang/bn.js",
     "lang/br.js",
@@ -81,6 +82,6 @@
     "lang/zh-tw.js"
   ],
   "scripts": [
-    "moment.js"
+    "frozen-moment.js"
   ]
 }
