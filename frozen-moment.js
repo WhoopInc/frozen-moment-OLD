@@ -2147,8 +2147,6 @@
             }
         },
 
-        month : makeAccessor('Month', true),
-
         startOf : function (units) {
             units = normalizeUnits(units);
             // the following switch intentionally omits break keywords
@@ -2414,12 +2412,11 @@
     // a new timezone) makes sense. Adding/subtracting hours does not follow
     // this rule.
     frozenMoment.fn.hour = frozenMoment.fn.hours = makeAccessor('Hours', true);
-    // frozenMoment.fn.month is defined separately
     frozenMoment.fn.date = frozenMoment.fn.days = makeAccessor('Date', true);
+    frozenMoment.fn.month = frozenMoment.fn.months = makeAccessor('Month', true);
     frozenMoment.fn.year = makeAccessor('FullYear', true);
 
-    // add plural methods
-    frozenMoment.fn.months = frozenMoment.fn.month;
+    // add plural aliases for computed accessor methods (defined above)
     frozenMoment.fn.weeks = frozenMoment.fn.week;
     frozenMoment.fn.isoWeeks = frozenMoment.fn.isoWeek;
     frozenMoment.fn.quarters = frozenMoment.fn.quarter;
@@ -2427,10 +2424,10 @@
     // add aliased format methods
     frozenMoment.fn.toJSON = frozenMoment.fn.toISOString;
 
+
     /************************************
         Duration Prototype
     ************************************/
-
 
     function daysToYears (days) {
         // 400 years have 146097 days (taking into account leap year rules)
