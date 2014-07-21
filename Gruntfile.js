@@ -121,7 +121,8 @@ module.exports = function (grunt) {
             }
         },
         nodeunit : {
-            all : ["test/frozen-moment/**/*.js", "test/lang/**/*.js"]
+            all : ["test/frozen-moment/**/*.js", "test/lang/**/*.js"],
+            core : ["test/frozen-moment/**/*.js"]
         },
         jshint: {
             all: [
