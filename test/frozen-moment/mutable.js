@@ -8,8 +8,8 @@ exports.mutable = {
         done();
     },
 
-    "manipulation methods" : function (test) {
-        var m = frozenMoment();
+    "mutation methods" : function (test) {
+        var m = frozenMoment.build();
 
         test.equal(m, m.year(2011), 'year() should be mutable');
         test.equal(m, m.month(1), 'month() should be mutable');
@@ -27,8 +27,8 @@ exports.mutable = {
         test.done();
     },
 
-    "non mutable methods" : function (test) {
-        var m = frozenMoment();
+    "non-mutation methods" : function (test) {
+        var m = frozenMoment.build();
         test.notEqual(m, m.clone(), "clone() should not be mutable");
 
         test.done();

@@ -13,15 +13,15 @@ exports.zoneSwitching = {
     "local to utc, keepLocalTime = true" : function (test) {
         var m = frozenMoment(),
             fmt = "YYYY-DD-MM HH:mm:ss";
-        test.equal(m.clone().utc(true).format(fmt), m.format(fmt), "local to utc failed to keep local time");
+        test.equal(m.thaw().utc(true).freeze().format(fmt), m.format(fmt), "local to utc failed to keep local time");
 
         test.done();
     },
 
     "local to utc, keepLocalTime = false" : function (test) {
         var m = frozenMoment();
-        test.equal(m.clone().utc().valueOf(), m.valueOf(), "local to utc failed to keep utc time (implicit)");
-        test.equal(m.clone().utc(false).valueOf(), m.valueOf(), "local to utc failed to keep utc time (explicit)");
+        test.equal(m.thaw().utc().freeze().valueOf(), m.valueOf(), "local to utc failed to keep utc time (implicit)");
+        test.equal(m.thaw().utc(false).freeze().valueOf(), m.valueOf(), "local to utc failed to keep utc time (explicit)");
 
         test.done();
     },
@@ -35,7 +35,7 @@ exports.zoneSwitching = {
         // http://en.wikipedia.org/wiki/UTC+14:00
         // http://en.wikipedia.org/wiki/UTC-12:00
         for (z = -12; z <= 14; ++z) {
-            test.equal(m.clone().zone(z * 60, true).format(fmt), m.format(fmt),
+            test.equal(m.thaw().zone(z * 60, true).freeze().format(fmt), m.format(fmt),
                     "local to zone(" + z + ":00) failed to keep local time");
         }
 
@@ -50,9 +50,9 @@ exports.zoneSwitching = {
         // http://en.wikipedia.org/wiki/UTC+14:00
         // http://en.wikipedia.org/wiki/UTC-12:00
         for (z = -12; z <= 14; ++z) {
-            test.equal(m.clone().zone(z * 60).valueOf(), m.valueOf(),
+            test.equal(m.thaw().zone(z * 60).freeze().valueOf(), m.valueOf(),
                     "local to zone(" + z + ":00) failed to keep utc time (implicit)");
-            test.equal(m.clone().zone(z * 60, false).valueOf(), m.valueOf(),
+            test.equal(m.thaw().zone(z * 60, false).freeze().valueOf(), m.valueOf(),
                     "local to zone(" + z + ":00) failed to keep utc time (explicit)");
         }
 
@@ -63,15 +63,15 @@ exports.zoneSwitching = {
         var um = frozenMoment.utc(),
             fmt = "YYYY-DD-MM HH:mm:ss";
 
-        test.equal(um.clone().local(true).format(fmt), um.format(fmt), "utc to local failed to keep local time");
+        test.equal(um.thaw().local(true).freeze().format(fmt), um.format(fmt), "utc to local failed to keep local time");
 
         test.done();
     },
 
     "utc to local, keepLocalTime = false" : function (test) {
         var um = frozenMoment.utc();
-        test.equal(um.clone().local().valueOf(), um.valueOf(), "utc to local failed to keep utc time (implicit)");
-        test.equal(um.clone().local(false).valueOf(), um.valueOf(), "utc to local failed to keep utc time (explicit)");
+        test.equal(um.thaw().local().freeze().valueOf(), um.valueOf(), "utc to local failed to keep utc time (implicit)");
+        test.equal(um.thaw().local(false).freeze().valueOf(), um.valueOf(), "utc to local failed to keep utc time (explicit)");
 
         test.done();
     },
@@ -87,7 +87,7 @@ exports.zoneSwitching = {
         for (z = -12; z <= 14; ++z) {
             m.zone(z * 60);
 
-            test.equal(m.clone().local(true).format(fmt), m.format(fmt),
+            test.equal(m.thaw().local(true).freeze().format(fmt), m.format(fmt),
                     "zone(" + z + ":00) to local failed to keep local time");
         }
 
@@ -104,9 +104,9 @@ exports.zoneSwitching = {
         for (z = -12; z <= 14; ++z) {
             m.zone(z * 60);
 
-            test.equal(m.clone().local(false).valueOf(), m.valueOf(),
+            test.equal(m.thaw().local(false).freeze().valueOf(), m.valueOf(),
                     "zone(" + z + ":00) to local failed to keep utc time (explicit)");
-            test.equal(m.clone().local().valueOf(), m.valueOf(),
+            test.equal(m.thaw().local().freeze().valueOf(), m.valueOf(),
                     "zone(" + z + ":00) to local failed to keep utc time (implicit)");
         }
 

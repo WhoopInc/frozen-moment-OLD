@@ -182,16 +182,16 @@ exports.create = {
 
         var now = frozenMoment();
         test.equal(frozenMoment('12:13:14', 'hh:mm:ss').format('YYYY-MM-DD hh:mm:ss'),
-                now.clone().hour(12).minute(13).second(14).format('YYYY-MM-DD hh:mm:ss'),
+                now.thaw().hour(12).minute(13).second(14).freeze().format('YYYY-MM-DD hh:mm:ss'),
                 'given only time default to current date');
         test.equal(frozenMoment('05', 'DD').format('YYYY-MM-DD'),
-                now.clone().date(5).format('YYYY-MM-DD'),
+                now.thaw().date(5).freeze().format('YYYY-MM-DD'),
                 'given day of month default to current month, year');
         test.equal(frozenMoment('05', 'MM').format('YYYY-MM-DD'),
-                now.clone().month(4).date(1).format('YYYY-MM-DD'),
+                now.thaw().month(4).date(1).freeze().format('YYYY-MM-DD'),
                 'given month default to current year');
         test.equal(frozenMoment('1996', 'YYYY').format('YYYY-MM-DD'),
-                now.clone().year(1996).month(0).date(1).format('YYYY-MM-DD'),
+                now.thaw().year(1996).month(0).date(1).freeze().format('YYYY-MM-DD'),
                 'given year do not default');
         test.done();
     },
@@ -417,37 +417,26 @@ exports.create = {
         test.done();
     },
 
-    "implicit cloning" : function (test) {
+    "thaw/freeze cycle" : function (test) {
         test.expect(2);
         var frozenMomentA = frozenMoment([2011, 10, 10]),
-            frozenMomentB = frozenMoment(frozenMomentA);
-        frozenMomentA.month(5);
-        test.equal(frozenMomentB.month(), 10, "Calling frozenMoment() on a frozenMoment will create a clone");
-        test.equal(frozenMomentA.month(), 5, "Calling frozenMoment() on a frozenMoment will create a clone");
-        test.done();
-    },
-
-    "explicit cloning" : function (test) {
-        test.expect(2);
-        var frozenMomentA = frozenMoment([2011, 10, 10]),
-            frozenMomentB = frozenMomentA.clone();
-        frozenMomentA.month(5);
-        test.equal(frozenMomentB.month(), 10, "Calling frozenMoment() on a frozenMoment will create a clone");
-        test.equal(frozenMomentA.month(), 5, "Calling frozenMoment() on a frozenMoment will create a clone");
+            frozenMomentB = frozenMomentA.thaw().month(5).freeze();
+        test.equal(frozenMomentA.month(), 10, "frozenMoment().thaw()...freeze() will create a clone");
+        test.equal(frozenMomentB.month(), 5, "frozenMoment().thaw()...freeze() will create a clone");
         test.done();
     },
 
     "cloning carrying over utc mode" : function (test) {
         test.expect(8);
 
-        test.equal(frozenMoment().local().clone()._isUTC, false, "An explicit cloned local frozenMoment should have _isUTC == false");
-        test.equal(frozenMoment().utc().clone()._isUTC, true, "An cloned utc frozenMoment should have _isUTC == true");
-        test.equal(frozenMoment().clone()._isUTC, false, "An explicit cloned local frozenMoment should have _isUTC == false");
-        test.equal(frozenMoment.utc().clone()._isUTC, true, "An explicit cloned utc frozenMoment should have _isUTC == true");
-        test.equal(frozenMoment(frozenMoment().local())._isUTC, false, "An implicit cloned local frozenMoment should have _isUTC == false");
-        test.equal(frozenMoment(frozenMoment().utc())._isUTC, true, "An implicit cloned utc frozenMoment should have _isUTC == true");
-        test.equal(frozenMoment(frozenMoment())._isUTC, false, "An implicit cloned local frozenMoment should have _isUTC == false");
-        test.equal(frozenMoment(frozenMoment.utc())._isUTC, true, "An implicit cloned utc frozenMoment should have _isUTC == true");
+        test.equal(frozenMoment().thaw().local().freeze()._isUTC, false, "An explicitly local frozenMoment should have _isUTC == false");
+        test.equal(frozenMoment().thaw().utc().freeze()._isUTC, true, "An explicitly utc frozenMoment should have _isUTC == true");
+        test.equal(frozenMoment().thaw().freeze()._isUTC, false, "A default frozenMoment should have _isUTC == false");
+        test.equal(frozenMoment.utc()._isUTC, true, "An explicitly utc frozenMoment should have _isUTC == true");
+        test.equal(frozenMoment(frozenMoment().thaw().local().freeze())._isUTC, false, "A 'cloned' local frozenMoment should have _isUTC == false");
+        test.equal(frozenMoment(frozenMoment().thaw().utc().freeze())._isUTC, true, "A 'cloned' utc frozenMoment should have _isUTC == true");
+        test.equal(frozenMoment(frozenMoment())._isUTC, false, "A 'cloned' default frozenMoment should have _isUTC == false");
+        test.equal(frozenMoment(frozenMoment.utc())._isUTC, true, "A 'cloned' utc frozenMoment should have _isUTC == true");
 
         test.done();
     },
@@ -636,10 +625,10 @@ exports.create = {
         ];
 
         for (i = 0; i < formats.length; i++) {
-            mom = frozenMoment(formats[i][0] + 'Z').utc();
+            mom = frozenMoment(formats[i][0] + 'Z').thaw().utc().freeze();
             test.equal(mom.format('YYYY-MM-DDTHH:mm:ss.SSS'), formats[i][1], "frozenMoment should be able to parse ISO in UTC " + formats[i][0] + 'Z');
 
-            mom = frozenMoment(formats[i][0] + ' Z').utc();
+            mom = frozenMoment(formats[i][0] + ' Z').thaw().utc().freeze();
             test.equal(mom.format('YYYY-MM-DDTHH:mm:ss.SSS'), formats[i][1], "frozenMoment should be able to parse ISO in UTC " + formats[i][0] + ' Z');
         }
         test.done();
@@ -680,7 +669,9 @@ exports.create = {
 
         var m = frozenMoment('2011-10-08T18:04:20.111Z');
 
-        test.equal(m.utc().format('YYYY-MM-DDTHH:mm:ss.SSS'), '2011-10-08T18:04:20.111', "frozenMoment should be able to parse ISO 2011-10-08T18:04:20.111Z");
+        test.equal(m.thaw().utc().freeze().format('YYYY-MM-DDTHH:mm:ss.SSS'),
+                '2011-10-08T18:04:20.111',
+                'frozenMoment should be able to parse ISO 2011-10-08T18:04:20.111Z');
 
         test.done();
     },

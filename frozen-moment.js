@@ -10,6 +10,7 @@
     ************************************/
 
     var frozenMoment,
+        momentBuilder,
         VERSION = '3.0.0-alpha1',
         // the global-scope this is NOT the global object in Node.js
         globalScope = typeof global !== 'undefined' ? global : this,
@@ -30,7 +31,6 @@
 
         // frozenMoment internal properties
         instanceProperties = {
-            _isAMomentObject: null,
             _i : null,
             _f : null,
             _l : null,
@@ -372,16 +372,22 @@
         Constructors
     ************************************/
 
+    // Language constructor
     function Language() {
     }
 
-    // FrozenMoment prototype object
+    // MomentBuilder constructor
+    function MomentBuilder(config) {
+        extend(this, config);
+    }
+
+    // FrozenMoment constructor
     function FrozenMoment(config) {
         checkOverflow(config);
         extend(this, config);
     }
 
-    // Duration Constructor
+    // Duration constructor
     function Duration(duration) {
         var normalizedInput = normalizeObjectUnits(duration),
             years = normalizedInput.year || 0,
@@ -415,10 +421,10 @@
         this._bubble();
     }
 
+
     /************************************
         Helpers
     ************************************/
-
 
     function extend(a, b) {
         for (var i in b) {
@@ -474,18 +480,18 @@
 
         res.months = other.month() - base.month() +
             (other.year() - base.year()) * 12;
-        if (base.clone().add(res.months, 'M').isAfter(other)) {
+        if (base.thaw().add(res.months, 'M').freeze().isAfter(other)) {
             --res.months;
         }
 
-        res.milliseconds = +other - +(base.clone().add(res.months, 'M'));
+        res.milliseconds = +other - +(base.thaw().add(res.months, 'M').freeze());
 
         return res;
     }
 
     function momentsDifference(base, other) {
         var res;
-        other = makeAs(other, base);
+        other = makeAsBuilder(other, base).freeze();
         if (base.isBefore(other)) {
             res = positiveMomentsDifference(base, other);
         } else {
@@ -604,7 +610,7 @@
             }
 
             getter = function (i) {
-                var m = frozenMoment().utc().set(setter, i);
+                var m = frozenMoment().thaw().utc().set(setter, i).freeze();
                 return method.call(frozenMoment.fn._lang, m, format || '');
             };
 
@@ -694,11 +700,11 @@
         return key ? key.toLowerCase().replace('_', '-') : key;
     }
 
-    // Return a frozenMoment from input, that is local/utc/zone equivalent to
+    // Return a momentBuilder from input, that is local/utc/zone equivalent to
     // model.
-    function makeAs(input, model) {
-        return model._isUTC ? frozenMoment(input).zone(model._offset || 0) :
-            frozenMoment(input).local();
+    function makeAsBuilder(input, model) {
+        return model._isUTC ? momentBuilder(input).zone(model._offset || 0) :
+            momentBuilder(input).local();
     }
 
     /************************************
@@ -776,7 +782,7 @@
             for (i = 0; i < 7; i++) {
                 // make the regex if we don't have it already
                 if (!this._weekdaysParse[i]) {
-                    mom = frozenMoment([2000, 1]).day(i);
+                    mom = momentBuilder([2000, 1]).day(i).freeze();
                     regex = '^' + this.weekdays(mom, '') + '|^' + this.weekdaysShort(mom, '') + '|^' + this.weekdaysMin(mom, '');
                     this._weekdaysParse[i] = new RegExp(regex.replace('.', ''), 'i');
                 }
@@ -995,7 +1001,7 @@
 
     // format date using native date object
     function formatMoment(m, format) {
-        if (!m.isValid()) {
+        if (!isValid(m)) {
             return m.lang().invalidDate();
         }
 
@@ -1675,7 +1681,7 @@
             daysToDayOfWeek += 7;
         }
 
-        adjustedMoment = frozenMoment(mom).add(daysToDayOfWeek, 'd');
+        adjustedMoment = momentBuilder(mom).add(daysToDayOfWeek, 'd').freeze();
         return {
             week: Math.ceil(adjustedMoment.dayOfYear() / 7),
             year: adjustedMoment.year()
@@ -1708,15 +1714,18 @@
         if (input === null || (format === undefined && input === '')) {
             return frozenMoment.invalid({nullInput: true});
         }
+        if (frozenMoment instanceof FrozenMoment) {
+            return input;
+        }
 
         if (typeof input === 'string') {
             config._i = input = getLangDefinition().preparse(input);
         }
 
-        if (frozenMoment.isMoment(input)) {
+        if (frozenMoment.isMoment(input) || frozenMoment.isBuilder(input)) {
             config = cloneMoment(input);
-
-            config._d = new Date(+input._d);
+            config._isAMomentObject = true;
+            config._d = new Date(valueOfBuilder(input));
         } else if (format) {
             if (isArray(format)) {
                 makeDateFromStringAndArray(config);
@@ -1807,7 +1816,7 @@
         c._strict = strict;
         c._pf = defaultParsingFlags();
 
-        return makeMoment(c).utc();
+        return makeMoment(c).thaw().utc().freeze();
     };
 
     // creating with unix timestamp (in seconds)
@@ -1942,10 +1951,16 @@
         return getLangDefinition(key);
     };
 
-    // compare frozenMoment object
+    // for typechecking FrozenMoment objects
     frozenMoment.isMoment = function (obj) {
         return obj instanceof FrozenMoment ||
             (obj != null &&  obj.hasOwnProperty('_isAMomentObject'));
+    };
+
+    // for typechecking MomentBuilder objects
+    frozenMoment.isBuilder = function (obj) {
+        return obj instanceof MomentBuilder ||
+            (obj != null && obj.hasOwnProperty('_isAMomentBuilderObject'));
     };
 
     // for typechecking Duration objects
@@ -1973,23 +1988,410 @@
         return m;
     };
 
-    frozenMoment.parseZone = function () {
-        return frozenMoment.apply(null, arguments).parseZone();
-    };
-
     frozenMoment.parseTwoDigitYear = function (input) {
         return toInt(input) + (toInt(input) > 68 ? 1900 : 2000);
     };
+
+
+
+    /************************************
+        Builder Functions
+    ************************************/
+
+    function makeMomentBuilder(config) {
+        var input = config._i,
+            format = config._f;
+
+        if (input === null || (format === undefined && input === '')) {
+            return momentBuilder.invalid({nullInput: true});
+        }
+
+        if (typeof input === 'string') {
+            config._i = input = getLangDefinition().preparse(input);
+        }
+
+        if (frozenMoment.isMoment(input) || frozenMoment.isBuilder(input)) {
+            config = cloneMoment(input);
+            config._isAMomentBuilderObject = true;
+
+            config._d = new Date(+input._d);
+        } else if (format) {
+            if (isArray(format)) {
+                makeDateFromStringAndArray(config);
+            } else {
+                makeDateFromStringAndFormat(config);
+            }
+        } else {
+            makeDateFromInput(config);
+        }
+
+        return new MomentBuilder(config);
+    }
+
+    momentBuilder = function (input, format, lang, strict) {
+        var c;
+
+        if (typeof(lang) === 'boolean') {
+            strict = lang;
+            lang = undefined;
+        }
+        // object construction must be done this way.
+        // https://github.com/moment/moment/issues/1423
+        c = {};
+        c._isAMomentBuilderObject = true;
+        c._i = input;
+        c._f = format;
+        c._l = lang;
+        c._strict = strict;
+        c._isUTC = false;
+        c._pf = defaultParsingFlags();
+
+        return makeMomentBuilder(c);
+    };
+
+    // constant that refers to the ISO standard
+    momentBuilder.ISO_8601 = function () {};
+
+    // Plugins that add properties should also add the key here (null value),
+    // so we can properly clone ourselves.
+    momentBuilder.instanceProperties = instanceProperties;
+
+    // This function will be called whenever a momentBuilder is mutated.
+    // It is intended to keep the offset in sync with the timezone.
+    momentBuilder.updateOffset = function () {};
+
+    // This function allows you to set a threshold for relative time strings
+    momentBuilder.relativeTimeThreshold = function (threshold, limit) {
+        if (relativeTimeThresholds[threshold] === undefined) {
+            return false;
+        }
+        if (limit === undefined) {
+            return relativeTimeThresholds[threshold];
+        }
+        relativeTimeThresholds[threshold] = limit;
+        return true;
+    };
+
+    // This function will load languages and then set the global language.
+    momentBuilder.lang = function (key, values) {
+        var r;
+        if (!key) {
+            throw new Error("momentBuilder.lang() requires at least one argument");
+        }
+        if (values) {
+            loadLang(normalizeLanguage(key), values);
+        } else if (values === null) {
+            unloadLang(key);
+            key = 'en';
+        } else if (!languages[key]) {
+            getLangDefinition(key);
+        }
+        r = momentBuilder.duration.fn._lang = momentBuilder.fn._lang = getLangDefinition(key);
+        return r._abbr;
+    };
+
+    for (i = lists.length - 1; i >= 0; --i) {
+        makeList(lists[i]);
+    }
+
+    momentBuilder.invalid = function (flags) {
+        var m = momentBuilder.utc(NaN);
+        if (flags != null) {
+            extend(m._pf, flags);
+        }
+        else {
+            m._pf.userInvalidated = true;
+        }
+
+        return m;
+    };
+
+    momentBuilder.parseZone = function () {
+        return momentBuilder.apply(null, arguments).parseZone();
+    };
+
+    momentBuilder.parseTwoDigitYear = function (input) {
+        return toInt(input) + (toInt(input) > 68 ? 1900 : 2000);
+    };
+
+
+    /************************************
+        MomentBuilder Prototype
+    ************************************/
+
+    function valueOfBuilder (builder) {
+        return +builder._d + ((builder._offset || 0) * 60000);
+    }
+
+    extend(momentBuilder.fn = MomentBuilder.prototype, {
+
+        clone : function () {
+            return momentBuilder(this);
+        },
+
+        freeze: function () {
+            return frozenMoment(this);
+        },
+
+        parsingFlags : function () {
+            return extend({}, this._pf);
+        },
+
+        invalidAt: function () {
+            return this._pf.overflow;
+        },
+
+        utc : function (keepLocalTime) {
+            return this.zone(0, keepLocalTime);
+        },
+
+        local : function (keepLocalTime) {
+            if (this._isUTC) {
+                this.zone(0, keepLocalTime);
+                this._isUTC = false;
+
+                if (keepLocalTime) {
+                    this.add(this._d.getTimezoneOffset(), 'm');
+                }
+            }
+            return this;
+        },
+
+        add : createAdder(1, 'add'),
+
+        subtract : createAdder(-1, 'subtract'),
+
+        day : function (input) {
+            var day = this._isUTC ? this._d.getUTCDay() : this._d.getDay();
+            input = parseWeekday(input, this.freeze().lang());
+            return this.add(input - day, 'd');
+        },
+
+        startOf : function (units) {
+            units = normalizeUnits(units);
+            // the following switch intentionally omits break keywords
+            // to utilize falling through the cases.
+            switch (units) {
+            case 'year':
+                this.month(0);
+                /* falls through */
+            case 'quarter':
+            case 'month':
+                this.date(1);
+                /* falls through */
+            case 'week':
+            case 'isoWeek':
+            case 'day':
+                this.hours(0);
+                /* falls through */
+            case 'hour':
+                this.minutes(0);
+                /* falls through */
+            case 'minute':
+                this.seconds(0);
+                /* falls through */
+            case 'second':
+                this.milliseconds(0);
+                /* falls through */
+            }
+
+            // weeks are a special case
+            if (units === 'week') {
+                this.weekday(0);
+            } else if (units === 'isoWeek') {
+                this.isoWeekday(1);
+            }
+
+            // quarters are also special
+            if (units === 'quarter') {
+                this.month(Math.floor(this.freeze().month() / 3) * 3);
+            }
+
+            return this;
+        },
+
+        endOf: function (units) {
+            units = normalizeUnits(units);
+            return this.startOf(units).add(1, (units === 'isoWeek' ? 'week' : units)).subtract(1, 'ms');
+        },
+
+        // keepLocalTime = true means only change the timezone, without
+        // affecting the local hour. So 5:31:26 +0300 --[zone(2, true)]-->
+        // 5:31:26 +0200 It is possible that 5:31:26 doesn't exist in zone
+        // +0200, so we adjust the time as needed, to be valid.
+        //
+        // Keeping the time actually adds/subtracts (one hour)
+        // from the actual represented time. That is why we call updateOffset
+        // a second time. In case it wants us to change the offset again
+        // _changeInProgress == true case, then we have to adjust, because
+        // there is no such time in the given timezone.
+        zone : function (input, keepLocalTime) {
+            var offset = this._offset || 0,
+                localAdjust;
+            if (typeof input === 'string') {
+                input = timezoneMinutesFromString(input);
+            }
+            if (Math.abs(input) < 16) {
+                input = input * 60;
+            }
+            if (!this._isUTC && keepLocalTime) {
+                localAdjust = this._d.getTimezoneOffset();
+            }
+            this._offset = input;
+            this._isUTC = true;
+            if (localAdjust != null) {
+                this.subtract(localAdjust, 'm');
+            }
+            if (offset !== input) {
+                if (!keepLocalTime || this._changeInProgress) {
+                    addOrSubtractDurationFromMoment(this,
+                            frozenMoment.duration(offset - input, 'm'), 1, false);
+                } else if (!this._changeInProgress) {
+                    this._changeInProgress = true;
+                    momentBuilder.updateOffset(this, true);
+                    this._changeInProgress = null;
+                }
+            }
+            return this;
+        },
+
+        parseZone : function () {
+            if (this._tzm) {
+                this.zone(this._tzm);
+            } else if (typeof this._i === 'string') {
+                this.zone(this._i);
+            }
+            return this;
+        },
+
+        dayOfYear : function (input) {
+            var dayOfYear = round((valueOfBuilder(momentBuilder(this).startOf('day')) - valueOfBuilder(momentBuilder(this).startOf('year'))) / 864e5) + 1;
+            return this.add((input - dayOfYear), 'd');
+        },
+
+        quarter : function (input) {
+            return this.month((input - 1) * 3 + this.freeze().month() % 3);
+        },
+
+        weekYear : function (input) {
+            var frozen = this.freeze(),
+                year = weekOfYear(frozen, frozen.lang()._week.dow, frozen.lang()._week.doy).year;
+            return this.add((input - year), 'y');
+        },
+
+        isoWeekYear : function (input) {
+            var year = weekOfYear(this, 1, 4).year;
+            return this.add((input - year), 'y');
+        },
+
+        week : function (input) {
+            var frozen = this.freeze(),
+                week = frozen.lang().week(frozen);
+            return this.add((input - week) * 7, 'd');
+        },
+
+        isoWeek : function (input) {
+            var week = weekOfYear(this.freeze(), 1, 4).week;
+            return this.add((input - week) * 7, 'd');
+        },
+
+        weekday : function (input) {
+            var frozen = this.freeze(),
+                weekday = (frozen.day() + 7 - frozen.lang()._week.dow) % 7;
+            return this.add(input - weekday, 'd');
+        },
+
+        isoWeekday : function (input) {
+            // behaves the same as momentBuilder#day except sunday should
+            // belong to the previous week.
+            return this.day(this.freeze().day() % 7 ? input : input - 7);
+        },
+
+        set : function (units, value) {
+            units = normalizeUnits(units);
+            if (typeof this[units] === 'function') {
+                this[units](value);
+            }
+            return this;
+        },
+
+        // Sets the language for this instance.
+        lang : function (key) {
+            this._lang = getLangDefinition(key);
+            return this;
+        }
+    });
+
+    function rawMonthSetter(mom, value) {
+        var maxDate, dayOfMonth;
+
+        // TODO: Move this out of here!
+        if (typeof value === 'string') {
+            value = mom.freeze().lang().monthsParse(value);
+            // TODO: Another silent failure?
+            if (typeof value !== 'number') {
+                return mom;
+            }
+        }
+
+        maxDate = daysInMonth(rawGetter(mom, "FullYear"), value);
+        dayOfMonth = Math.min(maxDate, rawGetter(mom, "Date"));
+        mom._d['set' + (mom._isUTC ? 'UTC' : '') + 'Month'](value, dayOfMonth);
+        return mom;
+    }
+
+    function rawSetter(mom, unit, value) {
+        if (unit === 'Month') {
+            return rawMonthSetter(mom, value);
+        } else {
+            return mom._d['set' + (mom._isUTC ? 'UTC' : '') + unit](value);
+        }
+    }
+
+    function makeSetter(unit, keepTime) {
+        return function (value) {
+            rawSetter(this, unit, value);
+            momentBuilder.updateOffset(this, keepTime);
+            return this;
+        };
+    }
+
+    momentBuilder.fn.millisecond = momentBuilder.fn.milliseconds = makeSetter('Milliseconds', false);
+    momentBuilder.fn.second = momentBuilder.fn.seconds = makeSetter('Seconds', false);
+    momentBuilder.fn.minute = momentBuilder.fn.minutes = makeSetter('Minutes', false);
+    // Setting the hour should keep the time, because the user explicitly
+    // specified which hour he wants. So trying to maintain the same hour (in
+    // a new timezone) makes sense. Adding/subtracting hours does not follow
+    // this rule.
+    momentBuilder.fn.hour = momentBuilder.fn.hours = makeSetter('Hours', true);
+    momentBuilder.fn.date = momentBuilder.fn.days = makeSetter('Date', true);
+    momentBuilder.fn.month = momentBuilder.fn.months = makeSetter('Month', true);
+    momentBuilder.fn.year = makeSetter('FullYear', true);
+
+    // add plural aliases for computed accessor methods (defined above)
+    momentBuilder.fn.weeks = momentBuilder.fn.week;
+    momentBuilder.fn.isoWeeks = momentBuilder.fn.isoWeek;
+    momentBuilder.fn.quarters = momentBuilder.fn.quarter;
+
+    // add aliased format methods
+    momentBuilder.fn.toJSON = momentBuilder.fn.toISOString;
+
+
+    frozenMoment.build = momentBuilder;
+
 
     /************************************
         FrozenMoment Prototype
     ************************************/
 
-
     extend(frozenMoment.fn = FrozenMoment.prototype, {
 
         clone : function () {
             return frozenMoment(this);
+        },
+
+        thaw : function () {
+            return momentBuilder(this);
         },
 
         valueOf : function () {
@@ -2001,7 +2403,7 @@
         },
 
         toString : function () {
-            return this.clone().lang('en').format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ');
+            return this.thaw().lang('en').freeze().format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ');
         },
 
         toDate : function () {
@@ -2009,7 +2411,7 @@
         },
 
         toISOString : function () {
-            var m = frozenMoment(this).utc();
+            var m = this.thaw().utc().freeze();
             if (0 < m.year() && m.year() <= 9999) {
                 return formatMoment(m, 'YYYY-MM-DD[T]HH:mm:ss.SSS[Z]');
             } else {
@@ -2050,35 +2452,15 @@
             return this._pf.overflow;
         },
 
-        utc : function (keepLocalTime) {
-            return this.zone(0, keepLocalTime);
-        },
-
-        local : function (keepLocalTime) {
-            if (this._isUTC) {
-                this.zone(0, keepLocalTime);
-                this._isUTC = false;
-
-                if (keepLocalTime) {
-                    this.add(this._d.getTimezoneOffset(), 'm');
-                }
-            }
-            return this;
-        },
-
         format : function (inputString) {
             var output = formatMoment(this, inputString || frozenMoment.defaultFormat);
             return this.lang().postformat(output);
         },
 
-        add : createAdder(1, 'add'),
-
-        subtract : createAdder(-1, 'subtract'),
-
         diff : function (input, units, asFloat) {
-            var that = makeAs(input, this),
-                zoneDiff = (this.zone() - that.zone()) * 6e4,
-                diff, output;
+            var thatBuilder = makeAsBuilder(input, this),
+                that = thatBuilder.freeze(),
+                diff, zoneDiff, thisMonth, thatMonth, output;
 
             units = normalizeUnits(units);
 
@@ -2089,16 +2471,18 @@
                 output = ((this.year() - that.year()) * 12) + (this.month() - that.month());
                 // adjust by taking difference in days, average number of days
                 // and dst in the given months.
-                output += ((this - frozenMoment(this).startOf('month')) -
-                        (that - frozenMoment(that).startOf('month'))) / diff;
+                thisMonth = this.thaw().startOf('month').freeze();
+                thatMonth = thatBuilder.startOf('month').freeze();
+                output += ((this - thisMonth) - (that - thatMonth)) / diff;
                 // same as above but with zones, to negate all dst
-                output -= ((this.zone() - frozenMoment(this).startOf('month').zone()) -
-                        (that.zone() - frozenMoment(that).startOf('month').zone())) * 6e4 / diff;
+                output -= ((this.zone() - thisMonth.zone()) -
+                        (that.zone() - thatMonth.zone())) * 6e4 / diff;
                 if (units === 'year') {
                     output = output / 12;
                 }
             } else {
                 diff = (this - that);
+                zoneDiff = (this.zone() - that.zone()) * 6e4;
                 output = units === 'second' ? diff / 1e3 : // 1000
                     units === 'minute' ? diff / 6e4 : // 1000 * 60
                     units === 'hour' ? diff / 36e5 : // 1000 * 60 * 60
@@ -2121,7 +2505,7 @@
             // We want to compare the start of today, vs this.
             // Getting start-of-today depends on whether we're zone'd or not.
             var now = time || frozenMoment(),
-                sod = makeAs(now, this).startOf('day'),
+                sod = makeAsBuilder(now, this).startOf('day').freeze(),
                 diff = this.diff(sod, 'days', true),
                 format = diff < -6 ? 'sameElse' :
                     diff < -1 ? 'lastWeek' :
@@ -2137,125 +2521,33 @@
         },
 
         isDST : function () {
-            return (this.zone() < this.clone().month(0).zone() ||
-                this.zone() < this.clone().month(5).zone());
+            return (this.zone() < this.thaw().month(0).freeze().zone() ||
+                this.zone() < this.thaw().month(5).freeze().zone());
         },
 
-        day : function (input) {
-            var day = this._isUTC ? this._d.getUTCDay() : this._d.getDay();
-            if (input != null) {
-                input = parseWeekday(input, this.lang());
-                return this.add(input - day, 'd');
-            } else {
-                return day;
-            }
-        },
-
-        startOf : function (units) {
-            units = normalizeUnits(units);
-            // the following switch intentionally omits break keywords
-            // to utilize falling through the cases.
-            switch (units) {
-            case 'year':
-                this.month(0);
-                /* falls through */
-            case 'quarter':
-            case 'month':
-                this.date(1);
-                /* falls through */
-            case 'week':
-            case 'isoWeek':
-            case 'day':
-                this.hours(0);
-                /* falls through */
-            case 'hour':
-                this.minutes(0);
-                /* falls through */
-            case 'minute':
-                this.seconds(0);
-                /* falls through */
-            case 'second':
-                this.milliseconds(0);
-                /* falls through */
-            }
-
-            // weeks are a special case
-            if (units === 'week') {
-                this.weekday(0);
-            } else if (units === 'isoWeek') {
-                this.isoWeekday(1);
-            }
-
-            // quarters are also special
-            if (units === 'quarter') {
-                this.month(Math.floor(this.month() / 3) * 3);
-            }
-
-            return this;
-        },
-
-        endOf: function (units) {
-            units = normalizeUnits(units);
-            return this.startOf(units).add(1, (units === 'isoWeek' ? 'week' : units)).subtract(1, 'ms');
+        day : function () {
+            return this._isUTC ? this._d.getUTCDay() : this._d.getDay();
         },
 
         isAfter: function (input, units) {
             units = typeof units !== 'undefined' ? units : 'millisecond';
-            return +this.clone().startOf(units) > +frozenMoment(input).startOf(units);
+            return valueOfBuilder(this.thaw().startOf(units)) > valueOfBuilder(momentBuilder(input).startOf(units));
         },
 
         isBefore: function (input, units) {
             units = typeof units !== 'undefined' ? units : 'millisecond';
-            return +this.clone().startOf(units) < +frozenMoment(input).startOf(units);
+            return valueOfBuilder(this.thaw().startOf(units)) < valueOfBuilder(momentBuilder(input).startOf(units));
         },
 
         isSame: function (input, units) {
             units = units || 'ms';
-            return +this.clone().startOf(units) === +makeAs(input, this).startOf(units);
+            return valueOfBuilder(this.thaw().startOf(units)) === valueOfBuilder(makeAsBuilder(input, this).startOf(units));
         },
 
-        // keepLocalTime = true means only change the timezone, without
-        // affecting the local hour. So 5:31:26 +0300 --[zone(2, true)]-->
-        // 5:31:26 +0200 It is possible that 5:31:26 doesn't exist int zone
-        // +0200, so we adjust the time as needed, to be valid.
-        //
-        // Keeping the time actually adds/subtracts (one hour)
-        // from the actual represented time. That is why we call updateOffset
-        // a second time. In case it wants us to change the offset again
-        // _changeInProgress == true case, then we have to adjust, because
-        // there is no such time in the given timezone.
-        zone : function (input, keepLocalTime) {
+        zone : function () {
             var offset = this._offset || 0,
                 localAdjust;
-            if (input != null) {
-                if (typeof input === 'string') {
-                    input = timezoneMinutesFromString(input);
-                }
-                if (Math.abs(input) < 16) {
-                    input = input * 60;
-                }
-                if (!this._isUTC && keepLocalTime) {
-                    localAdjust = this._d.getTimezoneOffset();
-                }
-                this._offset = input;
-                this._isUTC = true;
-                if (localAdjust != null) {
-                    this.subtract(localAdjust, 'm');
-                }
-                if (offset !== input) {
-                    if (!keepLocalTime || this._changeInProgress) {
-                        addOrSubtractDurationFromMoment(this,
-                                frozenMoment.duration(offset - input, 'm'), 1, false);
-                    } else if (!this._changeInProgress) {
-                        this._changeInProgress = true;
-                        frozenMoment.updateOffset(this, true);
-                        this._changeInProgress = null;
-                    }
-                }
-            } else {
-                return this._isUTC ? offset : this._d.getTimezoneOffset();
-            }
-            return this;
+            return this._isUTC ? offset : this._d.getTimezoneOffset();
         },
 
         zoneAbbr : function () {
@@ -2264,15 +2556,6 @@
 
         zoneName : function () {
             return this._isUTC ? 'Coordinated Universal Time' : '';
-        },
-
-        parseZone : function () {
-            if (this._tzm) {
-                this.zone(this._tzm);
-            } else if (typeof this._i === 'string') {
-                this.zone(this._i);
-            }
-            return this;
         },
 
         hasAlignedHourOffset : function (input) {
@@ -2290,45 +2573,38 @@
             return daysInMonth(this.year(), this.month());
         },
 
-        dayOfYear : function (input) {
-            var dayOfYear = round((frozenMoment(this).startOf('day') - frozenMoment(this).startOf('year')) / 864e5) + 1;
-            return input == null ? dayOfYear : this.add((input - dayOfYear), 'd');
+        dayOfYear : function () {
+            return round((valueOfBuilder(this.thaw().startOf('day')) - valueOfBuilder(this.thaw().startOf('year'))) / 864e5) + 1;
         },
 
-        quarter : function (input) {
-            return input == null ? Math.ceil((this.month() + 1) / 3) : this.month((input - 1) * 3 + this.month() % 3);
+        quarter : function () {
+            return Math.ceil((this.month() + 1) / 3);
         },
 
-        weekYear : function (input) {
-            var year = weekOfYear(this, this.lang()._week.dow, this.lang()._week.doy).year;
-            return input == null ? year : this.add((input - year), 'y');
+        weekYear : function () {
+            return weekOfYear(this, this.lang()._week.dow, this.lang()._week.doy).year;
         },
 
-        isoWeekYear : function (input) {
-            var year = weekOfYear(this, 1, 4).year;
-            return input == null ? year : this.add((input - year), 'y');
+        isoWeekYear : function () {
+            return weekOfYear(this, 1, 4).year;
         },
 
-        week : function (input) {
-            var week = this.lang().week(this);
-            return input == null ? week : this.add((input - week) * 7, 'd');
+        week : function () {
+            return this.lang().week(this);
         },
 
-        isoWeek : function (input) {
-            var week = weekOfYear(this, 1, 4).week;
-            return input == null ? week : this.add((input - week) * 7, 'd');
+        isoWeek : function () {
+            return weekOfYear(this, 1, 4).week;
         },
 
-        weekday : function (input) {
-            var weekday = (this.day() + 7 - this.lang()._week.dow) % 7;
-            return input == null ? weekday : this.add(input - weekday, 'd');
+        weekday : function () {
+            return (this.day() + 7 - this.lang()._week.dow) % 7;
         },
 
         isoWeekday : function (input) {
-            // behaves the same as frozenMoment#day except
-            // as a getter, returns 7 instead of 0 (1-7 range instead of 0-6)
-            // as a setter, sunday should belong to the previous week.
-            return input == null ? this.day() || 7 : this.day(this.day() % 7 ? input : input - 7);
+            // behaves the same as frozenMoment#day except returns 7
+            // instead of 0 (1-7 range instead of 0-6)
+            return this.day() || 7;
         },
 
         isoWeeksInYear : function () {
@@ -2345,80 +2621,33 @@
             return this[units]();
         },
 
-        set : function (units, value) {
-            units = normalizeUnits(units);
-            if (typeof this[units] === 'function') {
-                this[units](value);
-            }
-            return this;
-        },
-
-        // If passed a language key, it will set the language for this
-        // instance.  Otherwise, it will return the language configuration
-        // variables for this instance.
-        lang : function (key) {
-            if (key === undefined) {
-                return this._lang;
-            } else {
-                this._lang = getLangDefinition(key);
-                return this;
-            }
+        // Returns the language configuration variables for this instance.
+        lang : function () {
+            return this._lang;
         }
     });
-
-    function rawMonthSetter(mom, value) {
-        var dayOfMonth;
-
-        // TODO: Move this out of here!
-        if (typeof value === 'string') {
-            value = mom.lang().monthsParse(value);
-            // TODO: Another silent failure?
-            if (typeof value !== 'number') {
-                return mom;
-            }
-        }
-
-        dayOfMonth = Math.min(mom.date(),
-                daysInMonth(mom.year(), value));
-        mom._d['set' + (mom._isUTC ? 'UTC' : '') + 'Month'](value, dayOfMonth);
-        return mom;
-    }
 
     function rawGetter(mom, unit) {
         return mom._d['get' + (mom._isUTC ? 'UTC' : '') + unit]();
     }
 
-    function rawSetter(mom, unit, value) {
-        if (unit === 'Month') {
-            return rawMonthSetter(mom, value);
-        } else {
-            return mom._d['set' + (mom._isUTC ? 'UTC' : '') + unit](value);
-        }
-    }
-
-    function makeAccessor(unit, keepTime) {
-        return function (value) {
-            if (value != null) {
-                rawSetter(this, unit, value);
-                frozenMoment.updateOffset(this, keepTime);
-                return this;
-            } else {
-                return rawGetter(this, unit);
-            }
+    function makeGetter(unit) {
+        return function () {
+            return rawGetter(this, unit);
         };
     }
 
-    frozenMoment.fn.millisecond = frozenMoment.fn.milliseconds = makeAccessor('Milliseconds', false);
-    frozenMoment.fn.second = frozenMoment.fn.seconds = makeAccessor('Seconds', false);
-    frozenMoment.fn.minute = frozenMoment.fn.minutes = makeAccessor('Minutes', false);
+    frozenMoment.fn.millisecond = frozenMoment.fn.milliseconds = makeGetter('Milliseconds');
+    frozenMoment.fn.second = frozenMoment.fn.seconds = makeGetter('Seconds');
+    frozenMoment.fn.minute = frozenMoment.fn.minutes = makeGetter('Minutes');
     // Setting the hour should keep the time, because the user explicitly
     // specified which hour he wants. So trying to maintain the same hour (in
     // a new timezone) makes sense. Adding/subtracting hours does not follow
     // this rule.
-    frozenMoment.fn.hour = frozenMoment.fn.hours = makeAccessor('Hours', true);
-    frozenMoment.fn.date = frozenMoment.fn.days = makeAccessor('Date', true);
-    frozenMoment.fn.month = frozenMoment.fn.months = makeAccessor('Month', true);
-    frozenMoment.fn.year = makeAccessor('FullYear', true);
+    frozenMoment.fn.hour = frozenMoment.fn.hours = makeGetter('Hours');
+    frozenMoment.fn.date = frozenMoment.fn.days = makeGetter('Date');
+    frozenMoment.fn.month = frozenMoment.fn.months = makeGetter('Month');
+    frozenMoment.fn.year = makeGetter('FullYear');
 
     // add plural aliases for computed accessor methods (defined above)
     frozenMoment.fn.weeks = frozenMoment.fn.week;
@@ -2572,7 +2801,17 @@
             }
         },
 
-        lang : frozenMoment.fn.lang,
+        // If passed a language key, it will set the language for this
+        // instance.  Otherwise, it will return the language configuration
+        // variables for this instance.
+        lang : function (key) {
+            if (key === undefined) {
+                return this._lang;
+            } else {
+                this._lang = getLangDefinition(key);
+                return this;
+            }
+        },
 
         toISOString : function () {
             // inspired by https://github.com/dordille/moment-isoduration/blob/master/moment.isoduration.js

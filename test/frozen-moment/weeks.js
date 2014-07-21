@@ -1,4 +1,5 @@
-var frozenMoment = require("../../frozen-moment");
+var frozenMoment = require("../../frozen-moment"),
+    momentBuilder = frozenMoment.build;
 
 exports.weeks = {
     setUp : function (done) {
@@ -33,14 +34,14 @@ exports.weeks = {
     "day of year setters" : function (test) {
         test.expect(8);
 
-        test.equal(frozenMoment([2000,  0,  1]).dayOfYear(200).dayOfYear(), 200, "Setting Jan  1 2000 day of the year to 200 should work");
-        test.equal(frozenMoment([2000,  1, 28]).dayOfYear(200).dayOfYear(), 200, "Setting Feb 28 2000 day of the year to 200 should work");
-        test.equal(frozenMoment([2000,  1, 29]).dayOfYear(200).dayOfYear(), 200, "Setting Feb 28 2000 day of the year to 200 should work");
-        test.equal(frozenMoment([2000, 11, 31]).dayOfYear(200).dayOfYear(), 200, "Setting Dec 31 2000 day of the year to 200 should work");
-        test.equal(frozenMoment().dayOfYear(1).dayOfYear(),   1, "Setting day of the year to 1 should work");
-        test.equal(frozenMoment().dayOfYear(59).dayOfYear(),  59, "Setting day of the year to 59 should work");
-        test.equal(frozenMoment().dayOfYear(60).dayOfYear(),  60, "Setting day of the year to 60 should work");
-        test.equal(frozenMoment().dayOfYear(365).dayOfYear(), 365, "Setting day of the year to 365 should work");
+        test.equal(momentBuilder([2000,  0,  1]).dayOfYear(200).freeze().dayOfYear(), 200, "Setting Jan  1 2000 day of the year to 200 should work");
+        test.equal(momentBuilder([2000,  1, 28]).dayOfYear(200).freeze().dayOfYear(), 200, "Setting Feb 28 2000 day of the year to 200 should work");
+        test.equal(momentBuilder([2000,  1, 29]).dayOfYear(200).freeze().dayOfYear(), 200, "Setting Feb 28 2000 day of the year to 200 should work");
+        test.equal(momentBuilder([2000, 11, 31]).dayOfYear(200).freeze().dayOfYear(), 200, "Setting Dec 31 2000 day of the year to 200 should work");
+        test.equal(momentBuilder().dayOfYear(1).freeze().dayOfYear(),   1, "Setting day of the year to 1 should work");
+        test.equal(momentBuilder().dayOfYear(59).freeze().dayOfYear(),  59, "Setting day of the year to 59 should work");
+        test.equal(momentBuilder().dayOfYear(60).freeze().dayOfYear(),  60, "Setting day of the year to 60 should work");
+        test.equal(momentBuilder().dayOfYear(365).freeze().dayOfYear(), 365, "Setting day of the year to 365 should work");
 
         test.done();
     },
@@ -173,11 +174,11 @@ exports.weeks = {
     "weeks setter" : function (test) {
         test.expect(5);
 
-        test.equal(frozenMoment([2012, 0,  1]).week(30).week(), 30, "Setting Jan 1 2012 to week 30 should work");
-        test.equal(frozenMoment([2012, 0,  7]).week(30).week(), 30, "Setting Jan 7 2012 to week 30 should work");
-        test.equal(frozenMoment([2012, 0,  8]).week(30).week(), 30, "Setting Jan 8 2012 to week 30 should work");
-        test.equal(frozenMoment([2012, 0, 14]).week(30).week(), 30, "Setting Jan 14 2012 to week 30 should work");
-        test.equal(frozenMoment([2012, 0, 15]).week(30).week(), 30, "Setting Jan 15 2012 to week 30 should work");
+        test.equal(momentBuilder([2012, 0,  1]).week(30).freeze().week(), 30, "Setting Jan 1 2012 to week 30 should work");
+        test.equal(momentBuilder([2012, 0,  7]).week(30).freeze().week(), 30, "Setting Jan 7 2012 to week 30 should work");
+        test.equal(momentBuilder([2012, 0,  8]).week(30).freeze().week(), 30, "Setting Jan 8 2012 to week 30 should work");
+        test.equal(momentBuilder([2012, 0, 14]).week(30).freeze().week(), 30, "Setting Jan 14 2012 to week 30 should work");
+        test.equal(momentBuilder([2012, 0, 15]).week(30).freeze().week(), 30, "Setting Jan 15 2012 to week 30 should work");
 
         test.done();
     },
@@ -185,11 +186,11 @@ exports.weeks = {
     "iso weeks setter" : function (test) {
         test.expect(5);
 
-        test.equal(frozenMoment([2012, 0,  1]).isoWeeks(25).isoWeeks(), 25, "Setting Jan  1 2012 to week 25 should work");
-        test.equal(frozenMoment([2012, 0,  2]).isoWeeks(24).isoWeeks(), 24, "Setting Jan  2 2012 to week 24 should work");
-        test.equal(frozenMoment([2012, 0,  8]).isoWeeks(23).isoWeeks(), 23, "Setting Jan  8 2012 to week 23 should work");
-        test.equal(frozenMoment([2012, 0,  9]).isoWeeks(22).isoWeeks(), 22, "Setting Jan  9 2012 to week 22 should work");
-        test.equal(frozenMoment([2012, 0, 15]).isoWeeks(21).isoWeeks(), 21, "Setting Jan 15 2012 to week 21 should work");
+        test.equal(momentBuilder([2012, 0,  1]).isoWeeks(25).freeze().isoWeeks(), 25, "Setting Jan  1 2012 to week 25 should work");
+        test.equal(momentBuilder([2012, 0,  2]).isoWeeks(24).freeze().isoWeeks(), 24, "Setting Jan  2 2012 to week 24 should work");
+        test.equal(momentBuilder([2012, 0,  8]).isoWeeks(23).freeze().isoWeeks(), 23, "Setting Jan  8 2012 to week 23 should work");
+        test.equal(momentBuilder([2012, 0,  9]).isoWeeks(22).freeze().isoWeeks(), 22, "Setting Jan  9 2012 to week 22 should work");
+        test.equal(momentBuilder([2012, 0, 15]).isoWeeks(21).freeze().isoWeeks(), 21, "Setting Jan 15 2012 to week 21 should work");
 
         test.done();
     },
@@ -197,12 +198,12 @@ exports.weeks = {
     "iso weeks setter day of year" : function (test) {
         test.expect(6);
 
-        test.equal(frozenMoment([2012, 0,  1]).isoWeek(1).dayOfYear(), 9, "Setting Jan  1 2012 to week 1 should be day of year 8");
-        test.equal(frozenMoment([2012, 0,  1]).isoWeek(1).year(),   2011, "Setting Jan  1 2012 to week 1 should be year 2011");
-        test.equal(frozenMoment([2012, 0,  2]).isoWeek(1).dayOfYear(), 2, "Setting Jan  2 2012 to week 1 should be day of year 2");
-        test.equal(frozenMoment([2012, 0,  8]).isoWeek(1).dayOfYear(), 8, "Setting Jan  8 2012 to week 1 should be day of year 8");
-        test.equal(frozenMoment([2012, 0,  9]).isoWeek(1).dayOfYear(), 2, "Setting Jan  9 2012 to week 1 should be day of year 2");
-        test.equal(frozenMoment([2012, 0, 15]).isoWeek(1).dayOfYear(), 8, "Setting Jan 15 2012 to week 1 should be day of year 8");
+        test.equal(momentBuilder([2012, 0,  1]).isoWeek(1).freeze().dayOfYear(), 9, "Setting Jan  1 2012 to week 1 should be day of year 8");
+        test.equal(momentBuilder([2012, 0,  1]).isoWeek(1).freeze().year(),   2011, "Setting Jan  1 2012 to week 1 should be year 2011");
+        test.equal(momentBuilder([2012, 0,  2]).isoWeek(1).freeze().dayOfYear(), 2, "Setting Jan  2 2012 to week 1 should be day of year 2");
+        test.equal(momentBuilder([2012, 0,  8]).isoWeek(1).freeze().dayOfYear(), 8, "Setting Jan  8 2012 to week 1 should be day of year 8");
+        test.equal(momentBuilder([2012, 0,  9]).isoWeek(1).freeze().dayOfYear(), 2, "Setting Jan  9 2012 to week 1 should be day of year 2");
+        test.equal(momentBuilder([2012, 0, 15]).isoWeek(1).freeze().dayOfYear(), 8, "Setting Jan 15 2012 to week 1 should be day of year 8");
 
         test.done();
     },

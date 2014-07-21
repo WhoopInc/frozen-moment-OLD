@@ -18,15 +18,15 @@ exports.utc = {
     "utc and local" : function (test) {
         test.expect(7);
 
-        var m = frozenMoment(Date.UTC(2011, 1, 2, 3, 4, 5, 6)), zone, expected;
-        m.utc();
+        var m = frozenMoment.build(Date.UTC(2011, 1, 2, 3, 4, 5, 6)), zone, expected;
+        m = m.utc().freeze();
         // utc
         test.equal(m.date(), 2, "the day should be correct for utc");
         test.equal(m.day(), 3, "the date should be correct for utc");
         test.equal(m.hours(), 3, "the hours should be correct for utc");
 
         // local
-        m.local();
+        m = m.thaw().local().freeze();
         if (m.zone() > 180) {
             test.equal(m.date(), 1, "the date should be correct for local");
             test.equal(m.day(), 2, "the day should be correct for local");
@@ -37,7 +37,7 @@ exports.utc = {
         zone = Math.ceil(m.zone() / 60);
         expected = (24 + 3 - zone) % 24;
         test.equal(m.hours(), expected, "the hours (" + m.hours() + ") should be correct for local");
-        test.equal(frozenMoment().utc().zone(), 0, "timezone in utc should always be zero");
+        test.equal(frozenMoment.utc().zone(), 0, "timezone in utc should always be zero");
 
         test.done();
     },
@@ -92,7 +92,7 @@ exports.utc = {
 
         var m = frozenMoment.utc("2012-01-02T08:20:00");
         test.equal(frozenMoment.utc(m)._isUTC, true, "the local zone should be converted to UTC");
-        test.equal(frozenMoment.utc(m.clone().utc())._isUTC, true, "the local zone should stay in UTC");
+        test.equal(frozenMoment.utc(m.thaw().utc())._isUTC, true, "the local zone should stay in UTC");
 
         m.zone(120);
         test.equal(frozenMoment.utc(m)._isUTC, true, "the explicit zone should stay in UTC");
@@ -105,8 +105,8 @@ exports.utc = {
         test.expect(1);
 
         test.equal(
-            frozenMoment('2013-09-15T00:00:00Z').utc().weekday(), // first minute of the day
-            frozenMoment('2013-09-15T23:59:00Z').utc().weekday(), // last minute of the day
+            frozenMoment.build('2013-09-15T00:00:00Z').utc().freeze().weekday(), // first minute of the day
+            frozenMoment.build('2013-09-15T23:59:00Z').utc().freeze().weekday(), // last minute of the day
             "a UTC-frozenMoment's .weekday() should not be affected by the local timezone"
         );
 

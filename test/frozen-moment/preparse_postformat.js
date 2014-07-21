@@ -1,4 +1,5 @@
 var frozenMoment = require("../../frozen-moment"),
+    momentBuilder = frozenMoment.build,
 
     symbolMap = {
         '1': '!',
@@ -60,7 +61,7 @@ exports.preparsePostformat = {
 
         test.equal(frozenMoment.utc('@)!@-)*-@&', 'YYYY-MM-DD').unix(), 1346025600, "preparse string + format");
         test.equal(frozenMoment.utc('@)!@-)*-@&').unix(), 1346025600, "preparse ISO8601 string");
-        test.equal(frozenMoment.unix(1346025600).utc().format('YYYY-MM-DD'), '@)!@-)*-@&', "postformat");
+        test.equal(frozenMoment.unix(1346025600).thaw().utc().freeze().format('YYYY-MM-DD'), '@)!@-)*-@&', "postformat");
 
         test.done();
     },
@@ -70,8 +71,8 @@ exports.preparsePostformat = {
 
         var start = frozenMoment([2007, 1, 28]);
 
-        test.equal(start.from(frozenMoment([2007, 1, 28]).add({s: 90}), true), "@ minutes", "postformat should work on frozenMoment.fn.from");
-        test.equal(frozenMoment().add(6, 'd').fromNow(true), "^ days", "postformat should work on frozenMoment.fn.fromNow");
+        test.equal(start.from(momentBuilder([2007, 1, 28]).add({s: 90}), true), "@ minutes", "postformat should work on frozenMoment.fn.from");
+        test.equal(momentBuilder().add(6, 'd').freeze().fromNow(true), "^ days", "postformat should work on frozenMoment.fn.fromNow");
         test.equal(frozenMoment.duration(10, "h").humanize(), "!) hours", "postformat should work on frozenMoment.duration.fn.humanize");
 
         test.done();
@@ -80,14 +81,14 @@ exports.preparsePostformat = {
     "calendar day" : function (test) {
         test.expect(6);
 
-        var a = frozenMoment().hours(2).minutes(0).seconds(0);
+        var a = momentBuilder().hours(2).minutes(0).seconds(0);
 
-        test.equal(frozenMoment(a).calendar(),                     "Today at @:)) AM",     "today at the same time");
-        test.equal(frozenMoment(a).add({m: 25}).calendar(),      "Today at @:@% AM",     "Now plus 25 min");
-        test.equal(frozenMoment(a).add({h: 1}).calendar(),       "Today at #:)) AM",     "Now plus 1 hour");
-        test.equal(frozenMoment(a).add({d: 1}).calendar(),       "Tomorrow at @:)) AM",  "tomorrow at the same time");
-        test.equal(frozenMoment(a).subtract({h: 1}).calendar(),  "Today at !:)) AM",     "Now minus 1 hour");
-        test.equal(frozenMoment(a).subtract({d: 1}).calendar(),  "Yesterday at @:)) AM", "yesterday at the same time");
+        test.equal(a.freeze().calendar(),                           "Today at @:)) AM",     "today at the same time");
+        test.equal(a.clone().add({m: 25}).freeze().calendar(),      "Today at @:@% AM",     "Now plus 25 min");
+        test.equal(a.clone().add({h: 1}).freeze().calendar(),       "Today at #:)) AM",     "Now plus 1 hour");
+        test.equal(a.clone().add({d: 1}).freeze().calendar(),       "Tomorrow at @:)) AM",  "tomorrow at the same time");
+        test.equal(a.clone().subtract({h: 1}).freeze().calendar(),  "Today at !:)) AM",     "Now minus 1 hour");
+        test.equal(a.clone().subtract({d: 1}).freeze().calendar(),  "Yesterday at @:)) AM", "yesterday at the same time");
 
         test.done();
     }

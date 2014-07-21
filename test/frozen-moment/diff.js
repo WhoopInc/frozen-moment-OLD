@@ -7,22 +7,22 @@ function equal(test, a, b, message) {
 function dstForYear(year) {
     var start = frozenMoment([year]),
         end = frozenMoment([year + 1]),
-        current = start.clone(),
+        current = start,
         last;
 
     while (current < end) {
-        last = current.clone();
-        current.add(24, 'hour');
+        last = current;
+        current = current.thaw().add(24, 'hour').freeze();
         if (last.zone() !== current.zone()) {
-            end = current.clone();
-            current = last.clone();
+            end = current;
+            current = last;
             break;
         }
     }
 
     while (current < end) {
-        last = current.clone();
-        current.add(1, 'hour');
+        last = current;
+        current = current.thaw().add(1, 'hour').freeze();
         if (last.zone() !== current.zone()) {
             return {
                 frozenMoment : last,
@@ -135,7 +135,7 @@ exports.diff = {
         test.expect(16);
 
         a = dst.frozenMoment;
-        b = a.clone().utc().add(12, 'hours').local();
+        b = a.thaw().utc().add(12, 'hours').local().freeze();
         daysInMonth = (a.daysInMonth() + b.daysInMonth()) / 2;
         equal(test, b.diff(a, 'ms', true), 12 * 60 * 60 * 1000,                         "ms diff across DST");
         equal(test, b.diff(a, 's', true),  12 * 60 * 60,                                "second diff across DST");
@@ -148,7 +148,7 @@ exports.diff = {
 
 
         a = dst.frozenMoment;
-        b = a.clone().utc().add(12 + dst.diff, 'hours').local();
+        b = a.thaw().utc().add(12 + dst.diff, 'hours').local().freeze();
         daysInMonth = (a.daysInMonth() + b.daysInMonth()) / 2;
 
         equal(test, b.diff(a, 'ms', true), (12 + dst.diff) * 60 * 60 * 1000,   "ms diff across DST");
@@ -176,14 +176,14 @@ exports.diff = {
     "diff between utc and local" : function (test) {
         if (frozenMoment([2012]).zone() === frozenMoment([2011]).zone()) {
             // Russia's zone offset on 1st of Jan 2012 vs 2011 is different
-            test.equal(frozenMoment([2012]).utc().diff([2011], 'years'), 1, "year diff");
+            test.equal(frozenMoment([2012]).thaw().utc().freeze().diff([2011], 'years'), 1, "year diff");
         }
-        test.equal(frozenMoment([2010, 2, 2]).utc().diff([2010, 0, 2], 'months'), 2, "month diff");
-        test.equal(frozenMoment([2010, 0, 4]).utc().diff([2010], 'days'), 3, "day diff");
-        test.equal(frozenMoment([2010, 0, 22]).utc().diff([2010], 'weeks'), 3, "week diff");
-        test.equal(frozenMoment([2010, 0, 1, 4]).utc().diff([2010], 'hours'), 4, "hour diff");
-        test.equal(frozenMoment([2010, 0, 1, 0, 5]).utc().diff([2010], 'minutes'), 5, "minute diff");
-        test.equal(frozenMoment([2010, 0, 1, 0, 0, 6]).utc().diff([2010], 'seconds'), 6, "second diff");
+        test.equal(frozenMoment([2010, 2, 2]).thaw().utc().freeze().diff([2010, 0, 2], 'months'), 2, "month diff");
+        test.equal(frozenMoment([2010, 0, 4]).thaw().utc().freeze().diff([2010], 'days'), 3, "day diff");
+        test.equal(frozenMoment([2010, 0, 22]).thaw().utc().freeze().diff([2010], 'weeks'), 3, "week diff");
+        test.equal(frozenMoment([2010, 0, 1, 4]).thaw().utc().freeze().diff([2010], 'hours'), 4, "hour diff");
+        test.equal(frozenMoment([2010, 0, 1, 0, 5]).thaw().utc().freeze().diff([2010], 'minutes'), 5, "minute diff");
+        test.equal(frozenMoment([2010, 0, 1, 0, 0, 6]).thaw().utc().freeze().diff([2010], 'seconds'), 6, "second diff");
 
         test.done();
     },

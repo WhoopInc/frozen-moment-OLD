@@ -1,16 +1,16 @@
-// moment.js language configuration
+// frozen-moment.js language configuration
 // language : Burmese (mm)
 // author : Squar team, mysquar.com
 
 (function (factory) {
     if (typeof define === 'function' && define.amd) {
-        define(['moment'], factory); // AMD
+        define(['frozenMoment'], factory); // AMD
     } else if (typeof exports === 'object') {
-        module.exports = factory(require('../moment')); // Node
+        module.exports = factory(require('../frozen-moment')); // Node
     } else {
-        factory(window.moment); // Browser global
+        factory(window.frozenMoment); // Browser global
     }
-}(function (moment) {
+}(function (frozenMoment) {
     var symbolMap = {
         '1': '၁',
         '2': '၂',
@@ -34,7 +34,7 @@
         '၉': '9',
         '၀': '0'
     };
-    return moment.lang('my', {
+    return frozenMoment.lang('my', {
         months: "ဇန်နဝါရီ_ဖေဖော်ဝါရီ_မတ်_ဧပြီ_မေ_ဇွန်_ဇူလိုင်_သြဂုတ်_စက်တင်ဘာ_အောက်တိုဘာ_နိုဝင်ဘာ_ဒီဇင်ဘာ".split("_"),
         monthsShort: "ဇန်_ဖေ_မတ်_ပြီ_မေ_ဇွန်_လိုင်_သြ_စက်_အောက်_နို_ဒီ".split("_"),
         weekdays: "တနင်္ဂနွေ_တနင်္လာ_အင်္ဂါ_ဗုဒ္ဓဟူး_ကြာသပတေး_သောကြာ_စနေ".split("_"),

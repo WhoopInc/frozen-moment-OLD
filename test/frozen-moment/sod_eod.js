@@ -1,4 +1,5 @@
-var frozenMoment = require("../../frozen-moment");
+var frozenMoment = require("../../frozen-moment"),
+    momentBuilder = frozenMoment.build;
 
 exports.endStartOf = {
     setUp : function (done) {
@@ -17,9 +18,9 @@ exports.endStartOf = {
     "start of year" : function (test) {
         test.expect(9);
 
-        var m = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('year'),
-            ms = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('years'),
-            ma = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('y');
+        var m = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('year').freeze(),
+            ms = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('years').freeze(),
+            ma = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('y').freeze();
         test.equal(+m, +ms, "Plural or singular should work");
         test.equal(+m, +ma, "Full or abbreviated should work");
         test.equal(m.year(), 2011, "keep the year");
@@ -35,9 +36,9 @@ exports.endStartOf = {
     "end of year" : function (test) {
         test.expect(9);
 
-        var m = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('year'),
-            ms = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('years'),
-            ma = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('y');
+        var m = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('year').freeze(),
+            ms = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('years').freeze(),
+            ma = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('y').freeze();
         test.equal(+m, +ms, "Plural or singular should work");
         test.equal(+m, +ma, "Full or abbreviated should work");
         test.equal(m.year(), 2011, "keep the year");
@@ -53,9 +54,9 @@ exports.endStartOf = {
     "start of quarter" : function (test) {
         test.expect(10);
 
-        var m = frozenMoment(new Date(2011, 4, 2, 3, 4, 5, 6)).startOf('quarter'),
-            ms = frozenMoment(new Date(2011, 4, 2, 3, 4, 5, 6)).startOf('quarters'),
-            ma = frozenMoment(new Date(2011, 4, 2, 3, 4, 5, 6)).startOf('Q');
+        var m = momentBuilder(new Date(2011, 4, 2, 3, 4, 5, 6)).startOf('quarter').freeze(),
+            ms = momentBuilder(new Date(2011, 4, 2, 3, 4, 5, 6)).startOf('quarters').freeze(),
+            ma = momentBuilder(new Date(2011, 4, 2, 3, 4, 5, 6)).startOf('Q').freeze();
         test.equal(+m, +ms, "Plural or singular should work");
         test.equal(+m, +ma, "Full or abbreviated should work");
         test.equal(m.year(), 2011, "keep the year");
@@ -72,9 +73,9 @@ exports.endStartOf = {
     "end of quarter" : function (test) {
         test.expect(10);
 
-        var m = frozenMoment(new Date(2011, 4, 2, 3, 4, 5, 6)).endOf('quarter'),
-            ms = frozenMoment(new Date(2011, 4, 2, 3, 4, 5, 6)).endOf('quarters'),
-            ma = frozenMoment(new Date(2011, 4, 2, 3, 4, 5, 6)).endOf('Q');
+        var m = momentBuilder(new Date(2011, 4, 2, 3, 4, 5, 6)).endOf('quarter').freeze(),
+            ms = momentBuilder(new Date(2011, 4, 2, 3, 4, 5, 6)).endOf('quarters').freeze(),
+            ma = momentBuilder(new Date(2011, 4, 2, 3, 4, 5, 6)).endOf('Q').freeze();
         test.equal(+m, +ms, "Plural or singular should work");
         test.equal(+m, +ma, "Full or abbreviated should work");
         test.equal(m.year(), 2011, "keep the year");
@@ -91,9 +92,9 @@ exports.endStartOf = {
     "start of month" : function (test) {
         test.expect(9);
 
-        var m = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('month'),
-            ms = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('months'),
-            ma = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('M');
+        var m = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('month').freeze(),
+            ms = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('months').freeze(),
+            ma = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('M').freeze();
         test.equal(+m, +ms, "Plural or singular should work");
         test.equal(+m, +ma, "Full or abbreviated should work");
         test.equal(m.year(), 2011, "keep the year");
@@ -109,9 +110,9 @@ exports.endStartOf = {
     "end of month" : function (test) {
         test.expect(9);
 
-        var m = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('month'),
-            ms = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('months'),
-            ma = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('M');
+        var m = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('month').freeze(),
+            ms = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('months').freeze(),
+            ma = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('M').freeze();
         test.equal(+m, +ms, "Plural or singular should work");
         test.equal(+m, +ma, "Full or abbreviated should work");
         test.equal(m.year(), 2011, "keep the year");
@@ -127,9 +128,9 @@ exports.endStartOf = {
     "start of week" : function (test) {
         test.expect(10);
 
-        var m = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('week'),
-            ms = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('weeks'),
-            ma = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('w');
+        var m = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('week').freeze(),
+            ms = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('weeks').freeze(),
+            ma = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('w').freeze();
         test.equal(+m, +ms, "Plural or singular should work");
         test.equal(+m, +ma, "Full or abbreviated should work");
         test.equal(m.year(), 2011, "keep the year");
@@ -146,9 +147,9 @@ exports.endStartOf = {
     "end of week" : function (test) {
         test.expect(10);
 
-        var m = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('week'),
-            ms = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('weeks'),
-            ma = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('weeks');
+        var m = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('week').freeze(),
+            ms = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('weeks').freeze(),
+            ma = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('weeks').freeze();
         test.equal(+m, +ms, "Plural or singular should work");
         test.equal(+m, +ma, "Full or abbreviated should work");
         test.equal(m.year(), 2011, "keep the year");
@@ -165,9 +166,9 @@ exports.endStartOf = {
     "start of iso-week" : function (test) {
         test.expect(10);
 
-        var m = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('isoWeek'),
-            ms = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('isoWeeks'),
-            ma = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('W');
+        var m = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('isoWeek').freeze(),
+            ms = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('isoWeeks').freeze(),
+            ma = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('W').freeze();
         test.equal(+m, +ms, "Plural or singular should work");
         test.equal(+m, +ma, "Full or abbreviated should work");
         test.equal(m.year(), 2011, "keep the year");
@@ -184,9 +185,9 @@ exports.endStartOf = {
     "end of iso-week" : function (test) {
         test.expect(10);
 
-        var m = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('isoWeek'),
-            ms = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('isoWeeks'),
-            ma = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('W');
+        var m = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('isoWeek').freeze(),
+            ms = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('isoWeeks').freeze(),
+            ma = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('W').freeze();
         test.equal(+m, +ms, "Plural or singular should work");
         test.equal(+m, +ma, "Full or abbreviated should work");
         test.equal(m.year(), 2011, "keep the year");
@@ -203,9 +204,9 @@ exports.endStartOf = {
     "start of day" : function (test) {
         test.expect(9);
 
-        var m = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('day'),
-            ms = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('days'),
-            ma = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('d');
+        var m = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('day').freeze(),
+            ms = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('days').freeze(),
+            ma = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('d').freeze();
         test.equal(+m, +ms, "Plural or singular should work");
         test.equal(+m, +ma, "Full or abbreviated should work");
         test.equal(m.year(), 2011, "keep the year");
@@ -221,9 +222,9 @@ exports.endStartOf = {
     "end of day" : function (test) {
         test.expect(9);
 
-        var m = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('day'),
-            ms = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('days'),
-            ma = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('d');
+        var m = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('day').freeze(),
+            ms = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('days').freeze(),
+            ma = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('d').freeze();
         test.equal(+m, +ms, "Plural or singular should work");
         test.equal(+m, +ma, "Full or abbreviated should work");
         test.equal(m.year(), 2011, "keep the year");
@@ -239,9 +240,9 @@ exports.endStartOf = {
     "start of hour" : function (test) {
         test.expect(9);
 
-        var m = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('hour'),
-            ms = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('hours'),
-            ma = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('h');
+        var m = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('hour').freeze(),
+            ms = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('hours').freeze(),
+            ma = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('h').freeze();
         test.equal(+m, +ms, "Plural or singular should work");
         test.equal(+m, +ma, "Full or abbreviated should work");
         test.equal(m.year(), 2011, "keep the year");
@@ -257,9 +258,9 @@ exports.endStartOf = {
     "end of hour" : function (test) {
         test.expect(9);
 
-        var m = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('hour'),
-            ms = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('hours'),
-            ma = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('h');
+        var m = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('hour').freeze(),
+            ms = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('hours').freeze(),
+            ma = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('h').freeze();
         test.equal(+m, +ms, "Plural or singular should work");
         test.equal(+m, +ma, "Full or abbreviated should work");
         test.equal(m.year(), 2011, "keep the year");
@@ -275,9 +276,9 @@ exports.endStartOf = {
     "start of minute" : function (test) {
         test.expect(9);
 
-        var m = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('minute'),
-            ms = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('minutes'),
-            ma = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('m');
+        var m = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('minute').freeze(),
+            ms = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('minutes').freeze(),
+            ma = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('m').freeze();
         test.equal(+m, +ms, "Plural or singular should work");
         test.equal(+m, +ma, "Full or abbreviated should work");
         test.equal(m.year(), 2011, "keep the year");
@@ -293,9 +294,9 @@ exports.endStartOf = {
     "end of minute" : function (test) {
         test.expect(9);
 
-        var m = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('minute'),
-            ms = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('minutes'),
-            ma = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('m');
+        var m = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('minute').freeze(),
+            ms = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('minutes').freeze(),
+            ma = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('m').freeze();
         test.equal(+m, +ms, "Plural or singular should work");
         test.equal(+m, +ma, "Full or abbreviated should work");
         test.equal(m.year(), 2011, "keep the year");
@@ -311,9 +312,9 @@ exports.endStartOf = {
     "start of second" : function (test) {
         test.expect(9);
 
-        var m = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('second'),
-            ms = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('seconds'),
-            ma = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('s');
+        var m = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('second').freeze(),
+            ms = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('seconds').freeze(),
+            ma = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).startOf('s').freeze();
         test.equal(+m, +ms, "Plural or singular should work");
         test.equal(+m, +ma, "Full or abbreviated should work");
         test.equal(m.year(), 2011, "keep the year");
@@ -329,9 +330,9 @@ exports.endStartOf = {
     "end of second" : function (test) {
         test.expect(9);
 
-        var m = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('second'),
-            ms = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('seconds'),
-            ma = frozenMoment(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('s');
+        var m = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('second').freeze(),
+            ms = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('seconds').freeze(),
+            ma = momentBuilder(new Date(2011, 1, 2, 3, 4, 5, 6)).endOf('s').freeze();
         test.equal(+m, +ms, "Plural or singular should work");
         test.equal(+m, +ma, "Full or abbreviated should work");
         test.equal(m.year(), 2011, "keep the year");
@@ -347,7 +348,7 @@ exports.endStartOf = {
     "startOf across DST +1" : function (test) {
         var oldUpdateOffset = frozenMoment.updateOffset,
             // Based on a real story somewhere in America/Los_Angeles
-            dstAt = frozenMoment("2014-03-09T02:00:00-08:00").parseZone(),
+            dstAt = momentBuilder("2014-03-09T02:00:00-08:00").parseZone().freeze(),
             m;
 
         frozenMoment.updateOffset = function (mom, keepTime) {
@@ -358,23 +359,23 @@ exports.endStartOf = {
             }
         };
 
-        m = frozenMoment("2014-03-15T00:00:00-07:00").parseZone();
-        m.startOf('M');
+        m = momentBuilder("2014-03-15T00:00:00-07:00").parseZone();
+        m = m.startOf('M').freeze();
         test.equal(m.format(), "2014-03-01T00:00:00-08:00",
                 "startOf('month') across +1");
 
-        m = frozenMoment("2014-03-09T09:00:00-07:00").parseZone();
-        m.startOf('d');
+        m = momentBuilder("2014-03-09T09:00:00-07:00").parseZone();
+        m = m.startOf('d').freeze();
         test.equal(m.format(), "2014-03-09T00:00:00-08:00",
                 "startOf('day') across +1");
 
-        m = frozenMoment("2014-03-09T03:05:00-07:00").parseZone();
-        m.startOf('h');
+        m = momentBuilder("2014-03-09T03:05:00-07:00").parseZone();
+        m = m.startOf('h').freeze();
         test.equal(m.format(), "2014-03-09T03:00:00-07:00",
                 "startOf('hour') after +1");
 
-        m = frozenMoment("2014-03-09T01:35:00-08:00").parseZone();
-        m.startOf('h');
+        m = momentBuilder("2014-03-09T01:35:00-08:00").parseZone();
+        m = m.startOf('h').freeze();
         test.equal(m.format(), "2014-03-09T01:00:00-08:00",
                 "startOf('hour') before +1");
 
@@ -388,7 +389,7 @@ exports.endStartOf = {
     "startOf across DST -1" : function (test) {
         var oldUpdateOffset = frozenMoment.updateOffset,
             // Based on a real story somewhere in America/Los_Angeles
-            dstAt = frozenMoment("2014-11-02T02:00:00-07:00").parseZone(),
+            dstAt = momentBuilder("2014-11-02T02:00:00-07:00").parseZone().freeze(),
             m;
 
         frozenMoment.updateOffset = function (mom, keepTime) {
@@ -399,25 +400,25 @@ exports.endStartOf = {
             }
         };
 
-        m = frozenMoment("2014-11-15T00:00:00-08:00").parseZone();
-        m.startOf('M');
+        m = momentBuilder("2014-11-15T00:00:00-08:00").parseZone();
+        m = m.startOf('M').freeze();
         test.equal(m.format(), "2014-11-01T00:00:00-07:00",
                 "startOf('month') across -1");
 
-        m = frozenMoment("2014-11-02T09:00:00-08:00").parseZone();
-        m.startOf('d');
+        m = momentBuilder("2014-11-02T09:00:00-08:00").parseZone();
+        m = m.startOf('d').freeze();
         test.equal(m.format(), "2014-11-02T00:00:00-07:00",
                 "startOf('day') across -1");
 
         // note that zone is -8
-        m = frozenMoment("2014-11-02T01:30:00-08:00").parseZone();
-        m.startOf('h');
+        m = momentBuilder("2014-11-02T01:30:00-08:00").parseZone();
+        m = m.startOf('h').freeze();
         test.equal(m.format(), "2014-11-02T01:00:00-08:00",
                 "startOf('hour') after +1");
 
         // note that zone is -7
-        m = frozenMoment("2014-11-02T01:30:00-07:00").parseZone();
-        m.startOf('h');
+        m = momentBuilder("2014-11-02T01:30:00-07:00").parseZone();
+        m = m.startOf('h').freeze();
         test.equal(m.format(), "2014-11-02T01:00:00-07:00",
                 "startOf('hour') before +1");
 

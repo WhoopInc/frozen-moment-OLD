@@ -1,4 +1,5 @@
-var frozenMoment = require("../../frozen-moment");
+var frozenMoment = require("../../frozen-moment"),
+    momentBuilder = frozenMoment.build;
 
 exports.gettersSetters = {
     setUp : function (done) {
@@ -46,14 +47,15 @@ exports.gettersSetters = {
     "setters plural" : function (test) {
         test.expect(6);
 
-        var a = frozenMoment();
-        a.year(2011);
-        a.months(9);
-        a.date(12);
-        a.hours(6);
-        a.minutes(7);
-        a.seconds(8);
-        a.milliseconds(9);
+        var a = momentBuilder();
+        a = a.year(2011);
+        a = a.months(9);
+        a = a.date(12);
+        a = a.hours(6);
+        a = a.minutes(7);
+        a = a.seconds(8);
+        a = a.milliseconds(9);
+        a = a.freeze();
         test.equal(a.months(), 9, 'months');
         test.equal(a.days(), 12, 'days');
         test.equal(a.hours(), 6, 'hours');
@@ -66,14 +68,15 @@ exports.gettersSetters = {
     "setters singular" : function (test) {
         test.expect(8);
 
-        var a = frozenMoment();
-        a.year(2011);
-        a.month(9);
-        a.date(12);
-        a.hour(6);
-        a.minute(7);
-        a.second(8);
-        a.millisecond(9);
+        var a = momentBuilder();
+        a = a.year(2011);
+        a = a.month(9);
+        a = a.date(12);
+        a = a.hour(6);
+        a = a.minute(7);
+        a = a.second(8);
+        a = a.millisecond(9);
+        a = a.freeze();
         test.equal(a.year(), 2011, 'year');
         test.equal(a.month(), 9, 'month');
         test.equal(a.date(), 12, 'date');
@@ -88,14 +91,15 @@ exports.gettersSetters = {
     "setters" : function (test) {
         test.expect(9);
 
-        var a = frozenMoment();
-        a.year(2011);
-        a.month(9);
-        a.date(12);
-        a.hours(6);
-        a.minutes(7);
-        a.seconds(8);
-        a.milliseconds(9);
+        var a = momentBuilder();
+        a = a.year(2011);
+        a = a.month(9);
+        a = a.date(12);
+        a = a.hours(6);
+        a = a.minutes(7);
+        a = a.seconds(8);
+        a = a.milliseconds(9);
+        a = a.freeze();
         test.equal(a.year(), 2011, 'year');
         test.equal(a.month(), 9, 'month');
         test.equal(a.date(), 12, 'date');
@@ -106,22 +110,23 @@ exports.gettersSetters = {
         test.equal(a.milliseconds(), 9, 'milliseconds');
 
         // Test month() behavior. See https://github.com/timrwood/frozenMoment/pull/822
-        a = frozenMoment('20130531', 'YYYYMMDD');
+        a = momentBuilder('20130531', 'YYYYMMDD');
         a.month(3);
-        test.equal(a.month(), 3, 'month edge case');
+        test.equal(a.freeze().month(), 3, 'month edge case');
 
         test.done();
     },
 
     "setter programmatic" : function (test) {
-        var a = frozenMoment();
-        a.set('year', 2011);
-        a.set('month', 9);
-        a.set('date', 12);
-        a.set('hours', 6);
-        a.set('minutes', 7);
-        a.set('seconds', 8);
-        a.set('milliseconds', 9);
+        var a = momentBuilder();
+        a = a.set('year', 2011);
+        a = a.set('month', 9);
+        a = a.set('date', 12);
+        a = a.set('hours', 6);
+        a = a.set('minutes', 7);
+        a = a.set('seconds', 8);
+        a = a.set('milliseconds', 9);
+        a = a.freeze();
         test.equal(a.year(), 2011, 'year');
         test.equal(a.month(), 9, 'month');
         test.equal(a.date(), 12, 'date');
@@ -132,8 +137,8 @@ exports.gettersSetters = {
         test.equal(a.milliseconds(), 9, 'milliseconds');
 
         // Test month() behavior. See https://github.com/timrwood/frozenMoment/pull/822
-        a = frozenMoment('20130531', 'YYYYMMDD');
-        a.month(3);
+        a = momentBuilder('20130531', 'YYYYMMDD');
+        a = a.month(3).freeze();
         test.equal(a.month(), 3, 'month edge case');
 
         test.done();
@@ -173,38 +178,38 @@ exports.gettersSetters = {
     "setters strings" : function (test) {
         test.expect(7);
 
-        var a = frozenMoment([2012]).lang('en');
-        test.equal(a.clone().day(0).day('Wednesday').day(), 3, 'day full name');
-        test.equal(a.clone().day(0).day('Wed').day(), 3, 'day short name');
-        test.equal(a.clone().day(0).day('We').day(), 3, 'day minimal name');
-        test.equal(a.clone().day(0).day('invalid').day(), 0, 'invalid day name');
-        test.equal(a.clone().month(0).month('April').month(), 3, 'month full name');
-        test.equal(a.clone().month(0).month('Apr').month(), 3, 'month short name');
-        test.equal(a.clone().month(0).month('invalid').month(), 0, 'invalid month name');
+        var a = momentBuilder([2012]).lang('en');
+        test.equal(a.day(0).day('Wednesday').freeze().day(), 3, 'day full name');
+        test.equal(a.day(0).day('Wed').freeze().day(), 3, 'day short name');
+        test.equal(a.day(0).day('We').freeze().day(), 3, 'day minimal name');
+        test.equal(a.day(0).day('invalid').freeze().day(), 0, 'invalid day name');
+        test.equal(a.month(0).month('April').freeze().month(), 3, 'month full name');
+        test.equal(a.month(0).month('Apr').freeze().month(), 3, 'month short name');
+        test.equal(a.month(0).month('invalid').freeze().month(), 0, 'invalid month name');
         test.done();
     },
 
     "setters - falsey values" : function (test) {
         test.expect(1);
 
-        var a = frozenMoment();
+        var a = momentBuilder();
         // ensure minutes wasn't coincidentally 0 already
-        a.minutes(1);
-        a.minutes(0);
-        test.equal(a.minutes(), 0, 'falsey value');
+        a = a.minutes(1);
+        a = a.minutes(0);
+        test.equal(a.freeze().minutes(), 0, 'falsey value');
         test.done();
     },
 
     "chaining setters" : function (test) {
         test.expect(7);
 
-        var a = frozenMoment();
-        a.year(2011)
-         .month(9)
-         .date(12)
-         .hours(6)
-         .minutes(7)
-         .seconds(8);
+        var a = momentBuilder().year(2011)
+                               .month(9)
+                               .date(12)
+                               .hours(6)
+                               .minutes(7)
+                               .seconds(8)
+                               .freeze();
         test.equal(a.year(), 2011, 'year');
         test.equal(a.month(), 9, 'month');
         test.equal(a.date(), 12, 'date');
@@ -219,31 +224,31 @@ exports.gettersSetters = {
         test.expect(18);
 
         var a = frozenMoment([2011, 0, 15]);
-        test.equal(frozenMoment(a).day(0).date(), 9, 'set from saturday to sunday');
-        test.equal(frozenMoment(a).day(6).date(), 15, 'set from saturday to saturday');
-        test.equal(frozenMoment(a).day(3).date(), 12, 'set from saturday to wednesday');
+        test.equal(a.thaw().day(0).freeze().date(), 9, 'set from saturday to sunday');
+        test.equal(a.thaw().day(6).freeze().date(), 15, 'set from saturday to saturday');
+        test.equal(a.thaw().day(3).freeze().date(), 12, 'set from saturday to wednesday');
 
         a = frozenMoment([2011, 0, 9]);
-        test.equal(frozenMoment(a).day(0).date(), 9, 'set from sunday to sunday');
-        test.equal(frozenMoment(a).day(6).date(), 15, 'set from sunday to saturday');
-        test.equal(frozenMoment(a).day(3).date(), 12, 'set from sunday to wednesday');
+        test.equal(a.thaw().day(0).freeze().date(), 9, 'set from sunday to sunday');
+        test.equal(a.thaw().day(6).freeze().date(), 15, 'set from sunday to saturday');
+        test.equal(a.thaw().day(3).freeze().date(), 12, 'set from sunday to wednesday');
 
         a = frozenMoment([2011, 0, 12]);
-        test.equal(frozenMoment(a).day(0).date(), 9, 'set from wednesday to sunday');
-        test.equal(frozenMoment(a).day(6).date(), 15, 'set from wednesday to saturday');
-        test.equal(frozenMoment(a).day(3).date(), 12, 'set from wednesday to wednesday');
+        test.equal(a.thaw().day(0).freeze().date(), 9, 'set from wednesday to sunday');
+        test.equal(a.thaw().day(6).freeze().date(), 15, 'set from wednesday to saturday');
+        test.equal(a.thaw().day(3).freeze().date(), 12, 'set from wednesday to wednesday');
 
-        test.equal(frozenMoment(a).day(-7).date(), 2, 'set from wednesday to last sunday');
-        test.equal(frozenMoment(a).day(-1).date(), 8, 'set from wednesday to last saturday');
-        test.equal(frozenMoment(a).day(-4).date(), 5, 'set from wednesday to last wednesday');
+        test.equal(a.thaw().day(-7).freeze().date(), 2, 'set from wednesday to last sunday');
+        test.equal(a.thaw().day(-1).freeze().date(), 8, 'set from wednesday to last saturday');
+        test.equal(a.thaw().day(-4).freeze().date(), 5, 'set from wednesday to last wednesday');
 
-        test.equal(frozenMoment(a).day(7).date(), 16, 'set from wednesday to next sunday');
-        test.equal(frozenMoment(a).day(13).date(), 22, 'set from wednesday to next saturday');
-        test.equal(frozenMoment(a).day(10).date(), 19, 'set from wednesday to next wednesday');
+        test.equal(a.thaw().day(7).freeze().date(), 16, 'set from wednesday to next sunday');
+        test.equal(a.thaw().day(13).freeze().date(), 22, 'set from wednesday to next saturday');
+        test.equal(a.thaw().day(10).freeze().date(), 19, 'set from wednesday to next wednesday');
 
-        test.equal(frozenMoment(a).day(14).date(), 23, 'set from wednesday to second next sunday');
-        test.equal(frozenMoment(a).day(20).date(), 29, 'set from wednesday to second next saturday');
-        test.equal(frozenMoment(a).day(17).date(), 26, 'set from wednesday to second next wednesday');
+        test.equal(a.thaw().day(14).freeze().date(), 23, 'set from wednesday to second next sunday');
+        test.equal(a.thaw().day(20).freeze().date(), 29, 'set from wednesday to second next saturday');
+        test.equal(a.thaw().day(17).freeze().date(), 26, 'set from wednesday to second next wednesday');
         test.done();
     }
 };

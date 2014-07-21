@@ -39,16 +39,16 @@ exports.format = {
         test.expect(10);
 
         frozenMoment.lang('en');
-        test.equal(frozenMoment.utc().year(-1).format('YY'), '-01', 'YY with negative year');
-        test.equal(frozenMoment.utc().year(-1).format('YYYY'), '-0001', 'YYYY with negative year');
-        test.equal(frozenMoment.utc().year(-12).format('YY'), '-12', 'YY with negative year');
-        test.equal(frozenMoment.utc().year(-12).format('YYYY'), '-0012', 'YYYY with negative year');
-        test.equal(frozenMoment.utc().year(-123).format('YY'), '-23', 'YY with negative year');
-        test.equal(frozenMoment.utc().year(-123).format('YYYY'), '-0123', 'YYYY with negative year');
-        test.equal(frozenMoment.utc().year(-1234).format('YY'), '-34', 'YY with negative year');
-        test.equal(frozenMoment.utc().year(-1234).format('YYYY'), '-1234', 'YYYY with negative year');
-        test.equal(frozenMoment.utc().year(-12345).format('YY'), '-45', 'YY with negative year');
-        test.equal(frozenMoment.utc().year(-12345).format('YYYY'), '-12345', 'YYYY with negative year');
+        test.equal(frozenMoment.utc().thaw().year(-1).freeze().format('YY'), '-01', 'YY with negative year');
+        test.equal(frozenMoment.utc().thaw().year(-1).freeze().format('YYYY'), '-0001', 'YYYY with negative year');
+        test.equal(frozenMoment.utc().thaw().year(-12).freeze().format('YY'), '-12', 'YY with negative year');
+        test.equal(frozenMoment.utc().thaw().year(-12).freeze().format('YYYY'), '-0012', 'YYYY with negative year');
+        test.equal(frozenMoment.utc().thaw().year(-123).freeze().format('YY'), '-23', 'YY with negative year');
+        test.equal(frozenMoment.utc().thaw().year(-123).freeze().format('YYYY'), '-0123', 'YYYY with negative year');
+        test.equal(frozenMoment.utc().thaw().year(-1234).freeze().format('YY'), '-34', 'YY with negative year');
+        test.equal(frozenMoment.utc().thaw().year(-1234).freeze().format('YYYY'), '-1234', 'YYYY with negative year');
+        test.equal(frozenMoment.utc().thaw().year(-12345).freeze().format('YY'), '-45', 'YY with negative year');
+        test.equal(frozenMoment.utc().thaw().year(-12345).freeze().format('YYYY'), '-12345', 'YYYY with negative year');
 
         test.done();
     },
@@ -59,7 +59,7 @@ exports.format = {
         test.equal(b.format('S'), '1', 'Deciseconds');
         test.equal(b.format('SS'), '12', 'Centiseconds');
         test.equal(b.format('SSS'), '123', 'Milliseconds');
-        b.milliseconds(789);
+        b = b.thaw().milliseconds(789).freeze();
         test.equal(b.format('S'), '7', 'Deciseconds');
         test.equal(b.format('SS'), '78', 'Centiseconds');
         test.equal(b.format('SSS'), '789', 'Milliseconds');
@@ -205,13 +205,13 @@ exports.format = {
 
     "long years" : function (test) {
         test.expect(6);
-        test.equal(frozenMoment.utc().year(2).format('YYYYYY'), '+000002', 'small year with YYYYYY');
-        test.equal(frozenMoment.utc().year(2012).format('YYYYYY'), '+002012', 'regular year with YYYYYY');
-        test.equal(frozenMoment.utc().year(20123).format('YYYYYY'), '+020123', 'big year with YYYYYY');
+        test.equal(frozenMoment.utc().thaw().year(2).freeze().format('YYYYYY'), '+000002', 'small year with YYYYYY');
+        test.equal(frozenMoment.utc().thaw().year(2012).freeze().format('YYYYYY'), '+002012', 'regular year with YYYYYY');
+        test.equal(frozenMoment.utc().thaw().year(20123).freeze().format('YYYYYY'), '+020123', 'big year with YYYYYY');
 
-        test.equal(frozenMoment.utc().year(-1).format('YYYYYY'), '-000001', 'small negative year with YYYYYY');
-        test.equal(frozenMoment.utc().year(-2012).format('YYYYYY'), '-002012', 'negative year with YYYYYY');
-        test.equal(frozenMoment.utc().year(-20123).format('YYYYYY'), '-020123', 'big negative year with YYYYYY');
+        test.equal(frozenMoment.utc().thaw().year(-1).freeze().format('YYYYYY'), '-000001', 'small negative year with YYYYYY');
+        test.equal(frozenMoment.utc().thaw().year(-2012).freeze().format('YYYYYY'), '-002012', 'negative year with YYYYYY');
+        test.equal(frozenMoment.utc().thaw().year(-20123).freeze().format('YYYYYY'), '-020123', 'big negative year with YYYYYY');
 
         test.done();
     },
@@ -376,20 +376,20 @@ exports.format = {
 
         frozenMoment.lang('en');
         var zones = [60, -60, 90, -90, 360, -360, 720, -720],
-            b = frozenMoment().utc().startOf('day').subtract({m : 1}),
-            c = frozenMoment().local().startOf('day').subtract({m : 1}),
-            d = frozenMoment().local().startOf('day').subtract({d : 2}),
+            b = frozenMoment.build().utc().startOf('day').subtract({m : 1}).freeze(),
+            c = frozenMoment.build().local().startOf('day').subtract({m : 1}).freeze(),
+            d = frozenMoment.build().local().startOf('day').subtract({d : 2}).freeze(),
             i, z, a;
 
         for (i = 0; i < zones.length; ++i) {
             z = zones[i];
-            a = frozenMoment().zone(z).startOf('day').subtract({m: 1});
-            test.equal(frozenMoment(a).zone(z).calendar(), "Yesterday at 11:59 PM", "Yesterday at 11:59 PM, not Today, or the wrong time");
+            a = frozenMoment.build().zone(z).startOf('day').subtract({m: 1});
+            test.equal(a.zone(z).freeze().calendar(), "Yesterday at 11:59 PM", "Yesterday at 11:59 PM, not Today, or the wrong time");
         }
 
-        test.equal(frozenMoment(b).utc().calendar(), "Yesterday at 11:59 PM", "Yesterday at 11:59 PM, not Today, or the wrong time");
-        test.equal(frozenMoment(c).local().calendar(), "Yesterday at 11:59 PM", "Yesterday at 11:59 PM, not Today, or the wrong time");
-        test.equal(frozenMoment(c).local().calendar(d), "Tomorrow at 11:59 PM", "Tomorrow at 11:59 PM, not Yesterday, or the wrong time");
+        test.equal(frozenMoment.build(b).utc().freeze().calendar(), "Yesterday at 11:59 PM", "Yesterday at 11:59 PM, not Today, or the wrong time");
+        test.equal(frozenMoment.build(c).local().freeze().calendar(), "Yesterday at 11:59 PM", "Yesterday at 11:59 PM, not Today, or the wrong time");
+        test.equal(frozenMoment.build(c).local().freeze().calendar(d), "Tomorrow at 11:59 PM", "Tomorrow at 11:59 PM, not Yesterday, or the wrong time");
 
         test.done();
     },

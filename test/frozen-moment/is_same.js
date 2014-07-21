@@ -170,9 +170,9 @@ exports.isSame = {
 
     "is same with zone'd frozenMoments" : function (test) {
         test.expect(3);
-        test.ok(frozenMoment.parseZone('2013-02-01T-05:00').isSame(frozenMoment('2013-02-01'), 'year'), "zoned vs local frozenMoment");
-        test.ok(frozenMoment('2013-02-01').isSame(frozenMoment('2013-02-01').zone('-05:00'), 'year'), "local vs zoned frozenMoment");
-        test.ok(frozenMoment.parseZone('2013-02-01T-05:00').isSame(frozenMoment.parseZone('2013-02-01T-06:30'), 'year'),
+        test.ok(frozenMoment.build.parseZone('2013-02-01T-05:00').freeze().isSame(frozenMoment('2013-02-01'), 'year'), "zoned vs local frozenMoment");
+        test.ok(frozenMoment('2013-02-01').isSame(frozenMoment('2013-02-01').thaw().zone('-05:00').freeze(), 'year'), "local vs zoned frozenMoment");
+        test.ok(frozenMoment.build.parseZone('2013-02-01T-05:00').freeze().isSame(frozenMoment.build.parseZone('2013-02-01T-06:30'), 'year'),
                 "zoned vs (differently) zoned frozenMoment");
         test.done();
     }

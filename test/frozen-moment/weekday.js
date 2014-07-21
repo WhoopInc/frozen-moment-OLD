@@ -28,38 +28,38 @@ exports.weekYear = {
     "iso weekday setter" : function (test) {
         test.expect(27);
 
-        var a = frozenMoment([2011, 0, 10]);
-        test.equal(frozenMoment(a).isoWeekday(1).date(),  10, 'set from mon to mon');
-        test.equal(frozenMoment(a).isoWeekday(4).date(),  13, 'set from mon to thu');
-        test.equal(frozenMoment(a).isoWeekday(7).date(),  16, 'set from mon to sun');
-        test.equal(frozenMoment(a).isoWeekday(-6).date(),  3, 'set from mon to last mon');
-        test.equal(frozenMoment(a).isoWeekday(-3).date(),  6, 'set from mon to last thu');
-        test.equal(frozenMoment(a).isoWeekday(0).date(),   9, 'set from mon to last sun');
-        test.equal(frozenMoment(a).isoWeekday(8).date(),  17, 'set from mon to next mon');
-        test.equal(frozenMoment(a).isoWeekday(11).date(), 20, 'set from mon to next thu');
-        test.equal(frozenMoment(a).isoWeekday(14).date(), 23, 'set from mon to next sun');
+        var a = frozenMoment.build([2011, 0, 10]);
+        test.equal(a.clone().isoWeekday(1).freeze().date(),  10, 'set from mon to mon');
+        test.equal(a.clone().isoWeekday(4).freeze().date(),  13, 'set from mon to thu');
+        test.equal(a.clone().isoWeekday(7).freeze().date(),  16, 'set from mon to sun');
+        test.equal(a.clone().isoWeekday(-6).freeze().date(),  3, 'set from mon to last mon');
+        test.equal(a.clone().isoWeekday(-3).freeze().date(),  6, 'set from mon to last thu');
+        test.equal(a.clone().isoWeekday(0).freeze().date(),   9, 'set from mon to last sun');
+        test.equal(a.clone().isoWeekday(8).freeze().date(),  17, 'set from mon to next mon');
+        test.equal(a.clone().isoWeekday(11).freeze().date(), 20, 'set from mon to next thu');
+        test.equal(a.clone().isoWeekday(14).freeze().date(), 23, 'set from mon to next sun');
 
-        a = frozenMoment([2011, 0, 13]);
-        test.equal(frozenMoment(a).isoWeekday(1).date(), 10, 'set from thu to mon');
-        test.equal(frozenMoment(a).isoWeekday(4).date(), 13, 'set from thu to thu');
-        test.equal(frozenMoment(a).isoWeekday(7).date(), 16, 'set from thu to sun');
-        test.equal(frozenMoment(a).isoWeekday(-6).date(),  3, 'set from thu to last mon');
-        test.equal(frozenMoment(a).isoWeekday(-3).date(),  6, 'set from thu to last thu');
-        test.equal(frozenMoment(a).isoWeekday(0).date(),   9, 'set from thu to last sun');
-        test.equal(frozenMoment(a).isoWeekday(8).date(),  17, 'set from thu to next mon');
-        test.equal(frozenMoment(a).isoWeekday(11).date(), 20, 'set from thu to next thu');
-        test.equal(frozenMoment(a).isoWeekday(14).date(), 23, 'set from thu to next sun');
+        a = frozenMoment.build([2011, 0, 13]);
+        test.equal(a.clone().isoWeekday(1).freeze().date(), 10, 'set from thu to mon');
+        test.equal(a.clone().isoWeekday(4).freeze().date(), 13, 'set from thu to thu');
+        test.equal(a.clone().isoWeekday(7).freeze().date(), 16, 'set from thu to sun');
+        test.equal(a.clone().isoWeekday(-6).freeze().date(),  3, 'set from thu to last mon');
+        test.equal(a.clone().isoWeekday(-3).freeze().date(),  6, 'set from thu to last thu');
+        test.equal(a.clone().isoWeekday(0).freeze().date(),   9, 'set from thu to last sun');
+        test.equal(a.clone().isoWeekday(8).freeze().date(),  17, 'set from thu to next mon');
+        test.equal(a.clone().isoWeekday(11).freeze().date(), 20, 'set from thu to next thu');
+        test.equal(a.clone().isoWeekday(14).freeze().date(), 23, 'set from thu to next sun');
 
-        a = frozenMoment([2011, 0, 16]);
-        test.equal(frozenMoment(a).isoWeekday(1).date(), 10, 'set from sun to mon');
-        test.equal(frozenMoment(a).isoWeekday(4).date(), 13, 'set from sun to thu');
-        test.equal(frozenMoment(a).isoWeekday(7).date(), 16, 'set from sun to sun');
-        test.equal(frozenMoment(a).isoWeekday(-6).date(),  3, 'set from sun to last mon');
-        test.equal(frozenMoment(a).isoWeekday(-3).date(),  6, 'set from sun to last thu');
-        test.equal(frozenMoment(a).isoWeekday(0).date(),   9, 'set from sun to last sun');
-        test.equal(frozenMoment(a).isoWeekday(8).date(),  17, 'set from sun to next mon');
-        test.equal(frozenMoment(a).isoWeekday(11).date(), 20, 'set from sun to next thu');
-        test.equal(frozenMoment(a).isoWeekday(14).date(), 23, 'set from sun to next sun');
+        a = frozenMoment.build([2011, 0, 16]);
+        test.equal(a.clone().isoWeekday(1).freeze().date(), 10, 'set from sun to mon');
+        test.equal(a.clone().isoWeekday(4).freeze().date(), 13, 'set from sun to thu');
+        test.equal(a.clone().isoWeekday(7).freeze().date(), 16, 'set from sun to sun');
+        test.equal(a.clone().isoWeekday(-6).freeze().date(),  3, 'set from sun to last mon');
+        test.equal(a.clone().isoWeekday(-3).freeze().date(),  6, 'set from sun to last thu');
+        test.equal(a.clone().isoWeekday(0).freeze().date(),   9, 'set from sun to last sun');
+        test.equal(a.clone().isoWeekday(8).freeze().date(),  17, 'set from sun to next mon');
+        test.equal(a.clone().isoWeekday(11).freeze().date(), 20, 'set from sun to next thu');
+        test.equal(a.clone().isoWeekday(14).freeze().date(), 23, 'set from sun to next sun');
 
         test.done();
     },
