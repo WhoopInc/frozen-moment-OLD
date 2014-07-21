@@ -29,18 +29,8 @@
         // internal storage for locale config files
         locales = {},
 
-        // frozenMoment internal properties
-        instanceProperties = [
-          '_i',
-          '_f',
-          '_l',
-          '_strict',
-          '_tzm',
-          '_isUTC',
-          '_offset',
-          '_pf',
-          '_locale'
-        ];
+        // extra frozenMoment internal properties (plugins register props here)
+        instanceProperties = [],
 
         // check for nodeJS
         hasModule = (typeof module !== 'undefined' && module.exports),
@@ -379,15 +369,17 @@
     // MomentBuilder constructor
     function MomentBuilder(config) {
         copyConfig(this, config);
+        this._d = new Date(+config._d);
         this._isAMomentBuilderObject = true;
     }
 
     // FrozenMoment constructor
     function FrozenMoment(config, skipOverflow) {
-        if (skipOverflow != false) {
-          checkOverflow(config);
+        if (skipOverflow !== false) {
+            checkOverflow(config);
         }
         copyConfig(this, config);
+        this._d = new Date(+config._d);
         this._isAMomentObject = true;
     }
 
@@ -487,15 +479,43 @@
     function copyConfig(to, from) {
         var i, prop, val;
 
-        for (i in instanceProperties) {
-          prop = instanceProperties[i];
-          val = from[prop];
-          if (typeof val !== 'undefined') {
-            to[prop] = val;
-          }
+        if (typeof from._i !== 'undefined') {
+            to._i = from._i;
+        }
+        if (typeof from._f !== 'undefined') {
+            to._f = from._f;
+        }
+        if (typeof from._l !== 'undefined') {
+            to._l = from._l;
+        }
+        if (typeof from._strict !== 'undefined') {
+            to._strict = from._strict;
+        }
+        if (typeof from._tzm !== 'undefined') {
+            to._tzm = from._tzm;
+        }
+        if (typeof from._isUTC !== 'undefined') {
+            to._isUTC = from._isUTC;
+        }
+        if (typeof from._offset !== 'undefined') {
+            to._offset = from._offset;
+        }
+        if (typeof from._pf !== 'undefined') {
+            to._pf = from._pf;
+        }
+        if (typeof from._locale !== 'undefined') {
+            to._locale = from._locale;
         }
 
-        to._d = new Date(+from._d);
+        if (instanceProperties.length > 0) {
+            for (i in instanceProperties) {
+                prop = instanceProperties[i];
+                val = from[prop];
+                if (typeof val !== 'undefined') {
+                    to[prop] = val;
+                }
+            }
+        }
 
         return to;
     }
@@ -1501,7 +1521,7 @@
 
         for (i = 0; i < config._f.length; i++) {
             currentScore = 0;
-            tempConfig = extend({}, config);
+            tempConfig = copyConfig({}, config);
             tempConfig._pf = defaultParsingFlags();
             tempConfig._f = config._f[i];
             makeDateFromStringAndFormat(tempConfig);
