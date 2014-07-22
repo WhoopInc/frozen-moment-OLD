@@ -10,9 +10,9 @@ A lightweight javascript date library for parsing, validating, manipulating, and
 
 This is a recent fork of [Moment.js](https://github.com/moment/moment).  Whereas Moment provides a mutable wrapper over the native JavaScript Date API, this project seeks to provide an immutable API for working with moments in time that can be created with a chainable builder API.  We aim to maintain general feature parity with the upstream Moment API.
 
-## [Documentation](https://github.com/WhoopInc/frozen-moment/tree/docs/docs/moment)
+## [Documentation](http://whoopinc.github.io/frozen-moment/docs/)
 
-Sorry this documentation is so clunky to navigate right now.  We haven't had a chance to generate and publish a proper website from these Markdown files yet.  We have tried to update the documentation content to account for our API changes, though, so please open an issue (or a pull request!) if you notice anything that doesn't match the actual behavior of the frozen-moment.js code.
+The docs are a little rough in appearance right now, but they should be accurate and comprehensive.  If you notice anything that doesn't match the actual behavior of our code, please open an issue (or a pull request!).
 
 ## [Contributing](CONTRIBUTING.md)
 
