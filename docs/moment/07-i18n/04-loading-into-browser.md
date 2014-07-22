@@ -2,14 +2,14 @@
 title: Loading languages in the browser
 version: 1.0.0
 signature: |
-  moment.lang(String, Object);
+  frozenMoment.lang(String, Object);
 ---
 
 
 Loading languages in the browser just requires you to include the language files.
 
 ```html
-<script src="moment.min.js"></script>
+<script src="frozen-moment.min.js"></script>
 <script src="min/lang/fr.js"></script>
 <script src="min/lang/pt.js"></script>
 ```
@@ -17,7 +17,7 @@ Loading languages in the browser just requires you to include the language files
 There are minified versions of each of these languages. There is also a minified version of all of the languages bundled together.
 
 ```html
-<script src="moment.min.js"></script>
+<script src="frozen-moment.min.js"></script>
 <script src="lang/all.min.js"></script>
 ```
 
