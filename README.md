@@ -1,3 +1,5 @@
+# frozen-moment
+
 <!--[![NPM version][npm-version-image]][npm-url] [![NPM downloads][npm-downloads-image]][npm-url]-->
 
 [![MIT License][license-image]][license-url]
@@ -14,7 +16,7 @@ Sorry this documentation is so clunky to navigate right now.  We haven't had a c
 
 ## [Contributing](CONTRIBUTING.md)
 
-Want to see this project succeed?  We'd love to have you help out!  Take a look at our [current Issues list](https://github.com/WhoopInc/frozen-moment/issues), or just submit a pull request that adds a feature you need.
+Want to see this project succeed?  We'd love to have you help out!  Take a look at our [current Issues list](https://github.com/WhoopInc/frozen-moment/issues), or just submit a pull request that adds a feature you need.  Documentation pull requests are also very welcome.  Thanks!
 
 ## [Changelog](CHANGELOG.md)
 
