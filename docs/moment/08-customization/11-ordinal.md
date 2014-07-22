@@ -2,7 +2,7 @@
 title: Ordinal
 version: 1.0.0
 signature: |
-  moment.lang('en', {
+  frozenMoment.lang('en', {
       ordinal : Function
   });
 ---
@@ -11,7 +11,7 @@ signature: |
 `Language#ordinal` should be a function that returns the ordinal for a given number.
 
 ```javascript
-moment.lang('en', {
+frozenMoment.lang('en', {
     ordinal : function (number, token) {
         var b = number % 10;
         var output = (~~ (number % 100 / 10) === 1) ? 'th' :

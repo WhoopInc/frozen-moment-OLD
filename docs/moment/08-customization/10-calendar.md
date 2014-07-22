@@ -2,7 +2,7 @@
 title: Calendar
 version: 1.3.0
 signature: |
-  moment.lang('en', {
+  frozenMoment.lang('en', {
       calendar : Object
   });
 ---
@@ -11,7 +11,7 @@ signature: |
 `Language#calendar` should have the following formatting strings.
 
 ```javascript
-moment.lang('en', {
+frozenMoment.lang('en', {
     calendar : {
         lastDay : '[Yesterday at] LT',
         sameDay : '[Today at] LT',
@@ -23,7 +23,7 @@ moment.lang('en', {
 });
 ```
 
-Each of the `Language#calendar` keys can also be a callback function with the scope of the current moment. It should return a formatting string.
+Each of the `Language#calendar` keys can also be a callback function with the scope of the current frozenMoment. It should return a formatting string.
 
 ```javascript
 function () {

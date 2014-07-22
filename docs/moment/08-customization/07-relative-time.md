@@ -2,16 +2,16 @@
 title: Relative Time
 version: 1.0.0
 signature: |
-  moment.lang('en', {
+  frozenMoment.lang('en', {
       relativeTime : Object
   });
 ---
 
 
-`Language#relativeTime` should be an object of the replacement strings for `moment#from`.
+`Language#relativeTime` should be an object of the replacement strings for `frozenMoment#from`.
 
 ```javascript
-moment.lang('en', {
+frozenMoment.lang('en', {
     relativeTime : {
         future: "in %s",
         past:   "%s ago",

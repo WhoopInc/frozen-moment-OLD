@@ -2,10 +2,10 @@
 title: Weekday Abbreviations
 version: 1.0.0
 signature: |
-  moment.lang('en', {
+  frozenMoment.lang('en', {
       weekdaysShort : String[]
   });
-  moment.lang('en', {
+  frozenMoment.lang('en', {
       weekdaysShort : Function
   });
 ---
@@ -14,7 +14,7 @@ signature: |
 `Language#weekdaysShort` should be an array of the weekdays abbreviations.
 
 ```javascript
-moment.lang('en', {
+frozenMoment.lang('en', {
     weekdaysShort : ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 });
 ```
@@ -22,7 +22,7 @@ moment.lang('en', {
 `Language#weekdaysShort` can be a callback function as well.
 
 ```javascript
-moment.lang('en', {
+frozenMoment.lang('en', {
     weekdaysShort : function (momentToFormat, format) {
         return weekdaysShort[momentToFormat.day()];
     }

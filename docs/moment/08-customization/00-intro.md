@@ -3,10 +3,10 @@ title: Customize
 ---
 
 
-Moment.js is very easy to customize. In general, you should create a language setting with your customizations.
+FrozenMoment is very easy to customize. In general, you should create a language setting with your customizations.
 
 ```javascript
-moment.lang('en-my-settings', {
+frozenMoment.lang('en-my-settings', {
     // customizations.
 });
 ```
@@ -14,7 +14,7 @@ moment.lang('en-my-settings', {
 However, you can also overwrite an existing language that has been loaded as well.
 
 ```javascript
-moment.lang('en', {
+frozenMoment.lang('en', {
     // customizations
 });
 ```

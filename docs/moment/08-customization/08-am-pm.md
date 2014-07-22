@@ -2,7 +2,7 @@
 title: AM/PM
 version: 1.6.0
 signature: |
-  moment.lang('en', {
+  frozenMoment.lang('en', {
       meridiem : Function
   });
 ---
@@ -13,7 +13,7 @@ If your language uses 'am/pm', `Language#meridiem` can be ommitted, as those val
 If your language needs any different computation for am/pm, `Language#meridiem` should be a callback function that returns the correct string based on hour, minute, and upper/lowercase.
 
 ```javascript
-moment.lang('zh-cn', {
+frozenMoment.lang('zh-cn', {
     meridiem : function (hour, minute, isLowercase) {
         if (hour < 9) {
             return "早上";
@@ -33,7 +33,7 @@ moment.lang('zh-cn', {
 Before version **1.6.0**, `Language#meridiem` was a map of upper and lowercase versions of am/pm.
 
 ```javascript
-moment.lang('en', {
+frozenMoment.lang('en', {
     meridiem : {
         am : 'am',
         AM : 'AM',
