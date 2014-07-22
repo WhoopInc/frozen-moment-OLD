@@ -1,27 +1,29 @@
 ---
-title: Moment Clone
+title: FrozenMoment Clone
 version: 1.2.0
 signature: |
-  moment(Moment);
+  frozenMoment.build(FrozenMoment);
 ---
 
 
-All moments are mutable. If you want a clone of a moment, you can do so explicitly or implicitly.
+All moments are immutable, so cloning is unnecessary. Builder objects are mutable, however. If you want a clone of a frozenMoment builder, you can do so explicitly or implicitly.
 
-Calling `moment()` on a moment will clone it.
+Calling `frozenMoment.build()` on a FrozenMoment or a MomentBuilder will create a new MomentBuilder object initialized with a copy of the internal state of the provided FrozenMoment or MomentBuilder.
 
 ```javascript
-var a = moment([2012]);
-var b = moment(a);
+var a = frozenMoment.build([2012]);
+var b = frozenMoment.build(a);
 a.year(2000);
-b.year(); // 2012
+b.freeze().year(); // 2012
 ```
 
-Additionally, you can call `moment#clone` to clone a moment.
+Additionally, you can call `frozenMoment.build#clone` to clone an existing MomentBuilder.
 
 ```javascript
-var a = moment([2012]);
+var a = frozenMoment.build([2012]);
 var b = a.clone();
 a.year(2000);
-b.year(); // 2012
+b.freeze().year(); // 2012
 ```
+
+At time of writing, `frozenMoment#clone` also exists but should return a reference to the original frozenMoment object.  This will probably be removed prior to release.

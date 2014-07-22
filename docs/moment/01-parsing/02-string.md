@@ -2,25 +2,24 @@
 title: String
 version: 1.0.0
 signature: |
-  moment(String);
+  frozenMoment(String);
+  frozenMoment.build(String);
 ---
 
 
-You can create a moment from a string. Moment would try a few ISO patterns and then try the native js Date.
+You can create a frozenMoment from a string. FrozenMoment would try a few ISO patterns and then try the native js Date.
 
 ```javascript
-var day = moment("Dec 25, 1995");
+var day = frozenMoment("Dec 25, 1995");
 ```
 
 **Warning** Browser support for this is inconsistent. Because there is no specification on which formats should be supported, what works in some browsers will not work in other browsers.
 
-<!--
-**Note**: This has been the source of a lot of confustion, because moments created via `Date` constructor don't support `isValid` and also work unreliably. So it would be soon deprecated. From version 2.6.0 there is a way to prevent Date constructor usage -- just set `moment.createFromInputFallback` to an empty function.
--->
+**Warning** We currently intend to remove this functionality (inherited from upstream Moment) before the first release of FrozenMoment.
 
 For more consistent results, you should use [String + Format](#/parsing/string-format/).
 
-There is one exception: Moment.js does detect if you are using an ISO-8601 string and will parse that correctly without a format string.
+There is one exception: FrozenMoment does detect if you are using an ISO-8601 string and will parse that correctly without a format string.
 
 The following ISO-8601 formats are supported across all browsers.
 
@@ -62,8 +61,10 @@ The following ISO-8601 formats are supported across all browsers.
 
 **Note:** Automatic cross browser ISO-8601 support was added in version **1.5.0**. Support for the week and ordinal formats was added in version **2.3.0**.
 
-If a string does not match any of the above formats and is not able to be parsed with `Date.parse`, `moment#isValid` will return false.
+If a string does not match any of the above formats and is not able to be parsed with `Date.parse`, `frozenMoment#isValid` will return false.
 
 ```javascript
-moment("not a real date").isValid(); // false
+frozenMoment("not a real date").isValid(); // false
 ```
+
+When invoked as `frozenMoment.build()`, this API creates a builder object instead of a frozenMoment object.  See `frozenMoment#thaw` for more information about builder objects.

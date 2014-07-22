@@ -2,14 +2,15 @@
 title: Now
 version: 1.0.0
 signature: |
-  moment();
+  frozenMoment();
+  frozenMoment.build();
 ---
 
 
-To get the current date and time, just call `moment()` with no parameters.
+To get the current date and time, just call `frozenMoment()` with no parameters.
 
 ```javascript
-var now = moment();
+var now = frozenMoment();
 ```
 
-This is essentially the same as calling `moment(new Date())`.
+This is essentially the same as calling `frozenMoment(new Date())`.

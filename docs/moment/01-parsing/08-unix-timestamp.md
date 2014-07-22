@@ -2,18 +2,21 @@
 title: Unix Timestamp (seconds)
 version: 1.6.0
 signature: |
-  moment.unix(Number)
+  frozenMoment.unix(Number)
+  frozenMoment.build.unix(Number)
 ---
 
 
-To create a moment from a Unix timestamp (*seconds* since the Unix Epoch), use `moment.unix(Number)`.
+To create a FrozenMoment from a Unix timestamp (*seconds* since the Unix Epoch), use `frozenMoment.unix(Number)`.
 
 ```javascript
-var day = moment.unix(1318781876);
+var day = frozenMoment.unix(1318781876);
 ```
 
-This is implemented as `moment(timestamp * 1000)`, so partial seconds in the input timestamp are included.
+This is implemented as `frozenMoment(timestamp * 1000)`, so partial seconds in the input timestamp are included.
 
 ```javascript
-var day = moment.unix(1318781876.721);
+var day = frozenMoment.unix(1318781876.721);
 ```
+
+This syntax can also be invoked as `frozenMoment.build.unix()` to create a builder object instead of a frozenMoment object.  See `frozenMoment#thaw` for more information about builder objects.

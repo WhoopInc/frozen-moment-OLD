@@ -2,27 +2,31 @@
 title: String + Format
 version: 1.0.0
 signature: |
-  moment(String, String);
-  moment(String, String, String);
-  moment(String, String, Boolean);
-  moment(String, String, String, Boolean);
+  frozenMoment(String, String);
+  frozenMoment.build(String, String);
+  frozenMoment(String, String, String);
+  frozenMoment.build(String, String, String);
+  frozenMoment(String, String, Boolean);
+  frozenMoment.build(String, String, Boolean);
+  frozenMoment(String, String, String, Boolean);
+  frozenMoment.build(String, String, String, Boolean);
 ---
 
 
-If you know the format of an input string, you can use that to parse a moment.
+If you know the format of an input string, you can use that to parse a frozenMoment.
 
 ```javascript
-moment("12-25-1995", "MM-DD-YYYY");
+frozenMoment("12-25-1995", "MM-DD-YYYY");
 ```
 
 The parser ignores non-alphanumeric characters, so both of the following will return the same thing.
 
 ```javascript
-moment("12-25-1995", "MM-DD-YYYY");
-moment("12\25\1995", "MM-DD-YYYY");
+frozenMoment("12-25-1995", "MM-DD-YYYY");
+frozenMoment("12\25\1995", "MM-DD-YYYY");
 ```
 
-The parsing tokens are similar to the formatting tokens used in `moment#format`.
+The parsing tokens are similar to the formatting tokens used in `frozenMoment#format`.
 
 <table class="table table-striped table-bordered">
   <tbody>
@@ -36,7 +40,7 @@ The parsing tokens are similar to the formatting tokens used in `moment#format`.
     </tr>
     <tr>
       <td>MMM, MMMM</td>
-      <td>Month Name (In language currently set by `moment.lang()`)</td>
+      <td>Month Name (In language currently set by `frozenMoment.lang()`)</td>
     </tr>
     <tr>
       <td>Q</td>
@@ -156,40 +160,46 @@ added in `2.0.0`, `LT`, `L`, `LL`, `LLL`, `LLLL` were added in `2.2.1`.
 Unless you specify a timezone offset, parsing a string will create a date in the current timezone.
 
 ```javascript
-moment("2010-10-20 4:30", "YYYY-MM-DD HH:mm"); // parsed as 4:30 local time
-moment("2010-10-20 4:30 +0000", "YYYY-MM-DD HH:mm Z"); // parsed as 4:30 GMT
+frozenMoment("2010-10-20 4:30", "YYYY-MM-DD HH:mm"); // parsed as 4:30 local time
+frozenMoment("2010-10-20 4:30 +0000", "YYYY-MM-DD HH:mm Z"); // parsed as 4:30 GMT
 ```
 
-If the moment that results from the parsed input does not exist, `moment#isValid` will return false.
+If the moment that results from the parsed input does not exist, `frozenMoment#isValid` will return false.
 
 ```javascript
-moment("2010 13", "YYYY MM").isValid(); // false (not a real month)
-moment("2010 11 31", "YYYY MM DD").isValid(); // false (not a real day)
-moment("2010 2 29", "YYYY MM DD").isValid(); // false (not a leap year)
-moment("2010 notamonth 29", "YYYY MMM DD").isValid(); // false (not a real month name)
+frozenMoment("2010 13", "YYYY MM").isValid(); // false (not a real month)
+frozenMoment("2010 11 31", "YYYY MM DD").isValid(); // false (not a real day)
+frozenMoment("2010 2 29", "YYYY MM DD").isValid(); // false (not a leap year)
+frozenMoment("2010 notamonth 29", "YYYY MMM DD").isValid(); // false (not a real month name)
 ```
 
-As of version **2.0.0**, a language key can be passed as the third parameter to `moment()` and `moment.utc()`.
+As of version **2.0.0**, a language key can be passed as the third parameter to `frozenMoment()` and `frozenMoment.utc()`.
 
 ```javascript
-moment('2012 juillet', 'YYYY MMM', 'fr');
-moment('2012 July', 'YYYY MMM', 'en');
+frozenMoment('2012 juillet', 'YYYY MMM', 'fr');
+frozenMoment('2012 July', 'YYYY MMM', 'en');
 ```
 
-Moment's parser is very forgiving, and this can lead to undesired behavior. As of version **2.3.0**, you may specify a boolean for the last argument to make Moment use strict parsing. Strict parsing requires that the format and input match exactly.
+FrozenMoment's parser is very forgiving, and this can lead to undesired behavior. As of version **2.3.0**, you may specify a boolean for the last argument to make FrozenMoment use strict parsing. Strict parsing requires that the format and input match exactly.
+
+**Warning** We may remove the forgiving parser mode from FrozenMoment core prior to release.  In that case, strict parsing would become the only mode
+available.  If you have strong opinions about this one way or the other, please
+comment in our GitHub Issues.
 
 ```javascript
-moment('It is 2012-05-25', 'YYYY-MM-DD').isValid();        // true
-moment('It is 2012-05-25', 'YYYY-MM-DD', true).isValid();  // false
-moment('2012-05-25', 'YYYY-MM-DD', true).isValid();        // true
+frozenMoment('It is 2012-05-25', 'YYYY-MM-DD').isValid();        // true
+frozenMoment('It is 2012-05-25', 'YYYY-MM-DD', true).isValid();  // false
+frozenMoment('2012-05-25', 'YYYY-MM-DD', true).isValid();        // true
 ```
 
 You can use both language and strictness.
 
 ```javascript
-moment('2012-10-14', 'YYYY-MM-DD', 'fr', true);
+frozenMoment('2012-10-14', 'YYYY-MM-DD', 'fr', true);
 ```
 
 Two digit year parser by default assumes years above 68 to be in the 1900's and
 below in the 2000's. This can be changed by replacing the
-`moment.parseTwoDigitYear`.
+`frozenMoment.parseTwoDigitYear`.
+
+All of these syntaxes can also be invoked as `frozenMoment.build()` to create a builder object instead of a frozenMoment object.  See `frozenMoment#thaw` for more information about builder objects.
