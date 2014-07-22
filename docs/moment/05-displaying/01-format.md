@@ -353,9 +353,11 @@ frozenMoment().format('[today] dddd'); // 'today Sunday'
 
 For a breakdown of a few different date formatting tokens across different languages, see [this chart of date formatting tokens.](https://docs.google.com/spreadsheet/ccc?key=0AtgZluze7WMJdDBOLUZfSFIzenIwOHNjaWZoeGFqbWc&amp;hl=en_US#gid=0)
 
+<!--
 #### Formatting speed
 
-To compare FrozenMoment formatting speed against other libraries, check out [this comparison against other libraries](http://jsperf.com/date-formatting/8).
+To compare Moment formatting speed against other libraries, check out [this comparison against other libraries](http://jsperf.com/date-formatting/8).
+-->
 
 #### Other tokens
 

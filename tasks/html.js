@@ -16,13 +16,11 @@ module.exports = function(grunt) {
 			partials   : 'pages/partials/**/*.hbs',
 			layoutdir  : 'pages/layout',
 			helpers    : 'pages/helpers/**/*.js',
-			marked     : { sanitize: false },
-			lang       : require('../data/lang.js'),
-			size       : require('../data/size.js')
+			marked     : { sanitize: false }
 		},
 		'moment' : {
 			options : {
-				docs : require('../.temp/docs/frozen-moment.json')
+				docs : require('../.temp/docs/moment.json')
 			},
 			files: [{
 				expand : true,
@@ -31,41 +29,19 @@ module.exports = function(grunt) {
 				cwd    : 'pages/moment',
 				src    : '**/*.{hbs,md}'
 			}]
-		},
-		'moment-timezone' : {
-			options : {
-				docs : require('../.temp/docs/moment-timezone.json')
-			},
-			files: [{
-				expand : true,
-				rename : rename,
-				dest   : 'build/timezone',
-				cwd    : 'pages/moment-timezone',
-				src    : '**/*.hbs'
-			}]
 		}
 	});
 
 	grunt.registerTask('html', [
 		'docs:moment',
-		'docs:moment-timezone',
-		'assemble:moment',
-		'assemble:moment-timezone'
+		'assemble:moment'
 	]);
 
 	grunt.config('watch.html-moment', {
 		files: [
-			'.temp/docs/frozen-moment.json',
+			'.temp/docs/moment.json',
 			'pages/**/*.{hbs,json,md,js}'
 		],
 		tasks: ['assemble:moment']
-	});
-
-	grunt.config('watch.html-moment-timezone', {
-		files: [
-			'.temp/docs/moment-timezone.json',
-			'pages/**/*.{hbs,json,md,js}'
-		],
-		tasks: ['assemble:moment-timezone']
 	});
 };
