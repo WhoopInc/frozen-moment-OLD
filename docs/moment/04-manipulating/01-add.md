@@ -2,26 +2,26 @@
 title: Add
 version: 1.0.0
 signature: |
-  moment().add(String, Number);
-  moment().add(Number, String); // 2.0.0
-  moment().add(String, String); // 2.7.0
-  moment().add(Duration); // 1.6.0
-  moment().add(Object);
+  frozenMoment.build().add(String, Number);
+  frozenMoment.build().add(Number, String); // 2.0.0
+  frozenMoment.build().add(String, String); // 2.7.0
+  frozenMoment.build().add(Duration); // 1.6.0
+  frozenMoment.build().add(Object);
 ---
 
 
-Mutates the original moment by adding time.
+Mutates the original builder by adding time.
 
-This is a pretty robust function for adding time to an existing moment. To add time, pass the key of what time you want to add, and the amount you want to add.
+This is a pretty robust function for adding time to an existing builder. To add time, pass the key of what time you want to add, and the amount you want to add.
 
 ```javascript
-moment().add('days', 7);
+frozenMoment.build().add(7, 'days');
 ```
 
 There are some shorthand keys as well if you're into that whole brevity thing.
 
 ```javascript
-moment().add('d', 7);
+frozenMoment.build().add(7, 'd');
 ```
 
 <table class="table table-striped table-bordered">
@@ -68,15 +68,15 @@ moment().add('d', 7);
 If you want to add multiple different keys at the same time, you can pass them in as an object literal.
 
 ```javascript
-moment().add('days', 7).add('months', 1); // with chaining
-moment().add({days:7,months:1}); // with object literal
+frozenMoment.build().add(7, 'days').add(1, 'month'); // with chaining
+frozenMoment.build().add({days: 7, months: 1}); // with object literal
 ```
 
 There are no upper limits for the amounts, so you can overload any of the parameters.
 
 ```javascript
-moment().add('milliseconds', 1000000); // a million milliseconds
-moment().add('days', 360); // 360 days
+frozenMoment.build().add(1000000, 'milliseconds'); // a million milliseconds
+frozenMoment.build().add(360, 'days'); // 360 days
 ```
 
 #### Special considerations for months and years
@@ -85,49 +85,38 @@ If the day of the month on the original date is greater than the number of days 
 the day of the month will change to the last day in the final month.
 
 ```javascript
-moment([2010, 0, 31]);                  // January 31
-moment([2010, 0, 31]).add('months', 1); // February 28
+frozenMoment.build([2010, 0, 31]);                  // January 31
+frozenMoment.build([2010, 0, 31]).add('months', 1); // February 28
 ```
 
 There are also special considerations to keep in mind when adding time that crosses over Daylight Savings Time.
 If you are adding years, months, weeks, or days, the original hour will always match the added hour.
 
 ```javascript
-var m = moment(new Date(2011, 2, 12, 5, 0, 0)); // the day before DST in the US
-m.hours(); // 5
-m.add('days', 1).hours(); // 5
+var m = frozenMoment.build(new Date(2011, 2, 12, 5, 0, 0)); // the day before DST in the US
+m.freeze().hours(); // 5
+m.add(1, 'day').freeze().hours(); // 5
 ```
 
 If you are adding hours, minutes, seconds, or milliseconds, the assumption is that you want precision to the hour, and will result in a different hour.
 
 ```javascript
-var m = moment(new Date(2011, 2, 12, 5, 0, 0)); // the day before DST in the US
-m.hours(); // 5
-m.add('hours', 24).hours(); // 6
+var m = frozenMoment.build(new Date(2011, 2, 12, 5, 0, 0)); // the day before DST in the US
+m.freeze().hours(); // 5
+m.add(24, 'hours').freeze().hours(); // 6
 ```
 
 Alternatively, you can use [durations](#/durations/) to add to moments.
 
 ```javascript
-var duration = moment.duration({'days' : 1});
-moment([2012, 0, 31]).add(duration); // February 1
+var duration = frozenMoment.duration({'days' : 1});
+frozenMoment.build([2012, 0, 31]).add(duration); // February 1
 ```
-
-As of version **2.0.0**, a reversed syntax is also supported to ease development. The syntaxes below will all work.
-
-```javascript
-moment().add('seconds', 1);
-moment().add('seconds', '1');
-moment().add(1, 'seconds');
-```
-
-~~This syntax will not work. The first parameter would need to be a number, not a string.~~
 
 As of version **2.7.0**, `add` supports numeric values (number of seconds, hours, days etc) to be specified in `String` form, for example:
 
 ```javascript
-moment().add('1', 'seconds');
-moment().add('seconds', '1');
+frozenMoment.build().add('1', 'seconds');
 ```
 
-**NOTE**: Using `add(unit, value)` is discouraged. Prefer `add(value, unit)`, as it is easier to read and more consistent with the duration interface.
+**NOTE**: Moment's `add(unit, value)` syntax is **not** supported. Use `add(value, unit)` instead -- it's easier to read and more consistent with the duration interface.
