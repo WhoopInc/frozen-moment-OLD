@@ -1,0 +1,137 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+
+		<link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" href="/static/css/style.css" />
+		<link rel="shortcut icon" href="/static/img/moment-favicon.png" />
+
+		<title>Frozen Moment | Home</title>
+	</head>
+
+	<body class="is-moment">
+		<nav class="nav">
+			<div class="centered">
+				<div class="nav-projects">
+					<a class="nav-project nav-project-moment active" href="/">
+						<svg width="40px" height="40px" viewBox="0 0 40 40">
+							<ellipse stroke-width="3" cx="20" cy="20" rx="18.5" ry="18.5" fill="0" stroke="#000" />
+							<path fill-rule="evenodd" d="M20,36 C28.836556,36 36,28.836556 36,20 C36,11.163444 28.836556,4 20,4 C11.163444,4 4,11.163444 4,20 C4,28.836556 11.163444,36 20,36 Z M20,5 C19.4477153,5 19,5.44994876 19,6.00684547 L19,19 L11.9970301,19 C11.4463856,19 11,19.4438648 11,20 C11,20.5522847 11.4556644,21 11.9953976,21 L21,21 L21,6.00087166 C21,5.4481055 20.5561352,5 20,5 Z"></path>
+						</svg>
+						Frozen Moment
+					</a>
+				</div>
+				<div class="nav-pages">
+					
+						<a href="." class="active">Home</a>
+					
+						<a href="docs/" >Docs</a>
+					
+						<a href="tests/" >Tests</a>
+					
+					<a href="https://github.com/WhoopInc/frozen-moment/">Fork on GitHub</a>
+				</div>
+			</div>
+		</nav>
+
+		
+
+
+
+<header class="hero hero-moment">
+	<div class="centered">
+		<div class="hero-circle">
+			<div class="hero-face">
+				<div id="hour" class="hero-hour"></div>
+				<div id="minute" class="hero-minute"></div>
+				<div id="second" class="hero-second"></div>
+			</div>
+		</div>
+		<div class="hero-title">
+			<h1>FrozenMoment <span></span></h1>
+			<h2>Parse, validate, manipulate, and display dates in javascript.<br/>
+			Immutable fork of <a href="http://momentjs.com/">Moment.js</a>, brought to you by <a href="http://whoop.com/">Whoop</a>.</h2>
+		</div>
+	</div>
+</header>
+
+
+<div class="builds">
+	<div class="builds-download">
+		<h3>Download</h3>
+		<a class="builds-button builds-button-source" href="https://raw.githubusercontent.com/WhoopInc/frozen-moment/develop/frozen-moment.js">
+			frozen-moment.js
+		</a>
+		<!--
+		<a class="builds-button builds-button-gzipped" href="/downloads/frozen-moment.min.js">
+			frozen-moment.min.js
+			<span class="filesize">NaNk</span>
+		</a>
+		<a class="builds-button builds-button-source" href="/downloads/frozen-moment-with-langs.js">
+			moment+langs.js
+		</a>
+		<a class="builds-button builds-button-gzipped" href="/downloads/frozen-moment-with-langs.min.js">
+			moment+langs.min.js
+			<span class="filesize">NaNk</span>
+		</a>
+		-->
+	</div>
+	<div class="builds-packages">
+		<h3>Install</h3>
+		<pre><code>bower install --save https://github.com/WhoopInc/frozen-moment.git <span class="comment"># bower</span>
+npm install git+https://github.com/WhoopInc/frozen-moment.git --save   <span class="comment"># npm</span></code></pre>
+	</div>
+</div>
+
+<div class="page-moment-index">
+
+<h3 id="format-dates">Format Dates</h3>
+<pre><code class="language-js">frozenMoment().format(<span class="string">'MMMM Do YYYY, h:mm:ss a'</span>);
+frozenMoment().format(<span class="string">'dddd'</span>);
+frozenMoment().format(<span class="string">"MMM Do YY"</span>);
+frozenMoment().format(<span class="string">'YYYY [escaped] YYYY'</span>);
+frozenMoment().format();</code></pre>
+<h3 id="relative-time">Relative Time</h3>
+<pre><code class="language-js">frozenMoment(<span class="string">"20111031"</span>, <span class="string">"YYYYMMDD"</span>).fromNow();
+frozenMoment(<span class="string">"20120620"</span>, <span class="string">"YYYYMMDD"</span>).fromNow();
+frozenMoment.build().startOf(<span class="string">'day'</span>).freeze().fromNow();
+frozenMoment.build().endOf(<span class="string">'day'</span>).freeze().fromNow();
+frozenMoment.build().startOf(<span class="string">'hour'</span>).freeze().fromNow();</code></pre>
+<h3 id="calendar-time">Calendar Time</h3>
+<pre><code class="language-js">frozenMoment.build().subtract(<span class="string">'days'</span>, <span class="number">10</span>).freeze().calendar();
+frozenMoment.build().subtract(<span class="string">'days'</span>, <span class="number">6</span>).freeze().calendar();
+frozenMoment.build().subtract(<span class="string">'days'</span>, <span class="number">3</span>).freeze().calendar();
+frozenMoment.build().subtract(<span class="string">'days'</span>, <span class="number">1</span>).freeze().calendar();
+frozenMoment().calendar();
+frozenMoment.build().add(<span class="string">'days'</span>, <span class="number">1</span>).freeze().calendar();
+frozenMoment.build().add(<span class="string">'days'</span>, <span class="number">3</span>).freeze().calendar();
+frozenMoment.build().add(<span class="string">'days'</span>, <span class="number">10</span>).freeze().calendar();</code></pre>
+<h3 id="multiple-language-support">Multiple Language Support</h3>
+<pre><code class="language-js">frozenMoment().format(<span class="string">'L'</span>);
+frozenMoment().format(<span class="string">'l'</span>);
+frozenMoment().format(<span class="string">'LL'</span>);
+frozenMoment().format(<span class="string">'ll'</span>);
+frozenMoment().format(<span class="string">'LLL'</span>);
+frozenMoment().format(<span class="string">'lll'</span>);
+frozenMoment().format(<span class="string">'LLLL'</span>);
+frozenMoment().format(<span class="string">'llll'</span>);</code></pre>
+
+
+<div class="langs">
+	
+</div>
+
+</div>
+
+		<footer>
+			<p>FrozenMoment is freely distributable under the terms of the MIT license.</p>
+		</footer>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script src="/static/js/global.js"></script>
+		
+			<script src="/static/js/core-home.js"></script>
+		
+	</body>
+</html>
