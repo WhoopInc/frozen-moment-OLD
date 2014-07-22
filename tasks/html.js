@@ -22,7 +22,7 @@ module.exports = function(grunt) {
 		},
 		'moment' : {
 			options : {
-				docs : require('../.temp/docs/moment.json')
+				docs : require('../.temp/docs/frozen-moment.json')
 			},
 			files: [{
 				expand : true,
@@ -55,7 +55,7 @@ module.exports = function(grunt) {
 
 	grunt.config('watch.html-moment', {
 		files: [
-			'.temp/docs/moment.json',
+			'.temp/docs/frozen-moment.json',
 			'pages/**/*.{hbs,json,md,js}'
 		],
 		tasks: ['assemble:moment']

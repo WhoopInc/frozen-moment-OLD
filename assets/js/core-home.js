@@ -6,7 +6,7 @@
     function updateSnippets () {
         var i;
 
-        moment.lang(currentLang);
+        frozenMoment.lang(currentLang);
 
         for (i = 0; i < snippets.length; i++) {
             snippets[i].render();
@@ -14,7 +14,7 @@
     }
 
     function updateClock(){
-        var now = moment(),
+        var now = frozenMoment(),
             second = now.seconds() * 6,
             minute = now.minutes() * 6 + second / 60,
             hour = ((now.hours() % 12) / 12) * 360 + 90 + minute / 12;

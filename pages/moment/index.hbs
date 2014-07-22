@@ -26,17 +26,17 @@ scripts :
 <div class="builds">
 	<div class="builds-download">
 		<h3>Download</h3>
-		<a class="builds-button builds-button-source" href="/downloads/moment.js">
-			moment.js
+		<a class="builds-button builds-button-source" href="/downloads/frozen-moment.js">
+			frozen-moment.js
 		</a>
-		<a class="builds-button builds-button-gzipped" href="/downloads/moment.min.js">
-			moment.min.js
+		<a class="builds-button builds-button-gzipped" href="/downloads/frozen-moment.min.js">
+			frozen-moment.min.js
 			<span class="filesize">{{toKb size.moment_min.gzip }}</span>
 		</a>
-		<a class="builds-button builds-button-source" href="/downloads/moment-with-langs.js">
+		<a class="builds-button builds-button-source" href="/downloads/frozen-moment-with-langs.js">
 			moment+langs.js
 		</a>
-		<a class="builds-button builds-button-gzipped" href="/downloads/moment-with-langs.min.js">
+		<a class="builds-button builds-button-gzipped" href="/downloads/frozen-moment-with-langs.min.js">
 			moment+langs.min.js
 			<span class="filesize">{{toKb size.moment_with_langs_min.gzip }}</span>
 		</a>
@@ -55,47 +55,47 @@ Install-Package Moment.js   <span class="comment"># NuGet</span></code></pre>
 ### Format Dates
 
 ```js
-moment().format('MMMM Do YYYY, h:mm:ss a');
-moment().format('dddd');
-moment().format("MMM Do YY");
-moment().format('YYYY [escaped] YYYY');
-moment().format();
+frozenMoment().format('MMMM Do YYYY, h:mm:ss a');
+frozenMoment().format('dddd');
+frozenMoment().format("MMM Do YY");
+frozenMoment().format('YYYY [escaped] YYYY');
+frozenMoment().format();
 ```
 
 ### Relative Time
 
 ```js
-moment("20111031", "YYYYMMDD").fromNow();
-moment("20120620", "YYYYMMDD").fromNow();
-moment().startOf('day').fromNow();
-moment().endOf('day').fromNow();
-moment().startOf('hour').fromNow();
+frozenMoment("20111031", "YYYYMMDD").fromNow();
+frozenMoment("20120620", "YYYYMMDD").fromNow();
+frozenMoment().startOf('day').fromNow();
+frozenMoment().endOf('day').fromNow();
+frozenMoment().startOf('hour').fromNow();
 ```
 
 ### Calendar Time
 
 ```js
-moment().subtract('days', 10).calendar();
-moment().subtract('days', 6).calendar();
-moment().subtract('days', 3).calendar();
-moment().subtract('days', 1).calendar();
-moment().calendar();
-moment().add('days', 1).calendar();
-moment().add('days', 3).calendar();
-moment().add('days', 10).calendar();
+frozenMoment().subtract('days', 10).calendar();
+frozenMoment().subtract('days', 6).calendar();
+frozenMoment().subtract('days', 3).calendar();
+frozenMoment().subtract('days', 1).calendar();
+frozenMoment().calendar();
+frozenMoment().add('days', 1).calendar();
+frozenMoment().add('days', 3).calendar();
+frozenMoment().add('days', 10).calendar();
 ```
 
 ### Multiple Language Support
 
 ```js
-moment().format('L');
-moment().format('l');
-moment().format('LL');
-moment().format('ll');
-moment().format('LLL');
-moment().format('lll');
-moment().format('LLLL');
-moment().format('llll');
+frozenMoment().format('L');
+frozenMoment().format('l');
+frozenMoment().format('LL');
+frozenMoment().format('ll');
+frozenMoment().format('LLL');
+frozenMoment().format('lll');
+frozenMoment().format('LLLL');
+frozenMoment().format('llll');
 ```
 
 {{/markdown}}

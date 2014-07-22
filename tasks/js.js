@@ -2,7 +2,7 @@ module.exports = function(grunt) {
 	grunt.config('concat.js', {
 		files : {
 			'build/static/js/global.js' : [
-				'libs/moment/moment.js',
+				'libs/moment/frozen-moment.js',
 				'libs/moment/min/langs.js',
 				'libs/moment-timezone/builds/moment-timezone-with-data.js'
 			],
@@ -59,10 +59,10 @@ module.exports = function(grunt) {
 
 	grunt.config('copy.js', {
 		files : {
-			'build/downloads/moment.js'                : 'libs/moment/moment.js',
-			'build/downloads/moment.min.js'            : 'libs/moment/min/moment.min.js',
-			'build/downloads/moment-with-langs.js'     : 'libs/moment/min/moment-with-langs.js',
-			'build/downloads/moment-with-langs.min.js' : 'libs/moment/min/moment-with-langs.min.js',
+			'build/downloads/frozen-moment.js'                : 'libs/moment/frozen-moment.js',
+			'build/downloads/frozen-moment.min.js'            : 'libs/moment/min/frozen-moment.min.js',
+			'build/downloads/frozen-moment-with-langs.js'     : 'libs/moment/min/frozen-moment-with-langs.js',
+			'build/downloads/frozen-moment-with-langs.min.js' : 'libs/moment/min/frozen-moment-with-langs.min.js',
 
 			'build/downloads/moment-timezone.js'                         : 'libs/moment-timezone/moment-timezone.js',
 			'build/downloads/moment-timezone.min.js'                     : 'libs/moment-timezone/builds/moment-timezone.min.js',

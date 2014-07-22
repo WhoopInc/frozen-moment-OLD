@@ -5,7 +5,7 @@
 	var tests = $('#nodeunit-tests');
 	var headerRow = $("#header-row");
 
-	var start = moment();
+	var start = frozenMoment();
 	var passed = 0;
 	var failed = 0;
 	var total = 0;
@@ -110,7 +110,7 @@
 			updateTest(assertions.passes(), assertions.failures());
 		},
 		done : function (assertions) {
-			var duration = moment().diff(start),
+			var duration = frozenMoment().diff(start),
 				failures = assertions.failures(),
 				assert, error, i,
 				reportHTML = '',
