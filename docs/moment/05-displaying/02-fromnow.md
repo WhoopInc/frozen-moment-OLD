@@ -2,22 +2,22 @@
 title: Time from now
 version: 1.0.0
 signature: |
-  moment().fromNow();
-  moment().fromNow(Boolean);
+  frozenMoment().fromNow();
+  frozenMoment().fromNow(Boolean);
 ---
 
 
-A common way of displaying time is handled by `moment#fromNow`. This is sometimes called timeago or relative time.
+A common way of displaying time is handled by `frozenMoment#fromNow`. This is sometimes called timeago or relative time.
 
 ```javascript
-moment([2007, 0, 29]).fromNow(); // 4 years ago
+frozenMoment([2007, 0, 29]).fromNow(); // 4 years ago
 ```
 
 If you pass `true`, you can get the value without the suffix.
 
 ```javascript
-moment([2007, 0, 29]).fromNow();     // 4 years ago
-moment([2007, 0, 29]).fromNow(true); // 4 years
+frozenMoment([2007, 0, 29]).fromNow();     // 4 years ago
+frozenMoment([2007, 0, 29]).fromNow(true); // 4 years
 ```
 
 The base strings are [customized by the current language](#/customization/relative-time/).

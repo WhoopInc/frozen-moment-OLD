@@ -2,14 +2,14 @@
 title: Calendar Time
 version: 1.3.0
 signature: |
-  moment().calendar();
-  moment().calendar(referenceTime);
+  frozenMoment().calendar();
+  frozenMoment().calendar(referenceTime);
 ---
 
 
-Calendar time is displays time relative to given `referenceTime` (defaults to now), but slightly differently than `moment#fromNow`.
+Calendar time is displays time relative to given `referenceTime` (defaults to now), but slightly differently than `frozenMoment#fromNow`.
 
-`moment#calendar` will format a date with different strings depending on how close to `referenceTime`'s date (today by default) the date is.
+`frozenMoment#calendar` will format a date with different strings depending on how close to `referenceTime`'s date (today by default) the date is.
 
 <table class="table table-striped table-bordered">
   <tr>

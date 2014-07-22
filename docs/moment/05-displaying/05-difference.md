@@ -2,44 +2,44 @@
 title: Difference
 version: 1.0.0
 signature: |
-  moment().diff(Moment|String|Number|Date|Array);
-  moment().diff(Moment|String|Number|Date|Array, String);
-  moment().diff(Moment|String|Number|Date|Array, String, Boolean);
+  frozenMoment().diff(FrozenMoment|String|Number|Date|Array);
+  frozenMoment().diff(FrozenMoment|String|Number|Date|Array, String);
+  frozenMoment().diff(FrozenMoment|String|Number|Date|Array, String, Boolean);
 ---
 
 
-To get the difference in milliseconds, use `moment#diff` like you would use `moment#from`.
+To get the difference in milliseconds, use `frozenMoment#diff` like you would use `frozenMoment#from`.
 
 ```javascript
-var a = moment([2007, 0, 29]);
-var b = moment([2007, 0, 28]);
+var a = frozenMoment([2007, 0, 29]);
+var b = frozenMoment([2007, 0, 28]);
 a.diff(b) // 86400000
 ```
 
 To get the difference in another unit of measurement, pass that measurement as the second argument.
 
 ```javascript
-var a = moment([2007, 0, 29]);
-var b = moment([2007, 0, 28]);
+var a = frozenMoment([2007, 0, 29]);
+var b = frozenMoment([2007, 0, 28]);
 a.diff(b, 'days') // 1
 ```
 
 The supported measurements are years, months, weeks, days, hours, minutes, and seconds. For ease of development, the singular forms are supported as of **2.0.0**. Units of measurement other than milliseconds are available in version **1.1.1**.
 
-By default, `moment#diff` will return number rounded down. If you want the floating point number, pass `true` as the third argument. Before **2.0.0**, `moment#diff` returned rounded number, not a rounded *down* number.
+By default, `frozenMoment#diff` will return number rounded down. If you want the floating point number, pass `true` as the third argument. Before **2.0.0**, `frozenMoment#diff` returned rounded number, not a rounded *down* number.
 
 ```javascript
-var a = moment([2008, 6]);
-var b = moment([2007, 0]);
+var a = frozenMoment([2008, 6]);
+var b = frozenMoment([2007, 0]);
 a.diff(b, 'years');       // 1
 a.diff(b, 'years', true); // 1.5
 ```
 
-If the moment is later than the moment you are passing to `moment.fn.diff`, the return value will be negative.
+If the moment is later than the moment you are passing to `frozenMoment.fn.diff`, the return value will be negative.
 
 ```javascript
-var a = moment();
-var b = moment().add('seconds', 1);
+var a = frozenMoment();
+var b = frozenMoment().add('seconds', 1);
 a.diff(b) // -1000
 b.diff(a) // 1000
 ```
@@ -54,7 +54,7 @@ b.diff(a) // b - a < 0
 
 #### Month and year diffs
 
-`moment#diff` has some special handling for month and year diffs. It is optimized to ensure that two months with the same date are always a whole number apart.
+`frozenMoment#diff` has some special handling for month and year diffs. It is optimized to ensure that two months with the same date are always a whole number apart.
 
 So Jan 15 to Feb 15 should be exactly 1 month.
 

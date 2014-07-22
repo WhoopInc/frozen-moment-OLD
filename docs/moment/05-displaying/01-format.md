@@ -2,17 +2,17 @@
 title: Format
 version: 1.0.0
 signature: |
-  moment().format();
-  moment().format(String);
+  frozenMoment().format();
+  frozenMoment().format(String);
 ---
 
 
 This is the most robust display option. It takes a string of tokens and replaces them with their corresponding values.
 
 ```javascript
-moment().format("dddd, MMMM Do YYYY, h:mm:ss a"); // "Sunday, February 14th 2010, 3:25:50 pm"
-moment().format("ddd, hA");                       // "Sun, 3PM"
-moment('gibberish').format('YYYY MM DD');         // "Invalid date"
+frozenMoment().format("dddd, MMMM Do YYYY, h:mm:ss a"); // "Sunday, February 14th 2010, 3:25:50 pm"
+frozenMoment().format("ddd, hA");                       // "Sun, 3PM"
+frozenMoment('gibberish').format('YYYY MM DD');         // "Invalid date"
 ```
 
 There are a couple conventions used with the naming of the
@@ -344,7 +344,7 @@ There are upper and lower case variations on the same formats. The lowercase ver
 To escape characters in format strings, you can wrap the characters in square brackets.
 
 ```javascript
-moment().format('[today] dddd'); // 'today Sunday'
+frozenMoment().format('[today] dddd'); // 'today Sunday'
 ```
 
 #### Similarities and differences with LDML
@@ -355,12 +355,12 @@ For a breakdown of a few different date formatting tokens across different langu
 
 #### Formatting speed
 
-To compare Moment.js formatting speed against other libraries, check out [this comparison against other libraries](http://jsperf.com/date-formatting/8).
+To compare FrozenMoment formatting speed against other libraries, check out [this comparison against other libraries](http://jsperf.com/date-formatting/8).
 
 #### Other tokens
 
-If you are more comfortable working with strftime instead of LDML-like parsing tokens, you can use Ben Oakes' plugin. [benjaminoakes/moment-strftime](https://github.com/benjaminoakes/moment-strftime).
+If you are more comfortable working with strftime instead of LDML-like parsing tokens, take a look at Ben Oakes' plugin. It hasn't been ported to support FrozenMoment yet, but that effort should be very simple -- contact us if you need help creating a port. [benjaminoakes/moment-strftime](https://github.com/benjaminoakes/moment-strftime).
 
 #### Default format
 
-As of version **1.5.0**, calling `moment#format` without a format will default to `moment.defaultFormat`. Out of the box, `moment.defaultFormat` is the ISO8601 format `YYYY-MM-DDTHH:mm:ssZ`.
+As of version **1.5.0**, calling `frozenMoment#format` without a format will default to `frozenMoment.defaultFormat`. Out of the box, `frozenMoment.defaultFormat` is the ISO8601 format `YYYY-MM-DDTHH:mm:ssZ`.
