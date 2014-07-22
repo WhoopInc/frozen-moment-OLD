@@ -4,13 +4,12 @@ title: Node.js
 
 
 ```
-npm install moment
+npm install git+https://github.com/WhoopInc/frozen-moment.git
 ```
 
 ```javascript
-var moment = require('moment');
-moment().format();
+var frozenMoment = require('frozen-moment');
+frozenMoment().format();
 ```
 
-Since `2.4.0` the globally exported moment object is **deprecated**. Will be
-removed in next major release.
+The globally exported frozenMoment object is not available to Node.js.

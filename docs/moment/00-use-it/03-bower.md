@@ -4,7 +4,7 @@ title: Bower
 
 
 ```
-bower install --save moment
+bower install --save https://github.com/WhoopInc/frozen-moment.git
 ```
 
-Notable files are `moment.js`, `lang/*.js` and `min/moment-with-langs.js`.
+Notable files are `frozen-moment.js`, `lang/*.js` and `min/frozen-moment-with-langs.js`.

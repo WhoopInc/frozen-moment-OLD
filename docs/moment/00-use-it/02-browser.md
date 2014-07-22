@@ -4,10 +4,10 @@ title: Browser
 
 
 ```
-<script src="moment.js"></script>
+<script src="frozen-moment.js"></script>
 <script>
-	moment().format();
+	frozenMoment().format();
 </script>
 ```
 
-Moment.js is available on [cdnjs.com](http://cdnjs.com). Remember though, cool kids concatenate their scripts to minimize http requests.
+We recommend that you download a copy of frozen-moment.js and concatenate it with the rest of your scripts to minimize http requests.

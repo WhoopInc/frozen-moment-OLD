@@ -6,27 +6,19 @@ title: Require.js
 ```javascript
 require.config({
     paths: {
-        "moment": "path/to/moment",
+        "frozenMoment": "path/to/frozen-moment",
     }
 });
-define(["moment"], function (moment) {
-    moment().format();
+define(["frozenMoment"], function (frozenMoment) {
+    frozenMoment().format();
 });
 ```
 
-Moment will still create a `moment` global, which is useful to plugins and other third-party code. If you wish to squash that global, use the `noGlobal` option on the module config.
+FrozenMoment will only create a `frozenMoment` global when running in the browser in a traditional `<script>` tag. This is useful to plugins and other third-party code.
 
-```javascript
-require.config({
-  noGlobal: true
-});
-```
+If you want a `frozenMoment` global in other environments, you'll have to export it yourself.
 
-If you don't specify `noGlobal` then the globally exported moment will print
-a deprecation warning. From next major release you'll have to export it
-yourself if you want that behavior.
-
-For version `2.5.x`, in case you use other plugins that rely on Moment but are
+For version `2.5.x`, in case you use other plugins that rely on FrozenMoment but are
 not AMD-compatible you may need to add [`wrapShim:
 true`](https://github.com/jrburke/r.js/blob/b8a6982d2923ae8389355edaa50d2b7f8065a01a/build/example.build.js#L68-L78)
 to your r.js config.
