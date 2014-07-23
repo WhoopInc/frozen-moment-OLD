@@ -1952,10 +1952,11 @@
         var data;
         if (key) {
             if (typeof(values) !== "undefined") {
-                moment.defineLocale(key, values);
+                data = moment.defineLocale(key, values);
             }
-
-            data = moment.localeData(key);
+            else {
+                data = moment.localeData(key);
+            }
 
             if (data) {
                 moment.duration.fn._locale = moment.fn._locale = data;
@@ -1972,7 +1973,7 @@
                 locales[name] = new Locale();
             }
             locales[name].set(values);
-            return locales[name]._abbr;
+            return locales[name];
         } else {
             delete locales[name];
             return null;

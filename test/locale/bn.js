@@ -370,13 +370,5 @@ exports["locale:bn"] = {
         test.equal(frozenMoment([2012, 0, 15]).format('w ww wo'), '৩ ০৩ ৩', "Jan 15 2012 should be week 3");
 
         test.done();
-    },
-
-    "returns the name of the locale" : function (test) {
-        if (typeof module !== 'undefined' && module.exports) {
-            test.equal(require('../../locale/bn'), 'bn', "module should export bn");
-        }
-
-        test.done();
     }
 };
