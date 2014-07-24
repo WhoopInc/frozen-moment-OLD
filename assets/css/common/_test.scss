@@ -111,6 +111,7 @@ $red : #d33;
 	.button {
 		@include font-display;
 		display: block;
+		background-color: $color-moment;
 		border: 1px solid rgba($black, 0.5);
 		text-decoration: none;
 		text-align: center;
@@ -122,28 +123,12 @@ $red : #d33;
 		line-height: 30px;
 		color: $white;
 
-		.is-moment & {
-			background-color: $color-moment;
-
-			&:hover {
-				background-color: mix($color-moment, $white, 90%);
-			}
-
-			&:active {
-				background-color: mix($color-moment, $black, 90%);
-			}
+		&:hover {
+			background-color: mix($color-moment, $white, 90%);
 		}
 
-		.is-moment-timezone & {
-			background-color: $color-moment-timezone;
-
-			&:hover {
-				background-color: mix($color-moment-timezone, $white, 90%);
-			}
-
-			&:active {
-				background-color: mix($color-moment-timezone, $black, 90%);
-			}
+		&:active {
+			background-color: mix($color-moment, $black, 90%);
 		}
 	}
 

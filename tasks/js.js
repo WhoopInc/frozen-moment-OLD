@@ -3,8 +3,7 @@ module.exports = function(grunt) {
 		files : {
 			'build/static/js/global.js' : [
 				'libs/moment/frozen-moment.js',
-				'libs/moment/min/langs.js',
-				'libs/moment-timezone/builds/moment-timezone-with-data.js'
+				'libs/moment/min/langs.js'
 			],
 			'build/static/js/core-test.js' : [
 				'assets/js/test-start.js',

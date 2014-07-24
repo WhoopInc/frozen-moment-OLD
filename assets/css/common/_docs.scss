@@ -13,13 +13,7 @@
 	line-height: 18px;
 
 	.active a {
-		.is-moment & {
-			border-left-color: rgba($color-moment, 0.3);
-		}
-
-		.is-moment-timezone & {
-			border-left-color: rgba($color-moment-timezone, 0.3);
-		}
+		border-left-color: rgba($color-moment, 0.3);
 	}
 
 	a {
@@ -29,29 +23,15 @@
 
 		&:hover,
 		&.active {
-			.is-moment & {
-				background: rgba($color-moment, 0.1);
-				border-left-color: $color-moment;
-			}
-
-			.is-moment-timezone & {
-				background: rgba($color-moment-timezone, 0.1);
-				border-left-color: $color-moment-timezone;
-			}
+			background: rgba($color-moment, 0.1);
+			border-left-color: $color-moment;
 		}
 	}
 }
 
 .docs-nav-item {
+	color: $color-moment;
 	padding: 3px 25px;
-
-	.is-moment & {
-		color: $color-moment;
-	}
-
-	.is-moment-timezone & {
-		color: $color-moment-timezone;
-	}
 }
 
 .docs-nav-section {
@@ -61,17 +41,11 @@
 	}
 
 	&.active {
+		// background: rgba($color-moment, 0.1);
+
 		.docs-nav-item {
 			display: block;
 		}
-
-		// .is-moment & {
-		// 	background: rgba($color-moment, 0.1);
-		// }
-		//
-		// .is-moment-timezone & {
-		// 	background: rgba($color-moment-timezone, 0.1);
-		// }
 	}
 }
 
@@ -156,6 +130,7 @@
 }
 
 .docs-section-title {
+	background-color: $color-moment;
 	color: rgba($black, 0.8);
 	padding: 10px 20px;
 	margin: 0 0 20px;
@@ -164,14 +139,6 @@
 	border-radius: 4px;
 	background: $color-moment url(../img/bg.png) 0 50%;
 	border: 1px solid rgba($black, 0.3);
-
-	.is-moment & {
-		background-color: $color-moment;
-	}
-
-	.is-moment-timezone & {
-		background-color: $color-moment-timezone;
-	}
 
 	a {
 		color: $white;
@@ -239,7 +206,8 @@
 }
 
 .docs-method-signature pre {
-	background: rgba($black, 0.2);
+	background: rgba($color-moment, 0.15);
+	border-color: rgba($color-moment, 0.7);
 	position: relative;
 
 	&:after {
@@ -249,15 +217,5 @@
 		content: "Method Signature";
 		color: rgba($black, 0.3);
 		font-size: 12px;
-	}
-
-	.is-moment & {
-		border-color: rgba($color-moment, 0.7);
-		background: rgba($color-moment, 0.15);
-	}
-
-	.is-moment-timezone & {
-		border-color: rgba($color-moment-timezone, 0.7);
-		background: rgba($color-moment-timezone, 0.15);
 	}
 }
