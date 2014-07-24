@@ -77,14 +77,14 @@ frozenMoment.build().startOf('hour').freeze().fromNow();
 ### Calendar Time
 
 ```js
-frozenMoment.build().subtract('days', 10).freeze().calendar();
-frozenMoment.build().subtract('days', 6).freeze().calendar();
-frozenMoment.build().subtract('days', 3).freeze().calendar();
-frozenMoment.build().subtract('days', 1).freeze().calendar();
+frozenMoment.build().subtract(10, 'days').freeze().calendar();
+frozenMoment.build().subtract(6, 'days').freeze().calendar();
+frozenMoment.build().subtract(3, 'days').freeze().calendar();
+frozenMoment.build().subtract(1, 'days').freeze().calendar();
 frozenMoment().calendar();
-frozenMoment.build().add('days', 1).freeze().calendar();
-frozenMoment.build().add('days', 3).freeze().calendar();
-frozenMoment.build().add('days', 10).freeze().calendar();
+frozenMoment.build().add(1, 'days').freeze().calendar();
+frozenMoment.build().add(3, 'days').freeze().calendar();
+frozenMoment.build().add(10, 'days').freeze().calendar();
 ```
 
 ### Multiple Language Support
