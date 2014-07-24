@@ -6,6 +6,7 @@ exports.locale = {
         frozenMoment.createFromInputFallback = function () {
             throw new Error("input not handled by frozenMoment");
         };
+        frozenMoment.locale('en');
         done();
     },
 
@@ -226,8 +227,15 @@ exports.locale = {
         test.done();
     },
 
+    "changing the global locale doesn't affect existing duration instances" : function (test) {
+        var mom = frozenMoment.duration();
+        frozenMoment.locale('fr');
+        test.equal('en', mom.locale());
+        test.done();
+    },
+
     "duration deprecations" : function (test) {
-        test.equal(moment.duration().lang(), moment.duration().localeData(), "duration.lang is the same as duration.localeData");
+        test.equal(frozenMoment.duration().lang(), frozenMoment.duration().localeData(), "duration.lang is the same as duration.localeData");
         test.done();
     },
 
@@ -319,8 +327,8 @@ exports.locale = {
     },
 
     "instance localeData" : function (test) {
-        moment.defineLocale("dude", {week: {dow: 3}});
-        test.equal(moment().locale("dude").localeData()._week.dow, 3);
+        frozenMoment.defineLocale("dude", {week: {dow: 3}});
+        test.equal(frozenMoment().locale("dude").localeData()._week.dow, 3);
         test.done();
     },
 
@@ -422,5 +430,14 @@ exports.locale = {
         test.equal(registered, 'return-this', 'returns the locale configured');
 
         test.done();
+    },
+
+    "changing the global locale doesn't affect existing instances" : function (test) {
+        frozenMoment.locale('en');
+        var mom = frozenMoment();
+        frozenMoment.locale('pr');
+        test.equal('en', frozenMoment.locale());
+        frozenMoment.locale('fr');
+        test.equal('en', mom.locale());
     }
 };

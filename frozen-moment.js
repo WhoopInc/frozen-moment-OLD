@@ -1975,6 +1975,7 @@
             locales[name].set(values);
             return locales[name];
         } else {
+            // useful for testing
             delete locales[name];
             return null;
         }
