@@ -1,4 +1,5 @@
-$red : #d33;
+$red: #e2001a;
+$yellow: #ffde00;
 
 .tests {
 	margin: 0 auto;
@@ -100,8 +101,7 @@ $red : #d33;
 	}
 
 	&.has-failed span {
-		color: $red;
-		text-shadow: none;
+		color: $yellow;
 	}
 }
 

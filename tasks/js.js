@@ -8,7 +8,7 @@ module.exports = function(grunt) {
 			'build/static/js/core-test.js' : [
 				'assets/js/test-start.js',
 				'libs/nodeunit/nodeunit.js',
-				'libs/frozen-moment/test/moment/*.js',
+				'libs/frozen-moment/test/frozen-moment/*.js',
 				// 'libs/frozen-moment/test/lang/*.js',
 				'assets/js/test.js',
 				'assets/js/test-end.js'
