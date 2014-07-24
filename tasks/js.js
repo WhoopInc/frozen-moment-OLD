@@ -2,14 +2,14 @@ module.exports = function(grunt) {
 	grunt.config('concat.js', {
 		files : {
 			'build/static/js/global.js' : [
-				'libs/moment/frozen-moment.js',
-				'libs/moment/min/langs.js'
+				'libs/frozen-moment/frozen-moment.js'
+				// 'libs/frozen-moment/min/langs.js'
 			],
 			'build/static/js/core-test.js' : [
 				'assets/js/test-start.js',
 				'libs/nodeunit/nodeunit.js',
-				'libs/moment/test/moment/*.js',
-				'libs/moment/test/lang/*.js',
+				'libs/frozen-moment/test/moment/*.js',
+				// 'libs/frozen-moment/test/lang/*.js',
 				'assets/js/test.js',
 				'assets/js/test-end.js'
 			],
@@ -29,10 +29,10 @@ module.exports = function(grunt) {
 
 	grunt.config('copy.js', {
 		files : {
-			'build/downloads/frozen-moment.js'                : 'libs/moment/frozen-moment.js',
-			'build/downloads/frozen-moment.min.js'            : 'libs/moment/min/frozen-moment.min.js',
-			'build/downloads/frozen-moment-with-langs.js'     : 'libs/moment/min/frozen-moment-with-langs.js',
-			'build/downloads/frozen-moment-with-langs.min.js' : 'libs/moment/min/frozen-moment-with-langs.min.js',
+			'build/downloads/frozen-moment.js'                : 'libs/frozen-moment/frozen-moment.js',
+			'build/downloads/frozen-moment.min.js'            : 'libs/frozen-moment/min/frozen-moment.min.js',
+			'build/downloads/frozen-moment-with-langs.js'     : 'libs/frozen-moment/min/frozen-moment-with-langs.js',
+			'build/downloads/frozen-moment-with-langs.min.js' : 'libs/frozen-moment/min/frozen-moment-with-langs.min.js',
 		}
 	});
 
