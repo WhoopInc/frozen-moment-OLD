@@ -162,7 +162,7 @@
 	font-size: 45px;
 	line-height: 60px;
 	border-radius: 4px;
-	background: url(../img/bg.png) 0 50%;
+	background: $color-moment url(../img/bg.png) 0 50%;
 	border: 1px solid rgba($black, 0.3);
 
 	.is-moment & {
