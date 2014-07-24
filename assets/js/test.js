@@ -116,8 +116,8 @@
 				reportHTML = '',
 				header,
 				expression,
-				submitUrl = "https://github.com/moment/moment/issues/new",
-				searchUrl = "https://github.com/moment/moment/search",
+				submitUrl = "https://github.com/WhoopInc/frozen-moment/issues/new",
+				searchUrl = "https://github.com/WhoopInc/frozen-moment/search",
 				titleText = "" + failures + " test" + (failures !== 1 ? "s" : "") + " failed. ",
 				bodyText = [
 					"### Client info",
