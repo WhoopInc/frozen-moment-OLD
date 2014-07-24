@@ -1,5 +1,5 @@
 (function(){
     var require = function(){
-        return window.moment;
+        return window.frozenMoment;
     }
     var exports = {};
