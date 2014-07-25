@@ -573,19 +573,30 @@
 					
 				
 					
-						<a class="docs-nav-item" href="#/durations/add/">Add Time</a>
-					
-				
-					
-						<a class="docs-nav-item" href="#/durations/subtract/">Subtract Time</a>
-					
-				
-					
 						<a class="docs-nav-item" href="#/durations/as/">As Unit of Time</a>
 					
 				
 					
 						<a class="docs-nav-item" href="#/durations/get/">Get Unit of Time</a>
+					
+				
+			</div>
+		
+			<div class="docs-nav-section">
+				<a class="docs-nav-section-title" href='#/manipulate-durations/'>Set and Manipulate Durations</a>
+				
+					
+				
+					
+						<a class="docs-nav-item" href="#/manipulate-durations/add/">Add Time</a>
+					
+				
+					
+						<a class="docs-nav-item" href="#/manipulate-durations/subtract/">Subtract Time</a>
+					
+				
+					
+						<a class="docs-nav-item" href="#/manipulate-durations/abs/">Absolute Value</a>
 					
 				
 			</div>
@@ -4840,8 +4851,7 @@ The function should return a string.</p>
 					
 					<div class="docs-method-prose">
 						
-						<p><strong>Warning:</strong> This section describes the Duration API that FrozenMoment has inherited from the upstream Moment implementation.  This API <strong>will</strong> be changing to provide an immutable object + builder API, in much the same style as frozenMoment and frozenMoment.build have adapted the previous moment API.</p>
-<p>FrozenMoment also has duration objects. Where a moment is defined as single points in time, durations are defined as a length of time.</p>
+						<p>FrozenMoment also has duration objects. Where a moment is defined as single points in time, durations are defined as a length of time.</p>
 <p>Durations do not have a defined beginning and end date. They are contextless.</p>
 <p>A duration is conceptually more similar to &#39;2 hours&#39; than to &#39;between 2 and 4 pm today&#39;. As such, they are not a good solution to converting between units that depend on context.</p>
 <p>For example, a year can be defined as 366 days, 365 days, 365.25 days, 12 months, or 52 weeks. Trying to convert years to days makes no sense without context. It is much better to use <code>frozenMoment#diff</code> for calculating days or years between two moments than to use <code>Durations</code>.</p>
@@ -4866,12 +4876,16 @@ The function should return a string.</p>
 								<pre><code class="language-js">frozenMoment.duration(Number, String);
 frozenMoment.duration(Number);
 frozenMoment.duration(Object);
-frozenMoment.duration(String);</code></pre>
+frozenMoment.duration(String);
+frozenMoment.duration.build(Number, String);
+frozenMoment.duration.build(Number);
+frozenMoment.duration.build(Object);
+frozenMoment.duration.build(String);</code></pre>
 
 							</div>
 						
 						<p>To create a duration, call <code>frozenMoment.duration()</code> with the length of time in milliseconds.</p>
-<pre><code class="language-javascript">frozenMoment.duration(<span class="number">100</span>); <span class="comment">// 100 milliseconds</span></code></pre>
+<pre><code class="language-javascript">frozenMoment.duration(<span class="number">100</span>);  <span class="comment">// 100 milliseconds</span></code></pre>
 <p>If you want to create a moment with a unit of measurement other than seconds, you can pass the unit of measurement as well.</p>
 <pre><code class="language-javascript">frozenMoment.duration(<span class="number">2</span>, <span class="string">'seconds'</span>);
 frozenMoment.duration(<span class="number">2</span>, <span class="string">'minutes'</span>);
@@ -4937,7 +4951,8 @@ frozenMoment.duration(<span class="number">2</span>, <span class="string">'years
 <pre><code class="language-javascript">frozenMoment.duration(<span class="string">'23:59:59'</span>);
 frozenMoment.duration(<span class="string">'23:59:59.999'</span>);
 frozenMoment.duration(<span class="string">'7.23:59:59.999'</span>);
-frozenMoment.duration(<span class="string">'23:59'</span>);          <span class="comment">//added in 2.3.0</span></code></pre>
+frozenMoment.duration(<span class="string">'23:59'</span>);           <span class="comment">//added in 2.3.0</span></code></pre>
+<p>When invoked as <code>frozenMoment.duration.build()</code>, this API creates a builder object instead of a Duration object.  See <code>frozenMoment.duration#thaw</code> for more information about Duration builder objects.</p>
 
 					</div>
 				</article>
@@ -5106,7 +5121,7 @@ frozenMoment.duration().asDays();</code></pre>
 
 							</div>
 						
-						<p>As with the other getters for durations, <code>frozenMoment.duration().days()</code> gets the days (0 - 29).</p>
+						<p>As with the other getters for durations, <code>frozenMoment.duration().days()</code> gets the days (0 - 31).</p>
 <p><code>frozenMoment.duration().asDays()</code> gets the length of the duration in days.</p>
 
 					</div>
@@ -5133,7 +5148,7 @@ frozenMoment.duration().asMonths();</code></pre>
 						
 						<p>As with the other getters for durations, <code>frozenMoment.duration().months()</code> gets the months (0 - 11).</p>
 <p><code>frozenMoment.duration().asMonths()</code> gets the length of the duration in months.</p>
-<p><strong>Note:</strong> The length of a duration in months is defined as 30 days.</p>
+<p><strong>Note:</strong> A month-long duration is defined as 30 days.</p>
 
 					</div>
 				</article>
@@ -5159,67 +5174,7 @@ frozenMoment.duration().asYears();</code></pre>
 						
 						<p>As with the other getters for durations, <code>frozenMoment.duration().years()</code> gets the years.</p>
 <p><code>frozenMoment.duration().asYears()</code> gets the length of the duration in years.</p>
-<p><strong>Note:</strong> The length of a duration in years is defined as 365 days.</p>
-
-					</div>
-				</article>
-			
-				<article class="docs-method">
-					<a class="docs-method-target" id="/durations/add/"  name="/durations/add/"></a>
-					
-						<h3 class="docs-method-title">
-							<a href='#/durations/add/'>Add Time</a>
-							
-								<span>2.1.0+</span>
-							
-						</h3>
-						<a class="docs-method-edit" href="https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/09-durations/10-add.md" target="_blank">edit</a>
-					
-					<div class="docs-method-prose">
-						
-							<div class="docs-method-signature">
-								<pre><code class="language-js">frozenMoment.duration().add(Number, String);
-frozenMoment.duration().add(Number);
-frozenMoment.duration().add(Duration);
-frozenMoment.duration().add(Object);</code></pre>
-
-							</div>
-						
-						<p><strong>Warning:</strong> This mutator will move to a separate duration builder object prior to release.</p>
-<p>Mutates the original duration by adding time.</p>
-<pre><code class="language-javascript"><span class="keyword">var</span> a = frozenMoment.duration(<span class="number">1</span>, <span class="string">'d'</span>);
-<span class="keyword">var</span> b = frozenMoment.duration(<span class="number">2</span>, <span class="string">'d'</span>);
-a.add(b).days(); <span class="comment">// 3</span></code></pre>
-
-					</div>
-				</article>
-			
-				<article class="docs-method">
-					<a class="docs-method-target" id="/durations/subtract/"  name="/durations/subtract/"></a>
-					
-						<h3 class="docs-method-title">
-							<a href='#/durations/subtract/'>Subtract Time</a>
-							
-								<span>2.1.0+</span>
-							
-						</h3>
-						<a class="docs-method-edit" href="https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/09-durations/11-subtract.md" target="_blank">edit</a>
-					
-					<div class="docs-method-prose">
-						
-							<div class="docs-method-signature">
-								<pre><code class="language-js">frozenMoment.duration().subtract(Number, String);
-frozenMoment.duration().subtract(Number);
-frozenMoment.duration().subtract(Duration);
-frozenMoment.duration().subtract(Object);</code></pre>
-
-							</div>
-						
-						<p><strong>Warning:</strong> This mutator will move to a separate duration builder object prior to release.</p>
-<p>Mutates the original duration by subtracting time.</p>
-<pre><code class="language-javascript"><span class="keyword">var</span> a = frozenMoment.duration(<span class="number">3</span>, <span class="string">'d'</span>);
-<span class="keyword">var</span> b = frozenMoment.duration(<span class="number">2</span>, <span class="string">'d'</span>);
-a.subtract(b).days(); <span class="comment">// 1</span></code></pre>
+<p><strong>Note:</strong> A year-long duration is defined as 365 days.</p>
 
 					</div>
 				</article>
@@ -5233,7 +5188,7 @@ a.subtract(b).days(); <span class="comment">// 1</span></code></pre>
 								<span>2.1.0+</span>
 							
 						</h3>
-						<a class="docs-method-edit" href="https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/09-durations/12-as.md" target="_blank">edit</a>
+						<a class="docs-method-edit" href="https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/09-durations/10-as.md" target="_blank">edit</a>
 					
 					<div class="docs-method-prose">
 						
@@ -5260,7 +5215,7 @@ duration.as(<span class="string">'milliseconds'</span>);</code></pre>
 								<span>2.1.0+</span>
 							
 						</h3>
-						<a class="docs-method-edit" href="https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/09-durations/13-get.md" target="_blank">edit</a>
+						<a class="docs-method-edit" href="https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/09-durations/11-get.md" target="_blank">edit</a>
 					
 					<div class="docs-method-prose">
 						
@@ -5274,6 +5229,115 @@ duration.as(<span class="string">'milliseconds'</span>);</code></pre>
 duration.get(<span class="string">'minutes'</span>);
 duration.get(<span class="string">'seconds'</span>);
 duration.get(<span class="string">'milliseconds'</span>);</code></pre>
+
+					</div>
+				</article>
+			
+		
+			<article class="docs-section">
+				<a class="docs-section-target" id="/manipulate-durations/" name="/manipulate-durations/"></a>
+				<h2 class="docs-section-title"><a href='#/manipulate-durations/'>Set and Manipulate Durations</a></h2>
+			</article>
+			
+				<article class="docs-method">
+					<a class="docs-method-target" id="/manipulate-durations/intro/"  name="/manipulate-durations/intro/"></a>
+					
+					<div class="docs-method-prose">
+						
+						<p>Duration objects can be thawed into builder objects.  These builders support basic manipulations on the specified duration, and can be frozen back into duration objects for formatting and queries.</p>
+<pre><code class="language-javascript"><span class="keyword">var</span> a = frozenMoment.duration(<span class="number">2</span>, <span class="string">"hours"</span>).thaw();
+a.add(<span class="number">30</span>, <span class="string">"minutes"</span>);
+a.freeze().humanize();  <span class="comment">// 2 hours, 30 minutes</span></code></pre>
+<p>If you don&#39;t already have an appropriate Duration, it&#39;s more efficient to create a duration builder directly:</p>
+<pre><code class="language-javascript"><span class="keyword">var</span> b = frozenMoment.duration.build(<span class="number">2</span>, <span class="string">"hours"</span>);
+b.add(<span class="number">30</span>, <span class="string">"minutes"</span>);
+b.freeze().humanize();  <span class="comment">// 2 hours, 30 minutes</span></code></pre>
+
+					</div>
+				</article>
+			
+				<article class="docs-method">
+					<a class="docs-method-target" id="/manipulate-durations/add/"  name="/manipulate-durations/add/"></a>
+					
+						<h3 class="docs-method-title">
+							<a href='#/manipulate-durations/add/'>Add Time</a>
+							
+								<span>2.1.0+</span>
+							
+						</h3>
+						<a class="docs-method-edit" href="https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/10-manipulate-durations/01-add.md" target="_blank">edit</a>
+					
+					<div class="docs-method-prose">
+						
+							<div class="docs-method-signature">
+								<pre><code class="language-js">frozenMoment.duration.build().add(Number, String);
+frozenMoment.duration.build().add(Number);
+frozenMoment.duration.build().add(Duration);
+frozenMoment.duration.build().add(Object);</code></pre>
+
+							</div>
+						
+						<p>Mutates the duration to be built by adding time.</p>
+<pre><code class="language-javascript"><span class="keyword">var</span> a = frozenMoment.duration.build(<span class="number">1</span>, <span class="string">'d'</span>);
+<span class="keyword">var</span> b = frozenMoment.duration.build(<span class="number">2</span>, <span class="string">'d'</span>);
+a.add(b).freeze().days();  <span class="comment">// 3</span></code></pre>
+
+					</div>
+				</article>
+			
+				<article class="docs-method">
+					<a class="docs-method-target" id="/manipulate-durations/subtract/"  name="/manipulate-durations/subtract/"></a>
+					
+						<h3 class="docs-method-title">
+							<a href='#/manipulate-durations/subtract/'>Subtract Time</a>
+							
+								<span>2.1.0+</span>
+							
+						</h3>
+						<a class="docs-method-edit" href="https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/10-manipulate-durations/02-subtract.md" target="_blank">edit</a>
+					
+					<div class="docs-method-prose">
+						
+							<div class="docs-method-signature">
+								<pre><code class="language-js">frozenMoment.duration.build().subtract(Number, String);
+frozenMoment.duration.build().subtract(Number);
+frozenMoment.duration.build().subtract(Duration);
+frozenMoment.duration.build().subtract(Object);</code></pre>
+
+							</div>
+						
+						<p>Mutates the duration to be built by subtracting time.</p>
+<pre><code class="language-javascript"><span class="keyword">var</span> a = frozenMoment.duration.build(<span class="number">3</span>, <span class="string">'d'</span>);
+<span class="keyword">var</span> b = frozenMoment.duration.build(<span class="number">2</span>, <span class="string">'d'</span>);
+a.subtract(b).freeze().days();  <span class="comment">// 1</span></code></pre>
+
+					</div>
+				</article>
+			
+				<article class="docs-method">
+					<a class="docs-method-target" id="/manipulate-durations/abs/"  name="/manipulate-durations/abs/"></a>
+					
+						<h3 class="docs-method-title">
+							<a href='#/manipulate-durations/abs/'>Absolute Value</a>
+							
+								<span>3.0.0+</span>
+							
+						</h3>
+						<a class="docs-method-edit" href="https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/10-manipulate-durations/03-abs.md" target="_blank">edit</a>
+					
+					<div class="docs-method-prose">
+						
+							<div class="docs-method-signature">
+								<pre><code class="language-js">frozenMoment.duration.build().abs();</code></pre>
+
+							</div>
+						
+						<p>Mutates the duration to be built to be the absolute value of the currently
+specified duration.  That is, builders that build negative durations will now
+build positive durations of the same length, and all other builders will not
+change.</p>
+<pre><code class="language-javascript">frozenMoment.duration.build(<span class="number">3</span>, <span class="string">'days'</span>).abs();   <span class="comment">// 3 days</span>
+frozenMoment.duration.build(-<span class="number">3</span>, <span class="string">'days'</span>).abs();  <span class="comment">// 3 days</span></code></pre>
 
 					</div>
 				</article>
@@ -5303,7 +5367,7 @@ duration.get(<span class="string">'milliseconds'</span>);</code></pre>
 								<span>2.3.0+</span>
 							
 						</h3>
-						<a class="docs-method-edit" href="https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/10-utilities/01-normalize-units.md" target="_blank">edit</a>
+						<a class="docs-method-edit" href="https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/11-utilities/01-normalize-units.md" target="_blank">edit</a>
 					
 					<div class="docs-method-prose">
 						
@@ -5336,7 +5400,7 @@ frozenMoment.normalizeUnits(<span class="string">'YeARS'</span>);  <span class="
 								<span>2.3.0+</span>
 							
 						</h3>
-						<a class="docs-method-edit" href="https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/10-utilities/02-invalid.md" target="_blank">edit</a>
+						<a class="docs-method-edit" href="https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/11-utilities/02-invalid.md" target="_blank">edit</a>
 					
 					<div class="docs-method-prose">
 						
@@ -5382,7 +5446,7 @@ m.parsingFlags().invalidMonth; <span class="comment">// 'Actober'</span></code><
 							<a href='#/plugins/strftime/'>Strftime</a>
 							
 						</h3>
-						<a class="docs-method-edit" href="https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/11-plugins/01-strftime.md" target="_blank">edit</a>
+						<a class="docs-method-edit" href="https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/12-plugins/01-strftime.md" target="_blank">edit</a>
 					
 					<div class="docs-method-prose">
 						
@@ -5404,7 +5468,7 @@ m.parsingFlags().invalidMonth; <span class="comment">// 'Actober'</span></code><
 							<a href='#/plugins/isocalendar/'>ISO Calendar</a>
 							
 						</h3>
-						<a class="docs-method-edit" href="https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/11-plugins/02-isocalendar.md" target="_blank">edit</a>
+						<a class="docs-method-edit" href="https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/12-plugins/02-isocalendar.md" target="_blank">edit</a>
 					
 					<div class="docs-method-prose">
 						
@@ -5433,7 +5497,7 @@ m.parsingFlags().invalidMonth; <span class="comment">// 'Actober'</span></code><
 							<a href='#/plugins/range/'>Date Ranges</a>
 							
 						</h3>
-						<a class="docs-method-edit" href="https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/11-plugins/03-range.md" target="_blank">edit</a>
+						<a class="docs-method-edit" href="https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/12-plugins/03-range.md" target="_blank">edit</a>
 					
 					<div class="docs-method-prose">
 						
@@ -5457,7 +5521,7 @@ m.parsingFlags().invalidMonth; <span class="comment">// 'Actober'</span></code><
 							<a href='#/plugins/twix/'>Twix</a>
 							
 						</h3>
-						<a class="docs-method-edit" href="https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/11-plugins/04-twix.md" target="_blank">edit</a>
+						<a class="docs-method-edit" href="https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/12-plugins/04-twix.md" target="_blank">edit</a>
 					
 					<div class="docs-method-prose">
 						
@@ -5488,7 +5552,7 @@ t.simpleFormat(<span class="string">"h:m"</span>); <span class="comment">// '9:3
 							<a href='#/plugins/twitter/'>Twitter</a>
 							
 						</h3>
-						<a class="docs-method-edit" href="https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/11-plugins/05-twitter.md" target="_blank">edit</a>
+						<a class="docs-method-edit" href="https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/12-plugins/05-twitter.md" target="_blank">edit</a>
 					
 					<div class="docs-method-prose">
 						
@@ -5513,7 +5577,7 @@ t.simpleFormat(<span class="string">"h:m"</span>); <span class="comment">// '9:3
 							<a href='#/plugins/jalaali/'>Jalaali Calendar</a>
 							
 						</h3>
-						<a class="docs-method-edit" href="https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/11-plugins/06-jalaali.md" target="_blank">edit</a>
+						<a class="docs-method-edit" href="https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/12-plugins/06-jalaali.md" target="_blank">edit</a>
 					
 					<div class="docs-method-prose">
 						
@@ -5538,7 +5602,7 @@ m.format(<span class="string">'jYYYY/jM/jD [is] YYYY/M/D'</span>); <span class="
 							<a href='#/plugins/msdate/'>MSDate</a>
 							
 						</h3>
-						<a class="docs-method-edit" href="https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/11-plugins/07-msdate.md" target="_blank">edit</a>
+						<a class="docs-method-edit" href="https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/12-plugins/07-msdate.md" target="_blank">edit</a>
 					
 					<div class="docs-method-prose">
 						
@@ -5559,7 +5623,7 @@ m.format(<span class="string">'jYYYY/jM/jD [is] YYYY/M/D'</span>); <span class="
 							<a href='#/plugins/fquarter/'>Fiscal Quarters</a>
 							
 						</h3>
-						<a class="docs-method-edit" href="https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/11-plugins/08-fquarter.md" target="_blank">edit</a>
+						<a class="docs-method-edit" href="https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/12-plugins/08-fquarter.md" target="_blank">edit</a>
 					
 					<div class="docs-method-prose">
 						
@@ -5584,7 +5648,7 @@ m.format(<span class="string">'jYYYY/jM/jD [is] YYYY/M/D'</span>); <span class="
 							<a href='#/plugins/preciserange/'>Precise Range</a>
 							
 						</h3>
-						<a class="docs-method-edit" href="https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/11-plugins/09-preciserange.md" target="_blank">edit</a>
+						<a class="docs-method-edit" href="https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/12-plugins/09-preciserange.md" target="_blank">edit</a>
 					
 					<div class="docs-method-prose">
 						
@@ -5604,7 +5668,7 @@ m.format(<span class="string">'jYYYY/jM/jD [is] YYYY/M/D'</span>); <span class="
 							<a href='#/plugins/recur/'>Recur</a>
 							
 						</h3>
-						<a class="docs-method-edit" href="https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/11-plugins/10-recur.md" target="_blank">edit</a>
+						<a class="docs-method-edit" href="https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/12-plugins/10-recur.md" target="_blank">edit</a>
 					
 					<div class="docs-method-prose">
 						
@@ -5635,7 +5699,7 @@ interval.previous( <span class="number">2</span>, <span class="string">"L"</span
 							<a href='#/plugins/parseformat/'>Parse Date Format</a>
 							
 						</h3>
-						<a class="docs-method-edit" href="https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/11-plugins/11-parseformat.md" target="_blank">edit</a>
+						<a class="docs-method-edit" href="https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/12-plugins/11-parseformat.md" target="_blank">edit</a>
 					
 					<div class="docs-method-prose">
 						
@@ -5665,7 +5729,7 @@ Links: <a href="http://gr2m.github.io/moment.parseFormat/">Demo</a> |
 							<a href='#/plugins/jdateformatparser/'>Java DateFormat Parser</a>
 							
 						</h3>
-						<a class="docs-method-edit" href="https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/11-plugins/12-jdateformatparser.md" target="_blank">edit</a>
+						<a class="docs-method-edit" href="https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/12-plugins/12-jdateformatparser.md" target="_blank">edit</a>
 					
 					<div class="docs-method-prose">
 						
