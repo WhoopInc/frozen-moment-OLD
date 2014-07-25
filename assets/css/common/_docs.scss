@@ -1,7 +1,7 @@
 .docs-nav {
 	@include font-display;
 	position: fixed;
-	top: 150px;
+	top: 134px;
 	bottom: 0;
 	left: 50%;
 	margin-left: 256px;
@@ -137,7 +137,7 @@
 	font-size: 45px;
 	line-height: 60px;
 	border-radius: 4px;
-	background: $color-moment url(../img/bg.png) 0 50%;
+	background: $color-moment;
 	border: 1px solid rgba($black, 0.3);
 
 	a {

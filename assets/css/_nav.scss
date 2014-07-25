@@ -63,7 +63,7 @@
 
 .nav-pages {
 	float: right;
-	padding: 15px 0;
+	padding: 3px 0;
 
 	a {
 		display: inline-block;
@@ -71,21 +71,22 @@
 		padding: 0 10px;
 		float: left;
 		text-decoration: none;
-		color: $color-moment;
+		color: $yellow;
 		border-radius: 2px;
 		font-size: 14px;
 		margin: 0 2px;
 
 		&:hover {
 			//color: $black;
-			background: rgba($color-moment, 0.2);
+			background: rgba($white, 0.2);
 		}
 
 		&:active,
 		&:focus,
 		&.active {
 			color: $black;
-			background: $color-moment;
+			background: $yellow;
+			text-shadow: none;
 		}
 	}
 }
