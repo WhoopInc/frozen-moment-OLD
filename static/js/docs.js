@@ -64,7 +64,7 @@ $(function(){
 			this.refresh();
 		}
 
-		this.$target.css('top', Math.min(130, Math.max(0, 130 - elScrollTop)));
+		this.$target.css('top', Math.min(134, Math.max(0, 134 - elScrollTop)));
 
 		if (scrollTop >= maxScroll) {
 			return activeTarget != (i = targets[targets.length - 1]) && this.activate(i);
