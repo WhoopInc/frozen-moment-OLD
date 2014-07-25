@@ -186,8 +186,8 @@ exports.lang = {
         frozenMoment.lang('en');
 
         test.equal(frozenMoment.duration({seconds: 44}).humanize(), 'a few seconds', 'Normally default to global');
-        test.equal(frozenMoment.duration({seconds: 44}).lang('es').humanize(), 'unos segundos', 'Use the instance specific language');
-        test.equal(frozenMoment.duration({seconds: 44}).humanize(), 'a few seconds', 'Using an instance specific language does not affect other durations');
+        test.equal(frozenMoment.duration.build({seconds: 44}).lang('es').freeze().humanize(), 'unos segundos', 'Use the instance specific language');
+        test.equal(frozenMoment.duration.build({seconds: 44}).freeze().humanize(), 'a few seconds', 'Using an instance specific language does not affect other durations');
 
         test.done();
     },
@@ -196,7 +196,7 @@ exports.lang = {
         test.expect(1);
         frozenMoment.lang('en');
 
-        var a = frozenMoment.duration({seconds:  44}).lang('es'),
+        var a = frozenMoment.duration.build({seconds:  44}).lang('es').freeze(),
             b = frozenMoment.duration(a);
 
         test.equal(b.humanize(), 'unos segundos', 'using frozenMoment.duration()');

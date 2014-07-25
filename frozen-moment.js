@@ -387,8 +387,8 @@
         extend(this, config);
     }
 
-    // Duration constructor
-    function Duration(duration) {
+    // DurationBuilder constructor
+    function DurationBuilder(duration) {
         var normalizedInput = normalizeObjectUnits(duration),
             years = normalizedInput.year || 0,
             quarters = normalizedInput.quarter || 0,
@@ -418,7 +418,41 @@
 
         this._data = {};
 
-        this._bubble();
+        bubbleDuration(this);
+    }
+
+    // FrozenDuration constructor
+    function FrozenDuration(duration) {
+        var normalizedInput = normalizeObjectUnits(duration),
+            years = normalizedInput.year || 0,
+            quarters = normalizedInput.quarter || 0,
+            months = normalizedInput.month || 0,
+            weeks = normalizedInput.week || 0,
+            days = normalizedInput.day || 0,
+            hours = normalizedInput.hour || 0,
+            minutes = normalizedInput.minute || 0,
+            seconds = normalizedInput.second || 0,
+            milliseconds = normalizedInput.millisecond || 0;
+
+        // representation for dateAddRemove
+        this._milliseconds = +milliseconds +
+            seconds * 1e3 + // 1000
+            minutes * 6e4 + // 1000 * 60
+            hours * 36e5; // 1000 * 60 * 60
+        // Because dateAddRemove treats 24 hours as different from a
+        // day when working around DST, we need to store them separately
+        this._days = +days +
+            weeks * 7;
+        // It is impossible to translate months into days without knowing
+        // which months you are are talking about, so we have to store
+        // it separately.
+        this._months = +months +
+            quarters * 3 +
+            years * 12;
+
+        this._data = {};
+
+        bubbleDuration(this);
     }
 
 
@@ -1629,7 +1663,7 @@
     }
 
     function relativeTime(posNegDuration, withoutSuffix, lang) {
-        var duration = frozenMoment.duration(posNegDuration).abs(),
+        var duration = frozenMoment.duration.build(posNegDuration).abs().freeze(),
             seconds = round(duration.as('s')),
             minutes = round(duration.as('m')),
             hours = round(duration.as('h')),
@@ -1825,7 +1859,7 @@
     };
 
     // duration
-    frozenMoment.duration = function (input, key) {
+    function parseDuration(input, key) {
         var duration = input,
             // matching against regexp is expensive, do it on demand
             match = null,
@@ -1834,11 +1868,11 @@
             parseIso,
             diffRes;
 
-        if (frozenMoment.isDuration(input)) {
-            duration = {
-                ms: input._milliseconds,
+        if (frozenMoment.isDuration(input) || frozenMoment.isDurationBuilder(input)) {
+            return {
+                M: input._months,
                 d: input._days,
-                M: input._months
+                ms: input._milliseconds
             };
         } else if (typeof input === 'number') {
             duration = {};
@@ -1880,19 +1914,34 @@
                 ('from' in duration || 'to' in duration)) {
             diffRes = momentsDifference(frozenMoment(duration.from), frozenMoment(duration.to));
 
-            duration = {};
-            duration.ms = diffRes.milliseconds;
-            duration.M = diffRes.months;
+            duration = {
+                ms: diffRes.milliseconds,
+                M: diffRes.months
+            };
         }
 
-        ret = new Duration(duration);
+        return duration;
+    };
 
-        if (frozenMoment.isDuration(input) && input.hasOwnProperty('_lang')) {
+    frozenMoment.duration = function (input, key) {
+        var ret;
+        if (frozenMoment.isDuration(input)) {
+            return input;
+        }
+        ret = new FrozenDuration(parseDuration(input, key));
+        if (input.hasOwnProperty('_lang')) {
             ret._lang = input._lang;
         }
-
         return ret;
-    };
+    }
+
+    frozenMoment.duration.build = function (input, key) {
+        var ret = new DurationBuilder(parseDuration(input, key));
+        if (input.hasOwnProperty('_lang')) {
+            ret._lang = input._lang;
+        }
+        return ret;
+    }
 
     // version number
     frozenMoment.version = VERSION;
@@ -1963,9 +2012,14 @@
             (obj != null && obj.hasOwnProperty('_isAMomentBuilderObject'));
     };
 
-    // for typechecking Duration objects
+    // for typechecking FrozenDuration objects
     frozenMoment.isDuration = function (obj) {
-        return obj instanceof Duration;
+        return obj instanceof FrozenDuration;
+    };
+
+    // for typechecking DurationBuilder objects
+    frozenMoment.isDurationBuilder = function (obj) {
+        return obj instanceof DurationBuilder;
     };
 
     for (i = lists.length - 1; i >= 0; --i) {
@@ -2494,7 +2548,7 @@
         },
 
         from : function (time, withoutSuffix) {
-            return frozenMoment.duration({to: this, from: time}).lang(this.lang()._abbr).humanize(!withoutSuffix);
+            return frozenMoment.duration.build({to: this, from: time}).lang(this.lang()._abbr).freeze().humanize(!withoutSuffix);
         },
 
         fromNow : function (withoutSuffix) {
@@ -2659,7 +2713,7 @@
 
 
     /************************************
-        Duration Prototype
+        DurationBuilder Prototype
     ************************************/
 
     function daysToYears (days) {
@@ -2671,49 +2725,57 @@
         return years * 146097 / 400;
     }
 
-    extend(frozenMoment.duration.fn = Duration.prototype, {
+    function bubbleDuration (duration) {
+        var milliseconds = duration._milliseconds,
+            days = duration._days,
+            months = duration._months,
+            data = duration._data,
+            seconds, minutes, hours, years = 0;
 
-        _bubble : function () {
-            var milliseconds = this._milliseconds,
-                days = this._days,
-                months = this._months,
-                data = this._data,
-                seconds, minutes, hours, years = 0;
+        // The following code bubbles up values, see the tests for
+        // examples of what that means.
+        data.milliseconds = milliseconds % 1000;
 
-            // The following code bubbles up values, see the tests for
-            // examples of what that means.
-            data.milliseconds = milliseconds % 1000;
+        seconds = absRound(milliseconds / 1000);
+        data.seconds = seconds % 60;
 
-            seconds = absRound(milliseconds / 1000);
-            data.seconds = seconds % 60;
+        minutes = absRound(seconds / 60);
+        data.minutes = minutes % 60;
 
-            minutes = absRound(seconds / 60);
-            data.minutes = minutes % 60;
+        hours = absRound(minutes / 60);
+        data.hours = hours % 24;
 
-            hours = absRound(minutes / 60);
-            data.hours = hours % 24;
+        days += absRound(hours / 24);
 
-            days += absRound(hours / 24);
+        // Accurately convert days to years, assume start from year 0.
+        years = absRound(daysToYears(days));
+        days -= absRound(yearsToDays(years));
 
-            // Accurately convert days to years, assume start from year 0.
-            years = absRound(daysToYears(days));
-            days -= absRound(yearsToDays(years));
+        // 30 days to a month
+        // TODO (iskren): Use anchor date (like 1st Jan) to compute this.
+        months += absRound(days / 30);
+        days %= 30;
 
-            // 30 days to a month
-            // TODO (iskren): Use anchor date (like 1st Jan) to compute this.
-            months += absRound(days / 30);
-            days %= 30;
+        // 12 months -> 1 year
+        years += absRound(months / 12);
+        months %= 12;
 
-            // 12 months -> 1 year
-            years += absRound(months / 12);
-            months %= 12;
+        data.days = days;
+        data.months = months;
+        data.years = years;
+    }
 
-            data.days = days;
-            data.months = months;
-            data.years = years;
+    extend(frozenMoment.duration.build.fn = DurationBuilder.prototype, {
+
+        freeze: function () {
+            return frozenMoment.duration(this);
         },
 
-        abs : function () {
+        clone: function () {
+            return frozenMoment.duration.build(this);
+        },
+
+        abs: function () {
             this._milliseconds = Math.abs(this._milliseconds);
             this._days = Math.abs(this._days);
             this._months = Math.abs(this._months);
@@ -2728,18 +2790,61 @@
             return this;
         },
 
-        weeks : function () {
+        add: function (input, val) {
+            // supports only 2.0-style add(1, 's') or add(moment)
+            var dur = frozenMoment.duration(input, val);
+
+            this._milliseconds += dur._milliseconds;
+            this._days += dur._days;
+            this._months += dur._months;
+
+            bubbleDuration(this);
+
+            return this;
+        },
+
+        subtract: function (input, val) {
+            var dur = frozenMoment.duration(input, val);
+
+            this._milliseconds -= dur._milliseconds;
+            this._days -= dur._days;
+            this._months -= dur._months;
+
+            bubbleDuration(this);
+
+            return this;
+        },
+
+        // Sets the language for this instance using the provided language key.
+        lang: function (key) {
+            this._lang = getLangDefinition(key);
+            return this;
+        }
+    });
+
+
+    /************************************
+        FrozenDuration Prototype
+    ************************************/
+
+    extend(frozenMoment.duration.fn = FrozenDuration.prototype, {
+
+        thaw: function () {
+            return frozenMoment.duration.build(this);
+        },
+
+        weeks: function () {
             return absRound(this.days() / 7);
         },
 
-        valueOf : function () {
+        valueOf: function () {
             return this._milliseconds +
               this._days * 864e5 +
               (this._months % 12) * 2592e6 +
               toInt(this._months / 12) * 31536e6;
         },
 
-        humanize : function (withSuffix) {
+        humanize: function (withSuffix) {
             var output = relativeTime(this, !withSuffix, this.lang());
 
             if (withSuffix) {
@@ -2749,37 +2854,12 @@
             return this.lang().postformat(output);
         },
 
-        add : function (input, val) {
-            // supports only 2.0-style add(1, 's') or add(moment)
-            var dur = frozenMoment.duration(input, val);
-
-            this._milliseconds += dur._milliseconds;
-            this._days += dur._days;
-            this._months += dur._months;
-
-            this._bubble();
-
-            return this;
-        },
-
-        subtract : function (input, val) {
-            var dur = frozenMoment.duration(input, val);
-
-            this._milliseconds -= dur._milliseconds;
-            this._days -= dur._days;
-            this._months -= dur._months;
-
-            this._bubble();
-
-            return this;
-        },
-
-        get : function (units) {
+        get: function (units) {
             units = normalizeUnits(units);
             return this[units.toLowerCase() + 's']();
         },
 
-        as : function (units) {
+        as: function (units) {
             var days, months;
             units = normalizeUnits(units);
 
@@ -2804,7 +2884,7 @@
         // If passed a language key, it will set the language for this
         // instance.  Otherwise, it will return the language configuration
         // variables for this instance.
-        lang : function (key) {
+        lang: function (key) {
             if (key === undefined) {
                 return this._lang;
             } else {
@@ -2813,7 +2893,7 @@
             }
         },
 
-        toISOString : function () {
+        toISOString: function () {
             // inspired by https://github.com/dordille/moment-isoduration/blob/master/moment.isoduration.js
             var years = Math.abs(this.years()),
                 months = Math.abs(this.months()),
@@ -2877,10 +2957,10 @@
         return this.as('y');
     };
 
+
     /************************************
         Default Lang
     ************************************/
-
 
     // Set default language, other languages will inherit from English.
     frozenMoment.lang('en', {
@@ -2895,6 +2975,7 @@
     });
 
     /* EMBED_LANGUAGES */
+
 
     /************************************
         Exposing Moment

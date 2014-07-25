@@ -138,7 +138,30 @@ exports.duration = {
                 seconds: 20,
                 milliseconds: 12
             }),
-            modified = frozenMoment.duration(1, 'day').add(frozenMoment.duration(1, 'day'));
+            modified = frozenMoment.duration(1, 'day').thaw().add(frozenMoment.duration(1, 'day')).freeze();
+
+        test.expect(4);
+        test.deepEqual(frozenMoment.duration(simple), simple, "simple clones are equal");
+        test.deepEqual(frozenMoment.duration(lengthy), lengthy, "lengthy clones are equal");
+        test.deepEqual(frozenMoment.duration(complicated), complicated, "complicated clones are equal");
+        test.deepEqual(frozenMoment.duration(modified), modified, "cloning modified duration works");
+        test.done();
+    },
+
+    "instantiation from a duration builder" : function (test) {
+        var simple = frozenMoment.duration.build(1234),
+            lengthy = frozenMoment.duration.build(60 * 60 * 24 * 360 * 1e3),
+            complicated = frozenMoment.duration.build({
+                years: 2,
+                months: 3,
+                weeks: 4,
+                days: 1,
+                hours: 8,
+                minutes: 9,
+                seconds: 20,
+                milliseconds: 12
+            }),
+            modified = frozenMoment.duration.build(1, 'day').add(frozenMoment.duration(1, 'day'));
 
         test.expect(4);
         test.deepEqual(frozenMoment.duration(simple), simple, "simple clones are equal");
@@ -508,7 +531,7 @@ exports.duration = {
     "add" : function (test) {
         test.expect(4);
 
-        var d = frozenMoment.duration({months: 4, weeks: 3, days: 2});
+        var d = frozenMoment.duration.build({months: 4, weeks: 3, days: 2});
         // for some reason, d._data._months does not get updated; use d._months instead.
         test.equal(d.add(1, 'month')._months, 5, 'Add months');
         test.equal(d.add(5, 'days')._days, 28, 'Add days');
@@ -521,10 +544,10 @@ exports.duration = {
     "add and bubble" : function (test) {
         test.expect(4);
 
-        test.equal(frozenMoment.duration(1, 'second').add(1000, 'milliseconds').seconds(), 2, 'Adding milliseconds should bubble up to seconds');
-        test.equal(frozenMoment.duration(1, 'minute').add(60, 'second').minutes(), 2, 'Adding seconds should bubble up to minutes');
-        test.equal(frozenMoment.duration(1, 'hour').add(60, 'minutes').hours(), 2, 'Adding minutes should bubble up to hours');
-        test.equal(frozenMoment.duration(1, 'day').add(24, 'hours').days(), 2, 'Adding hours should bubble up to days');
+        test.equal(frozenMoment.duration.build(1, 'second').add(1000, 'milliseconds').freeze().seconds(), 2, 'Adding milliseconds should bubble up to seconds');
+        test.equal(frozenMoment.duration.build(1, 'minute').add(60, 'second').freeze().minutes(), 2, 'Adding seconds should bubble up to minutes');
+        test.equal(frozenMoment.duration.build(1, 'hour').add(60, 'minutes').freeze().hours(), 2, 'Adding minutes should bubble up to hours');
+        test.equal(frozenMoment.duration.build(1, 'day').add(24, 'hours').freeze().days(), 2, 'Adding hours should bubble up to days');
 
         test.done();
     },
@@ -532,10 +555,10 @@ exports.duration = {
     "subtract and bubble" : function (test) {
         test.expect(4);
 
-        test.equal(frozenMoment.duration(2, 'second').subtract(1000, 'milliseconds').seconds(), 1, 'Subtracting milliseconds should bubble up to seconds');
-        test.equal(frozenMoment.duration(2, 'minute').subtract(60, 'second').minutes(), 1, 'Subtracting seconds should bubble up to minutes');
-        test.equal(frozenMoment.duration(2, 'hour').subtract(60, 'minutes').hours(), 1, 'Subtracting minutes should bubble up to hours');
-        test.equal(frozenMoment.duration(2, 'day').subtract(24, 'hours').days(), 1, 'Subtracting hours should bubble up to days');
+        test.equal(frozenMoment.duration.build(2, 'second').subtract(1000, 'milliseconds').freeze().seconds(), 1, 'Subtracting milliseconds should bubble up to seconds');
+        test.equal(frozenMoment.duration.build(2, 'minute').subtract(60, 'second').freeze().minutes(), 1, 'Subtracting seconds should bubble up to minutes');
+        test.equal(frozenMoment.duration.build(2, 'hour').subtract(60, 'minutes').freeze().hours(), 1, 'Subtracting minutes should bubble up to hours');
+        test.equal(frozenMoment.duration.build(2, 'day').subtract(24, 'hours').freeze().days(), 1, 'Subtracting hours should bubble up to days');
 
         test.done();
     },
@@ -543,7 +566,7 @@ exports.duration = {
     "subtract" : function (test) {
         test.expect(4);
 
-        var d = frozenMoment.duration({months: 2, weeks: 2, days: 0, hours: 5});
+        var d = frozenMoment.duration.build({months: 2, weeks: 2, days: 0, hours: 5});
         // for some reason, d._data._months does not get updated; use d._months instead.
         test.equal(d.subtract(1, 'months')._months, 1, 'Subtract months');
         test.equal(d.subtract(14, 'days')._days, 0, 'Subtract days');
