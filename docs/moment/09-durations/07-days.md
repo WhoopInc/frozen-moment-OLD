@@ -7,6 +7,6 @@ signature: |
 ---
 
 
-As with the other getters for durations, `frozenMoment.duration().days()` gets the days (0 - 29).
+As with the other getters for durations, `frozenMoment.duration().days()` gets the days (0 - 31).
 
 `frozenMoment.duration().asDays()` gets the length of the duration in days.

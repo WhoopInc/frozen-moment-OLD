@@ -11,4 +11,4 @@ As with the other getters for durations, `frozenMoment.duration().years()` gets 
 
 `frozenMoment.duration().asYears()` gets the length of the duration in years.
 
-**Note:** The length of a duration in years is defined as 365 days.
+**Note:** A year-long duration is defined as 365 days.

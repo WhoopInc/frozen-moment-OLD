@@ -3,8 +3,6 @@ title: Durations
 ---
 
 
-**Warning:** This section describes the Duration API that FrozenMoment has inherited from the upstream Moment implementation.  This API **will** be changing to provide an immutable object + builder API, in much the same style as frozenMoment and frozenMoment.build have adapted the previous moment API.
-
 FrozenMoment also has duration objects. Where a moment is defined as single points in time, durations are defined as a length of time.
 
 Durations do not have a defined beginning and end date. They are contextless.

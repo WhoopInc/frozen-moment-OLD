@@ -6,13 +6,17 @@ signature: |
   frozenMoment.duration(Number);
   frozenMoment.duration(Object);
   frozenMoment.duration(String);
+  frozenMoment.duration.build(Number, String);
+  frozenMoment.duration.build(Number);
+  frozenMoment.duration.build(Object);
+  frozenMoment.duration.build(String);
 ---
 
 
 To create a duration, call `frozenMoment.duration()` with the length of time in milliseconds.
 
 ```javascript
-frozenMoment.duration(100); // 100 milliseconds
+frozenMoment.duration(100);  // 100 milliseconds
 ```
 
 If you want to create a moment with a unit of measurement other than seconds, you can pass the unit of measurement as well.
@@ -92,5 +96,7 @@ The format is an hour, minute, second string separated by colons like `23:59:59`
 frozenMoment.duration('23:59:59');
 frozenMoment.duration('23:59:59.999');
 frozenMoment.duration('7.23:59:59.999');
-frozenMoment.duration('23:59');          //added in 2.3.0
+frozenMoment.duration('23:59');           //added in 2.3.0
 ```
+
+When invoked as `frozenMoment.duration.build()`, this API creates a builder object instead of a Duration object.  See `frozenMoment.duration#thaw` for more information about Duration builder objects.

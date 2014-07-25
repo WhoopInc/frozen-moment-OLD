@@ -11,4 +11,4 @@ As with the other getters for durations, `frozenMoment.duration().months()` gets
 
 `frozenMoment.duration().asMonths()` gets the length of the duration in months.
 
-**Note:** The length of a duration in months is defined as 30 days.
+**Note:** A month-long duration is defined as 30 days.
