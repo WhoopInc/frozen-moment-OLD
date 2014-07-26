@@ -1938,13 +1938,6 @@
         return true;
     };
 
-    frozenMoment.lang = deprecate(
-        "frozenMoment.lang is deprecated. Use frozenMoment.locale instead.",
-        function (key, value) {
-            return frozenMoment.locale(key, value);
-        }
-    );
-
     // This function will load locale and then set the global locale.  If
     // no arguments are passed in, it will simply return the current global
     // locale key.
@@ -1980,13 +1973,6 @@
             return null;
         }
     };
-
-    frozenMoment.langData = deprecate(
-        "frozenMoment.langData is deprecated. Use frozenMoment.localeData instead.",
-        function (key) {
-            return frozenMoment.localeData(key);
-        }
-    );
 
     // returns locale data
     frozenMoment.localeData = function (key) {
@@ -2136,24 +2122,6 @@
         }
         relativeTimeThresholds[threshold] = limit;
         return true;
-    };
-
-    // This function will load languages and then set the global language.
-    momentBuilder.lang = function (key, values) {
-        var r;
-        if (!key) {
-            throw new Error("momentBuilder.lang() requires at least one argument");
-        }
-        if (values) {
-            loadLang(normalizeLanguage(key), values);
-        } else if (values === null) {
-            unloadLang(key);
-            key = 'en';
-        } else if (!languages[key]) {
-            getLangDefinition(key);
-        }
-        r = momentBuilder.duration.fn._lang = momentBuilder.fn._lang = getLangDefinition(key);
-        return r._abbr;
     };
 
     for (i = lists.length - 1; i >= 0; --i) {
@@ -2692,13 +2660,6 @@
             return this._locale._abbr;
         },
 
-        lang : deprecate(
-            "frozenMoment().lang() is deprecated. Use frozenMoment().localeData() instead.",
-            function (key) {
-                return this.localeData(key);
-            }
-        ),
-
         localeData : function () {
             return this._locale;
         }
@@ -2838,9 +2799,9 @@
             return this;
         },
 
-        // Sets the language for this instance using the provided language key.
-        lang: function (key) {
-            this._lang = getLangDefinition(key);
+        // Set the locale for this instance using the provided locale key.
+        locale: function (key) {
+            this._locale = frozenMoment.localeData(key);
             return this;
         }
     });

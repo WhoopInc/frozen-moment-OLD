@@ -126,14 +126,6 @@ exports.locale = {
         test.done();
     },
 
-    "library deprecations" : function (test) {
-        frozenMoment.lang("dude", {months: ["Movember"]});
-        test.equal(frozenMoment.locale(), "dude", "setting the lang sets the locale");
-        test.equal(frozenMoment.lang(), frozenMoment.locale());
-        test.equal(frozenMoment.langData(), frozenMoment.localeData(), "langData is localeData");
-        test.done();
-    },
-
     "defineLocale" : function (test) {
         frozenMoment.locale("en");
         frozenMoment.defineLocale("dude", {months: ["Movember"]});
@@ -231,11 +223,6 @@ exports.locale = {
         var mom = frozenMoment.duration();
         frozenMoment.locale('fr');
         test.equal('en', mom.locale());
-        test.done();
-    },
-
-    "duration deprecations" : function (test) {
-        test.equal(frozenMoment.duration().lang(), frozenMoment.duration().localeData(), "duration.lang is the same as duration.localeData");
         test.done();
     },
 
