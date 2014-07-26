@@ -1714,7 +1714,7 @@
         if (input === null || (format === undefined && input === '')) {
             return frozenMoment.invalid({nullInput: true});
         }
-        if (frozenMoment instanceof FrozenMoment) {
+        if (input instanceof FrozenMoment) {
             return input;
         }
 
@@ -2058,15 +2058,15 @@
             return momentBuilder.invalid({nullInput: true});
         }
 
+        config._locale = config._locale || frozenMoment.localeData(config._l);
         if (typeof input === 'string') {
-            config._i = input = getLangDefinition().preparse(input);
+            config._i = input = config._locale.preparse(input);
         }
 
         if (frozenMoment.isMoment(input) || frozenMoment.isBuilder(input)) {
             config = cloneMoment(input);
             config._isAMomentBuilderObject = true;
-
-            config._d = new Date(+input._d);
+            config._d = new Date(valueOfBuilder(input));
         } else if (format) {
             if (isArray(format)) {
                 makeDateFromStringAndArray(config);
