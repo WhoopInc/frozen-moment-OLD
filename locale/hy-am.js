@@ -36,7 +36,7 @@
         return weekdays[m.day()];
     }
 
-    return moment.defineLocale('hy-am', {
+    return frozenMoment.defineLocale('hy-am', {
         months : monthsCaseReplace,
         monthsShort : monthsShortCaseReplace,
         weekdays : weekdaysCaseReplace,

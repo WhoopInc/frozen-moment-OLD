@@ -1,4 +1,4 @@
-var frozenMoment = require("../../frozen-frozenMoment"),
+var frozenMoment = require("../../frozen-moment"),
     frozenMomentBuilder = frozenMoment.build;
 
 exports.locale = {

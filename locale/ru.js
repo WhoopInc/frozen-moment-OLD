@@ -72,7 +72,7 @@
         return weekdays[nounCase][m.day()];
     }
 
-    return moment.defineLocale('ru', {
+    return frozenMoment.defineLocale('ru', {
         months : monthsCaseReplace,
         monthsShort : monthsShortCaseReplace,
         weekdays : weekdaysCaseReplace,

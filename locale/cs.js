@@ -71,7 +71,7 @@
         }
     }
 
-    return moment.defineLocale('cs', {
+    return frozenMoment.defineLocale('cs', {
         months : months,
         monthsShort : monthsShort,
         monthsParse : (function (months, monthsShort) {

@@ -1709,7 +1709,7 @@
         var input = config._i,
             format = config._f;
 
-        config._locale = config._locale || moment.localeData(config._l);
+        config._locale = config._locale || frozenMoment.localeData(config._l);
 
         if (input === null || (format === undefined && input === '')) {
             return frozenMoment.invalid({nullInput: true});
@@ -1939,34 +1939,34 @@
     };
 
     frozenMoment.lang = deprecate(
-        "moment.lang is deprecated. Use moment.locale instead.",
+        "frozenMoment.lang is deprecated. Use frozenMoment.locale instead.",
         function (key, value) {
-            return moment.locale(key, value);
+            return frozenMoment.locale(key, value);
         }
     );
 
     // This function will load locale and then set the global locale.  If
     // no arguments are passed in, it will simply return the current global
     // locale key.
-    moment.locale = function (key, values) {
+    frozenMoment.locale = function (key, values) {
         var data;
         if (key) {
             if (typeof(values) !== "undefined") {
-                data = moment.defineLocale(key, values);
+                data = frozenMoment.defineLocale(key, values);
             }
             else {
-                data = moment.localeData(key);
+                data = frozenMoment.localeData(key);
             }
 
             if (data) {
-                moment.duration.fn._locale = moment.fn._locale = data;
+                frozenMoment.duration.fn._locale = frozenMoment.fn._locale = data;
             }
         }
 
-        return moment.fn._locale._abbr;
+        return frozenMoment.fn._locale._abbr;
     };
 
-    moment.defineLocale = function (name, values) {
+    frozenMoment.defineLocale = function (name, values) {
         if (values !== null) {
             values.abbr = name;
             if (!locales[name]) {
@@ -1981,15 +1981,15 @@
         }
     };
 
-    moment.langData = deprecate(
-        "moment.langData is deprecated. Use moment.localeData instead.",
+    frozenMoment.langData = deprecate(
+        "frozenMoment.langData is deprecated. Use frozenMoment.localeData instead.",
         function (key) {
-            return moment.localeData(key);
+            return frozenMoment.localeData(key);
         }
     );
 
     // returns locale data
-    moment.localeData = function (key) {
+    frozenMoment.localeData = function (key) {
         var locale;
 
         if (key && key._locale && key._locale._abbr) {
@@ -1997,7 +1997,7 @@
         }
 
         if (!key) {
-            return moment.fn._locale;
+            return frozenMoment.fn._locale;
         }
 
         if (!isArray(key)) {
@@ -2388,13 +2388,13 @@
             if (key === undefined) {
                 return this._locale._abbr;
             } else {
-                this._locale = moment.localeData(key);
+                this._locale = frozenMoment.localeData(key);
                 return this;
             }
         },
 
         lang : deprecate(
-            "moment().lang() is deprecated. Use moment().localeData() instead.",
+            "frozenMoment().lang() is deprecated. Use frozenMoment().localeData() instead.",
             function (key) {
                 return this.localeData(key);
             }
@@ -2910,11 +2910,11 @@
             }
         },
 
-        lang : moment.fn.lang,
-        locale : moment.fn.locale,
+        lang : frozenMoment.fn.lang,
+        locale : frozenMoment.fn.locale,
 
         toISOString: function () {
-            // inspired by https://github.com/dordille/moment-isoduration/blob/master/moment.isoduration.js
+            // inspired by https://github.com/dordille/moment-isoduration/blob/master/frozenMoment.isoduration.js
             var years = Math.abs(this.years()),
                 months = Math.abs(this.months()),
                 days = Math.abs(this.days()),
@@ -2987,7 +2987,7 @@
     ************************************/
 
     // Set default locale, other locale will inherit from English.
-    moment.locale('en', {
+    frozenMoment.locale('en', {
         ordinal : function (number) {
             var b = number % 10,
                 output = (toInt(number % 100 / 10) === 1) ? 'th' :

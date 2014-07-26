@@ -36,7 +36,7 @@
         }
     }
 
-    return moment.defineLocale('pl', {
+    return frozenMoment.defineLocale('pl', {
         months : function (momentToFormat, format) {
             if (/D MMMM/.test(format)) {
                 return monthsSubjective[momentToFormat.month()];

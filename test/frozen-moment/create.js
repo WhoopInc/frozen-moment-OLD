@@ -560,7 +560,7 @@ exports.create = {
         test.equal(frozenMoment.utc("2011-01", "gggg-ww").format(), "2011-01-03T00:00:00+00:00", "2011 week 1 (1st Jan Sat)");
         test.equal(frozenMoment.utc("2012-01", "gggg-ww").format(), "2012-01-02T00:00:00+00:00", "2012 week 1 (1st Jan Sun)");
 
-        moment.defineLocale("dow:1,doy:4", null);
+        frozenMoment.defineLocale("dow:1,doy:4", null);
         test.done();
     },
 
@@ -575,7 +575,7 @@ exports.create = {
         test.equal(frozenMoment.utc("2011-01", "gggg-ww").format(), "2010-12-27T00:00:00+00:00", "2011 week 1 (1st Jan Sat)");
         test.equal(frozenMoment.utc("2012-01", "gggg-ww").format(), "2011-12-26T00:00:00+00:00", "2012 week 1 (1st Jan Sun)");
 
-        moment.defineLocale("dow:1,doy:7", null);
+        frozenMoment.defineLocale("dow:1,doy:7", null);
         test.done();
     },
 
@@ -590,7 +590,7 @@ exports.create = {
         test.equal(frozenMoment.utc("2011-01", "gggg-ww").format(), "2010-12-26T00:00:00+00:00", "2011 week 1 (1st Jan Sat)");
         test.equal(frozenMoment.utc("2012-01", "gggg-ww").format(), "2012-01-01T00:00:00+00:00", "2012 week 1 (1st Jan Sun)");
 
-        moment.defineLocale("dow:0,doy:6", null);
+        frozenMoment.defineLocale("dow:0,doy:6", null);
         test.done();
     },
 

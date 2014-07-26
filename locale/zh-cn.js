@@ -57,13 +57,13 @@
             },
             nextWeek : function () {
                 var startOfWeek, prefix;
-                startOfWeek = moment().startOf('week');
+                startOfWeek = frozenMoment.build().startOf('week').freeze();
                 prefix = this.unix() - startOfWeek.unix() >= 7 * 24 * 3600 ? '[下]' : '[本]';
                 return this.minutes() === 0 ? prefix + "dddAh点整" : prefix + "dddAh点mm";
             },
             lastWeek : function () {
                 var startOfWeek, prefix;
-                startOfWeek = moment().startOf('week');
+                startOfWeek = frozenMoment.build().startOf('week').freeze();
                 prefix = this.unix() < startOfWeek.unix()  ? '[上]' : '[本]';
                 return this.minutes() === 0 ? prefix + "dddAh点整" : prefix + "dddAh点mm";
             },
