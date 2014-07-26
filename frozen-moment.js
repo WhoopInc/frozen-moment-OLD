@@ -2381,27 +2381,10 @@
             return this;
         },
 
-        // If passed a locale key, it will set the locale for this
-        // instance.  Otherwise, it will return the locale configuration
-        // variables for this instance.
+        // Set the locale for this instance using the provided locale key.
         locale : function (key) {
-            if (key === undefined) {
-                return this._locale._abbr;
-            } else {
-                this._locale = frozenMoment.localeData(key);
-                return this;
-            }
-        },
-
-        lang : deprecate(
-            "frozenMoment().lang() is deprecated. Use frozenMoment().localeData() instead.",
-            function (key) {
-                return this.localeData(key);
-            }
-        ),
-
-        localeData : function () {
-            return this._locale;
+            this._locale = frozenMoment.localeData(key);
+            return this;
         }
     });
 
@@ -2704,9 +2687,20 @@
             return this[units]();
         },
 
-        // Returns the language configuration variables for this instance.
-        lang : function () {
-            return this._lang;
+        // Returns the locale configuration variables for this instance.
+        locale : function (key) {
+            return this._locale._abbr;
+        },
+
+        lang : deprecate(
+            "frozenMoment().lang() is deprecated. Use frozenMoment().localeData() instead.",
+            function (key) {
+                return this.localeData(key);
+            }
+        ),
+
+        localeData : function () {
+            return this._locale;
         }
     });
 
@@ -2910,9 +2904,6 @@
             }
         },
 
-        lang : frozenMoment.fn.lang,
-        locale : frozenMoment.fn.locale,
-
         toISOString: function () {
             // inspired by https://github.com/dordille/moment-isoduration/blob/master/frozenMoment.isoduration.js
             var years = Math.abs(this.years()),
@@ -2937,6 +2928,10 @@
                 (hours ? hours + 'H' : '') +
                 (minutes ? minutes + 'M' : '') +
                 (seconds ? seconds + 'S' : '');
+        },
+
+        locale : function () {
+            return this._locale._abbr;
         },
 
         localeData : function () {
