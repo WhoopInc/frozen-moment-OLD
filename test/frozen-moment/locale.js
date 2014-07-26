@@ -426,5 +426,6 @@ exports.locale = {
         test.equal('en', frozenMoment.locale());
         frozenMoment.locale('fr');
         test.equal('en', mom.locale());
+        test.done();
     }
 };
