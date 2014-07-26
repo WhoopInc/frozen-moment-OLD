@@ -3,7 +3,7 @@ module.exports = function (grunt) {
         embedLocaleDest = embedOption ?
             'min/frozen-moment-with-customlocales.js' :
             'min/frozen-moment-with-locales.js',
-        embedLocaleSrc = 'lang/*.js';
+        embedLocaleSrc = 'locale/*.js';
 
     if (embedOption && embedOption.match(/,/)) {
         embedLocaleSrc = 'locale/{' + embedOption + '}.js';

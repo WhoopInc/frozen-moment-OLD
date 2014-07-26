@@ -2080,12 +2080,12 @@
         return new MomentBuilder(config);
     }
 
-    momentBuilder = function (input, format, lang, strict) {
+    momentBuilder = function (input, format, locale, strict) {
         var c;
 
-        if (typeof(lang) === 'boolean') {
-            strict = lang;
-            lang = undefined;
+        if (typeof(locale) === 'boolean') {
+            strict = locale;
+            locale = undefined;
         }
         // object construction must be done this way.
         // https://github.com/moment/moment/issues/1423
@@ -2093,7 +2093,7 @@
         c._isAMomentBuilderObject = true;
         c._i = input;
         c._f = format;
-        c._l = lang;
+        c._l = locale;
         c._strict = strict;
         c._isUTC = false;
         c._pf = defaultParsingFlags();
@@ -2616,7 +2616,7 @@
         },
 
         weekYear : function () {
-            return weekOfYear(this, this.lang()._week.dow, this.lang()._week.doy).year;
+            return weekOfYear(this, this.localeData()._week.dow, this.localeData()._week.doy).year;
         },
 
         isoWeekYear : function () {
@@ -2624,7 +2624,7 @@
         },
 
         week : function () {
-            return this.lang().week(this);
+            return this.localeData().week(this);
         },
 
         isoWeek : function () {
@@ -2632,7 +2632,7 @@
         },
 
         weekday : function () {
-            return (this.day() + 7 - this.lang()._week.dow) % 7;
+            return (this.day() + 7 - this.localeData()._week.dow) % 7;
         },
 
         isoWeekday : function (input) {
@@ -2656,7 +2656,7 @@
         },
 
         // Returns the locale configuration variables for this instance.
-        locale : function (key) {
+        locale : function () {
             return this._locale._abbr;
         },
 
