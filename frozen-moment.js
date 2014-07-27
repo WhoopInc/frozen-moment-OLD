@@ -1239,7 +1239,7 @@
             // if we didn't get a weekday name, mark the date as invalid
             if (a != null) {
                 config._w = config._w || {};
-                config._w['d'] = a;
+                config._w.d = a;
             } else {
                 config._pf.invalidWeekday = input;
             }
@@ -1887,7 +1887,7 @@
         }
 
         return duration;
-    };
+    }
 
     frozenMoment.duration = function (input, key) {
         var ret;
@@ -1899,7 +1899,7 @@
             ret._locale = input._locale;
         }
         return ret;
-    }
+    };
 
     frozenMoment.duration.build = function (input, key) {
         var ret = new DurationBuilder(parseDuration(input, key));
@@ -1907,7 +1907,7 @@
             ret._locale = input._locale;
         }
         return ret;
-    }
+    };
 
     // version number
     frozenMoment.version = VERSION;
