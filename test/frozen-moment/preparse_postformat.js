@@ -43,7 +43,7 @@ var frozenMoment = require("../../frozen-moment"),
 
 exports.preparsePostformat = {
     setUp: function (cb) {
-        frozenMoment.lang('symbol', symbolLang);
+        frozenMoment.locale('symbol', symbolLang);
         frozenMoment.createFromInputFallback = function () {
             throw new Error("input not handled by frozenMoment");
         };
@@ -52,7 +52,7 @@ exports.preparsePostformat = {
     },
 
     tearDown: function (cb) {
-        frozenMoment.lang('en-gb');
+        frozenMoment.locale('en-gb');
         cb();
     },
 

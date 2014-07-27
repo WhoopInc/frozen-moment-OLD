@@ -161,13 +161,72 @@ exports.duration = {
                 seconds: 20,
                 milliseconds: 12
             }),
-            modified = frozenMoment.duration.build(1, 'day').add(frozenMoment.duration(1, 'day'));
+            modified = frozenMoment.duration.build(1, 'day');
 
         test.expect(4);
-        test.deepEqual(frozenMoment.duration(simple), simple, "simple clones are equal");
-        test.deepEqual(frozenMoment.duration(lengthy), lengthy, "lengthy clones are equal");
-        test.deepEqual(frozenMoment.duration(complicated), complicated, "complicated clones are equal");
-        test.deepEqual(frozenMoment.duration(modified), modified, "cloning modified duration works");
+        modified.add(frozenMoment.duration(1, 'day'));
+
+        test.deepEqual(simple._data, frozenMoment.duration(simple)._data,
+                       "simple durations are equal to their builders");
+        test.deepEqual(lengthy._data, frozenMoment.duration(lengthy)._data,
+                       "lengthy durations are equal to their builders");
+        test.deepEqual(complicated._data, frozenMoment.duration(complicated)._data,
+                       "complicated durations are equal to their builders");
+        test.deepEqual(modified._data, frozenMoment.duration(modified)._data,
+                       "building modified duration works");
+        test.done();
+    },
+
+    "freezing a duration builder" : function (test) {
+        var simple = frozenMoment.duration.build(1234),
+            lengthy = frozenMoment.duration.build(60 * 60 * 24 * 360 * 1e3),
+            complicated = frozenMoment.duration.build({
+                years: 2,
+                months: 3,
+                weeks: 4,
+                days: 1,
+                hours: 8,
+                minutes: 9,
+                seconds: 20,
+                milliseconds: 12
+            }),
+            modified = frozenMoment.duration.build(1, 'day');
+
+        test.expect(4);
+        modified.add(frozenMoment.duration(1, 'day'));
+
+        test.deepEqual(simple._data, simple.freeze()._data,
+                       "simple durations are equal to their builders");
+        test.deepEqual(lengthy._data, lengthy.freeze()._data,
+                       "lengthy durations are equal to their builders");
+        test.deepEqual(complicated._data, complicated.freeze()._data,
+                       "complicated durations are equal to their builders");
+        test.deepEqual(modified._data, modified.freeze()._data,
+                       "building modified duration works");
+        test.done();
+    },
+
+    "thawing a duration" : function (test) {
+        var simple = frozenMoment.duration(1234),
+            lengthy = frozenMoment.duration(60 * 60 * 24 * 360 * 1e3),
+            complicated = frozenMoment.duration({
+                years: 2,
+                months: 3,
+                weeks: 4,
+                days: 1,
+                hours: 8,
+                minutes: 9,
+                seconds: 20,
+                milliseconds: 12
+            });
+
+        test.expect(3);
+        test.deepEqual(simple._data, simple.thaw()._data,
+                       "simple builders are equal to their durations");
+        test.deepEqual(lengthy._data, lengthy.thaw()._data,
+                       "lengthy builders are equal to their durations");
+        test.deepEqual(complicated._data, complicated.thaw()._data,
+                       "complicated builders are equal to their durations");
         test.done();
     },
 
@@ -360,7 +419,7 @@ exports.duration = {
 
     "humanize" : function (test) {
         test.expect(32);
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
         test.equal(frozenMoment.duration({seconds: 44}).humanize(),  "a few seconds", "44 seconds = a few seconds");
         test.equal(frozenMoment.duration({seconds: 45}).humanize(),  "a minute",      "45 seconds = a minute");
         test.equal(frozenMoment.duration({seconds: 89}).humanize(),  "a minute",      "89 seconds = a minute");
@@ -398,7 +457,7 @@ exports.duration = {
 
     "humanize duration with suffix" : function (test) {
         test.expect(2);
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
         test.equal(frozenMoment.duration({seconds:  44}).humanize(true),  "in a few seconds", "44 seconds = a few seconds");
         test.equal(frozenMoment.duration({seconds: -44}).humanize(true),  "a few seconds ago", "44 seconds = a few seconds");
         test.done();

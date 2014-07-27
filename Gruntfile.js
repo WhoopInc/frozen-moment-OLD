@@ -1,29 +1,29 @@
 module.exports = function (grunt) {
-    var embedOption = grunt.option('embedLanguages'),
-        embedLanguageDest = embedOption ?
-            'min/frozen-moment-with-customlangs.js' :
-            'min/frozen-moment-with-langs.js',
-        embedLanguageLangs = 'lang/*.js';
+    var embedOption = grunt.option('embedLocales'),
+        embedLocaleDest = embedOption ?
+            'min/frozen-moment-with-customlocales.js' :
+            'min/frozen-moment-with-locales.js',
+        embedLocaleSrc = 'locale/*.js';
 
     if (embedOption && embedOption.match(/,/)) {
-        embedLanguageLangs = 'lang/{' + embedOption + '}.js';
+        embedLocaleSrc = 'locale/{' + embedOption + '}.js';
     }
     else if (embedOption) {
-        embedLanguageLangs = 'lang/' + embedOption + '.js';
+        embedLocaleSrc = 'locale/' + embedOption + '.js';
     }
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         concat : {
-            langs: {
-                src: 'lang/*.js',
-                dest: 'min/langs.js'
+            locales: {
+                src: 'locale/*.js',
+                dest: 'min/locales.js'
             },
             tests: {
                 src: [
                     'test/browser-prefix.js',
                     'test/frozen-moment/*.js',
-                    'test/lang/*.js',
+                    'test/locale/*.js',
                     'test/browser-suffix.js'
                 ],
                 dest: 'min/tests.js'
@@ -37,7 +37,7 @@ module.exports = function (grunt) {
             options: {
                 frameworks: ['nodeunit'],
                 files: [
-                    'min/frozen-moment-with-langs.js',
+                    'min/frozen-moment-with-locales.js',
                     'min/tests.js',
                     'test/browser.js'
                 ],
@@ -102,10 +102,10 @@ module.exports = function (grunt) {
         uglify : {
             target: {
                 files: {
-                    'min/frozen-moment-with-langs.min.js'       : 'min/frozen-moment-with-langs.js',
-                    'min/frozen-moment-with-customlangs.min.js' : 'min/frozen-moment-with-customlangs.js',
-                    'min/langs.min.js'                          : 'min/langs.js',
-                    'min/frozen-moment.min.js'                  : 'frozen-moment.js'
+                    'min/frozen-moment-with-locales.min.js'       : 'min/frozen-moment-with-locales.js',
+                    'min/frozen-moment-with-customlocales.min.js' : 'min/frozen-moment-with-customlocales.js',
+                    'min/locales.min.js'                          : 'min/locales.js',
+                    'min/frozen-moment.min.js'                    : 'frozen-moment.js'
                 }
             },
             options: {
@@ -121,12 +121,12 @@ module.exports = function (grunt) {
             }
         },
         nodeunit : {
-            all : ["test/frozen-moment/**/*.js", "test/lang/**/*.js"],
+            all : ["test/frozen-moment/**/*.js", "test/locale/**/*.js"],
             core : ["test/frozen-moment/**/*.js"]
         },
         jshint: {
             all: [
-                "Gruntfile.js", "frozen-moment.js", "lang/**/*.js", "test/**/*.js",
+                "Gruntfile.js", "frozen-moment.js", "locale/**/*.js", "test/**/*.js",
                 "!test/browser*.js"
             ],
             options: {
@@ -162,7 +162,7 @@ module.exports = function (grunt) {
         },
         jscs: {
             all: [
-                "Gruntfile.js", "frozen-moment.js", "lang/**/*.js",
+                "Gruntfile.js", "frozen-moment.js", "locale/**/*.js",
                 "test/**/*.js", "!test/browser*.js"
             ],
             options: {
@@ -173,7 +173,7 @@ module.exports = function (grunt) {
             test : {
                 files : [
                     'frozen-moment.js',
-                    'lang/*.js',
+                    'locale/*.js',
                     'test/**/*.js'
                 ],
                 tasks: ['nodeunit']
@@ -183,10 +183,10 @@ module.exports = function (grunt) {
                 tasks: ['jshint']
             }
         },
-        embedLanguages: {
+        embedLocales: {
             moment: 'frozen-moment.js',
-            dest: embedLanguageDest,
-            targetLangs: embedLanguageLangs
+            dest: embedLocaleDest,
+            targetLocales: embedLocaleSrc
         }
     });
 
@@ -201,10 +201,10 @@ module.exports = function (grunt) {
     // test tasks
     grunt.registerTask('test', ['test:node', 'test:browser']);
     grunt.registerTask('test:node', ['nodeunit']);
-    grunt.registerTask('test:server', ['concat', 'embedLanguages', 'karma:server']);
-    grunt.registerTask('test:browser', ['concat', 'embedLanguages', 'karma:chrome', 'karma:firefox']);
-    grunt.registerTask('test:sauce-browser', ['concat', 'embedLanguages', 'env:sauceLabs', 'karma:sauce']);
-    grunt.registerTask('test:travis-sauce-browser', ['concat', 'embedLanguages', 'karma:sauce']);
+    grunt.registerTask('test:server', ['concat', 'embedLocales', 'karma:server']);
+    grunt.registerTask('test:browser', ['concat', 'embedLocales', 'karma:chrome', 'karma:firefox']);
+    grunt.registerTask('test:sauce-browser', ['concat', 'embedLocales', 'env:sauceLabs', 'karma:sauce']);
+    grunt.registerTask('test:travis-sauce-browser', ['concat', 'embedLocales', 'karma:sauce']);
 
     // travis build task
     grunt.registerTask('build:travis', [
@@ -216,7 +216,7 @@ module.exports = function (grunt) {
 
     // Task to be run when releasing a new version
     grunt.registerTask('release', [
-        'jshint', 'nodeunit', 'concat', 'embedLanguages',
+        'jshint', 'nodeunit', 'concat', 'embedLocales',
         'component', 'uglify'
     ]);
 };

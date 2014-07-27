@@ -27,7 +27,7 @@
             ],
             "files": [
                "min/*.js",
-               "lang/*.js"
+               "locale/*.js"
             ]
         }
     }

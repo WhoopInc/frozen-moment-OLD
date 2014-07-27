@@ -39,7 +39,7 @@ exports.weekYear = {
         test.expect(31);
 
         // Some examples taken from http://en.wikipedia.org/wiki/ISO_week
-        frozenMoment.lang('dow: 1,doy: 4', {week: {dow: 1, doy: 4}}); // like iso
+        frozenMoment.locale('dow: 1,doy: 4', {week: {dow: 1, doy: 4}}); // like iso
         test.equal(frozenMoment([2005, 0, 1]).weekYear(), 2004);
         test.equal(frozenMoment([2005, 0, 2]).weekYear(), 2004);
         test.equal(frozenMoment([2005, 0, 3]).weekYear(), 2005);
@@ -60,7 +60,7 @@ exports.weekYear = {
         test.equal(frozenMoment([2010, 0, 3]).weekYear(), 2009);
         test.equal(frozenMoment([2010, 0, 4]).weekYear(), 2010);
 
-        frozenMoment.lang('dow: 1,doy: 7', {week: {dow: 1, doy: 7}});
+        frozenMoment.locale('dow: 1,doy: 7', {week: {dow: 1, doy: 7}});
         test.equal(frozenMoment([2004, 11, 26]).weekYear(), 2004);
         test.equal(frozenMoment([2004, 11, 27]).weekYear(), 2005);
         test.equal(frozenMoment([2005, 11, 25]).weekYear(), 2005);

@@ -19,7 +19,7 @@ exports.format = {
     "format escape brackets" : function (test) {
         test.expect(10);
 
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
 
         var b = frozenMoment(new Date(2009, 1, 14, 15, 25, 50, 125));
         test.equal(b.format('[day]'), 'day', 'Single bracket');
@@ -38,7 +38,7 @@ exports.format = {
     "handle negative years" : function (test) {
         test.expect(10);
 
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
         test.equal(frozenMoment.utc().thaw().year(-1).freeze().format('YY'), '-01', 'YY with negative year');
         test.equal(frozenMoment.utc().thaw().year(-1).freeze().format('YYYY'), '-0001', 'YYYY with negative year');
         test.equal(frozenMoment.utc().thaw().year(-12).freeze().format('YY'), '-12', 'YY with negative year');
@@ -158,7 +158,7 @@ exports.format = {
 
     "escaping quotes" : function (test) {
         test.expect(4);
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
         var date = frozenMoment([2012, 0]);
         test.equal(date.format('MMM \'YY'), "Jan '12", "Should be able to format with single parenthesis");
         test.equal(date.format('MMM "YY'),  'Jan "12', "Should be able to format with double parenthesis");
@@ -307,7 +307,7 @@ exports.format = {
             "405-12-31": "0405-52"
         }, i, isoWeekYear, formatted5, formatted4, formatted2;
 
-        frozenMoment.lang('en-gb'); // 1, 4
+        frozenMoment.locale('en-gb'); // 1, 4
         for (i in cases) {
             isoWeekYear = cases[i].split('-')[0];
             formatted5 = frozenMoment(i, 'YYYY-MM-DD').format('ggggg');
@@ -338,7 +338,7 @@ exports.format = {
     "weekday formats" : function (test) {
         test.expect(7);
 
-        frozenMoment.lang('dow: 3,doy: 5', {week: {dow: 3, doy: 5}});
+        frozenMoment.locale('dow: 3,doy: 5', {week: {dow: 3, doy: 5}});
         test.equal(frozenMoment([1985, 1,  6]).format('e'), '0', "Feb  6 1985 is Wednesday -- 0th day");
         test.equal(frozenMoment([2029, 8, 20]).format('e'), '1', "Sep 20 2029 is Thursday  -- 1st day");
         test.equal(frozenMoment([2013, 3, 26]).format('e'), '2', "Apr 26 2013 is Friday    -- 2nd day");
@@ -361,20 +361,20 @@ exports.format = {
     "toJSON skips postformat" : function (test) {
         test.expect(1);
 
-        frozenMoment.lang('postformat', {
+        frozenMoment.locale('postformat', {
             postformat: function (s) {
                 s.replace(/./g, 'X');
             }
         });
         test.equal(frozenMoment.utc([2000, 0, 1]).toJSON(), "2000-01-01T00:00:00.000Z", "toJSON doesn't postformat");
-        frozenMoment.lang('postformat', null);
+        frozenMoment.locale('postformat', null);
         test.done();
     },
 
     "calendar day timezone" : function (test) {
         test.expect(11);
 
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
         var zones = [60, -60, 90, -90, 360, -360, 720, -720],
             b = frozenMoment.build().utc().startOf('day').subtract({m : 1}).freeze(),
             c = frozenMoment.build().local().startOf('day').subtract({m : 1}).freeze(),
@@ -395,7 +395,7 @@ exports.format = {
     },
 
     "invalid" : function (test) {
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
 
         test.equal(frozenMoment.invalid().format(), "Invalid date");
         test.equal(frozenMoment.invalid().format('YYYY-MM-DD'), "Invalid date");
