@@ -40,7 +40,7 @@ The parsing tokens are similar to the formatting tokens used in `frozenMoment#fo
     </tr>
     <tr>
       <td>MMM, MMMM</td>
-      <td>Month Name (In language currently set by `frozenMoment.lang()`)</td>
+      <td>Month Name (In the default locale, which is set with `frozenMoment.locale()`)</td>
     </tr>
     <tr>
       <td>Q</td>
@@ -173,7 +173,7 @@ frozenMoment("2010 2 29", "YYYY MM DD").isValid(); // false (not a leap year)
 frozenMoment("2010 notamonth 29", "YYYY MMM DD").isValid(); // false (not a real month name)
 ```
 
-As of version **2.0.0**, a language key can be passed as the third parameter to `frozenMoment()` and `frozenMoment.utc()`.
+As of version **2.0.0**, a locale key can be passed as the third parameter to `frozenMoment()` and `frozenMoment.utc()`.
 
 ```javascript
 frozenMoment('2012 juillet', 'YYYY MMM', 'fr');
@@ -192,7 +192,7 @@ frozenMoment('It is 2012-05-25', 'YYYY-MM-DD', true).isValid();  // false
 frozenMoment('2012-05-25', 'YYYY-MM-DD', true).isValid();        // true
 ```
 
-You can use both language and strictness.
+You can use both locale and strictness.
 
 ```javascript
 frozenMoment('2012-10-14', 'YYYY-MM-DD', 'fr', true);

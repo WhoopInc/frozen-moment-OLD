@@ -2,19 +2,19 @@
 title: Month Abbreviations
 version: 1.0.0
 signature: |
-  frozenMoment.lang('en', {
+  frozenMoment.locale('en', {
       monthsShort : String[]
   });
-  frozenMoment.lang('en', {
+  frozenMoment.locale('en', {
       monthsShort : Function
   });
 ---
 
 
-`Language#monthsShort` should be an array of the month abbreviations.
+`Locale#monthsShort` should normally be an array of month abbreviations.
 
 ```javascript
-frozenMoment.lang('en', {
+frozenMoment.locale('en', {
     monthsShort : [
         "Jan", "Feb", "Mar", "Apr", "May", "Jun",
         "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
@@ -22,10 +22,10 @@ frozenMoment.lang('en', {
 });
 ```
 
-Like `Language#months`, `Language#monthsShort` can be a callback function as well.
+Like `Locale#months`, `Locale#monthsShort` can be a callback function.
 
 ```javascript
-frozenMoment.lang('en', {
+frozenMoment.locale('en', {
     monthsShort : function (momentToFormat, format) {
         if (/^MMMM/.test(format)) {
             return nominative[momentToFormat.month()];

@@ -17,4 +17,4 @@ For example, in the United States, Sunday is the first day of the week. The week
 
 In France, Monday is the first day of the week, and the week with January 4th is the first week of the year.
 
-The output of `frozenMoment#week` will depend on the [locale/language](#/i18n) for that frozenMoment.
+The output of `frozenMoment#week` will depend on the [locale/locale](#/i18n) for that frozenMoment.

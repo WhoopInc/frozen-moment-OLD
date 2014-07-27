@@ -26,7 +26,7 @@ frozenMoment("29-06-1995", ["MM-DD-YYYY", "DD-MM", "DD-MM-YYYY"]); //uses the la
 frozenMoment("05-06-1995", ["MM-DD-YYYY", "DD-MM-YYYY"]); // uses the first format
 ```
 
-You may also specify a language and strictness argument; they work the same was as they do in the single format case.
+You may also specify a locale and strictness argument; they work the same was as they do in the single format case.
 
 **Note:** Parsing multiple formats is considerably slower than parsing a single format. If you can avoid it, it is much faster to parse a single format.
 

@@ -38,4 +38,4 @@ Calendar time is displays time relative to given `referenceTime` (defaults to no
   </tr>
 </table>
 
-These strings are localized, and [can be customized](#/customization/calendar/).
+These strings are localized, and [can be customized](#/customize/calendar/).

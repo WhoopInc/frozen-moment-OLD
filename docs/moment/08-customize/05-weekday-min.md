@@ -2,27 +2,27 @@
 title: Minimal Weekday Abbreviations
 version: 1.7.0
 signature: |
-  frozenMoment.lang('en', {
+  frozenMoment.locale('en', {
       weekdaysMin : String[]
   });
-  frozenMoment.lang('en', {
+  frozenMoment.locale('en', {
       weekdaysMin : Function
   });
 ---
 
 
-`Language#weekdaysMin` should be an array of two letter weekday abbreviations. The purpose of these is for things like calendar pickers, thus they should be as small as possible.
+`Locale#weekdaysMin` should normally be an array of two letter weekday abbreviations. These are used for things like calendar pickers, so they should be as small as possible.
 
 ```javascript
-frozenMoment.lang('en', {
+frozenMoment.locale('en', {
     weekdaysMin : ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
 });
 ```
 
-`Language#weekdaysMin` can be a callback function as well.
+`Locale#weekdaysMin` can also be a callback function.
 
 ```javascript
-frozenMoment.lang('en', {
+frozenMoment.locale('en', {
     weekdaysMin : function (momentToFormat, format) {
         return weekdaysMin[momentToFormat.day()];
     }

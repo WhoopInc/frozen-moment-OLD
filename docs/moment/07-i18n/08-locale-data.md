@@ -1,8 +1,9 @@
 ---
-title: Accessing language specific functionality
+title: Access locale specific functionality
 version: 2.2.0
 signature: |
-  frozenMoment.langData()
+  frozenMoment.localeData()  // 3.0.0
+  frozenMoment().localeData()  // 3.0.0
   langData.months()
   langData.monthsShort()
   langData.monthsParse()
@@ -24,14 +25,13 @@ signature: |
 ---
 
 
-You can access the properties of the currently loaded language through the
-`frozenMoment.langData(key)` function. It returns the current language or a language
+You can access the properties of the currently loaded locale through the
+`frozenMoment.localeData(key)` function. It returns the current locale or a locale
 with the given key:
 
 ```javascript
-// get current Language
-var currentLangData = frozenMoment.langData();
-var frLangData = frozenMoment.langData('fr');
+var defaultLocale = frozenMoment.localeData();     // current default locale
+var frenchLocale = frozenMoment.localeData('fr');  // French locale
 ```
 
 The returned object has the following methods:
@@ -56,3 +56,14 @@ langData.postformat(str);  // called after formatting on every string
 langData.week(aFrozenMoment);  // returns week-of-year of aFrozenMoment
 langData.invalidDate();  // returns a translation of 'Invalid date'
 ```
+
+You can also call `frozenMoment#localeData` on a FrozenMoment to get that instance's locale configuration.
+
+```javascript
+var fr = frozenMoment.build().locale('fr').freeze();
+fr.locale().months(frozenMoment([2012, 0])) // "janvier"
+fr = fr.thaw().locale('en').freeze();
+fr.locale().months(frozenMoment([2012, 0])) // "January"
+```
+
+If you need to access the locale data for a FrozenMoment, this is the preferred way to do so.

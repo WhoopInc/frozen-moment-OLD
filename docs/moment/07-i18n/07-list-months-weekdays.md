@@ -1,6 +1,6 @@
 ---
-title: Listing the months and weekdays of the current FrozenMoment language
-version: 2.3.0
+title: List months and weekdays in the default locale
+version: 3.0.0
 signature: |
   frozenMoment.months()
   frozenMoment.monthsShort()
@@ -10,13 +10,13 @@ signature: |
 ---
 
 
-It is sometimes useful to get the list of months or weekdays in a language, for example when populating a dropdown menu.
+It is sometimes useful to get the list of months or weekdays in a locale, for example when populating a dropdown menu.
 
 ```javascript
 frozenMoment.months();
 ```
 
-Returns the list of months in the current language.
+Returns the list of months in the current locale.
 
 ```javascript
 [ 'January',
@@ -43,10 +43,10 @@ frozenMoment.weekday(3); // 'Wednesday'
 
 **Note:** Currently, weekdays always have Sunday as index 0, regardless of the local first day of the week.
 
-Some languages make special considerations into account when formatting month names. For example, Dutch formats month abbreviations without a trailing period, but only if it's formatting the month between dashes. The `months` method supports passing a format in so that the months will be listed in the proper context.
+Some locales make special considerations into account when formatting month names. For example, Dutch formats month abbreviations without a trailing period, but only if it's formatting the month between dashes. The `months` method supports passing a format in so that the months will be listed in the proper context.
 
 ```javascript
-frozenMoment.lang('nl');
+frozenMoment.locale('nl');
 frozenMoment.monthsShort(); // ['jan.', 'feb.', 'mrt.', ...]
 frozenMoment.monthsShort('-MMM-'); // [ 'jan', 'feb', 'mrt', ...]
 ```

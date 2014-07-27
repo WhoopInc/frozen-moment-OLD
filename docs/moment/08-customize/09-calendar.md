@@ -2,16 +2,16 @@
 title: Calendar
 version: 1.3.0
 signature: |
-  frozenMoment.lang('en', {
+  frozenMoment.locale('en', {
       calendar : Object
   });
 ---
 
 
-`Language#calendar` should have the following formatting strings.
+`Locale#calendar` should have the following formatting strings.
 
 ```javascript
-frozenMoment.lang('en', {
+frozenMoment.locale('en', {
     calendar : {
         lastDay : '[Yesterday at] LT',
         sameDay : '[Today at] LT',
@@ -23,7 +23,7 @@ frozenMoment.lang('en', {
 });
 ```
 
-Each of the `Language#calendar` keys can also be a callback function with the scope of the current frozenMoment. It should return a formatting string.
+Each of the `Locale#calendar` keys can also be a callback function with the scope of the current frozenMoment. It should return a formatting string.
 
 ```javascript
 function () {

@@ -2,29 +2,29 @@
 title: Weekday Names
 version: 1.0.0
 signature: |
-  frozenMoment.lang('en', {
+  frozenMoment.locale('en', {
       weekdays : String[]
   });
-  frozenMoment.lang('en', {
+  frozenMoment.locale('en', {
       weekdays : Function
   });
 ---
 
 
-`Language#weekdays` should be an array of the weekdays names.
+`Locale#weekdays` should normally be an array of weekday names.
 
 ```javascript
-frozenMoment.lang('en', {
+frozenMoment.locale('en', {
     weekdays : [
         "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
     ]
 });
 ```
 
-`Language#weekdays` can be a callback function as well.
+`Locale#weekdays` can also be a callback function.
 
 ```javascript
-frozenMoment.lang('en', {
+frozenMoment.locale('en', {
     weekdays : function (momentToFormat, format) {
         return weekdays[momentToFormat.day()];
     }

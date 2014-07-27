@@ -2,27 +2,27 @@
 title: Weekday Abbreviations
 version: 1.0.0
 signature: |
-  frozenMoment.lang('en', {
+  frozenMoment.locale('en', {
       weekdaysShort : String[]
   });
-  frozenMoment.lang('en', {
+  frozenMoment.locale('en', {
       weekdaysShort : Function
   });
 ---
 
 
-`Language#weekdaysShort` should be an array of the weekdays abbreviations.
+`Locale#weekdaysShort` should normally be an array of weekday abbreviations.
 
 ```javascript
-frozenMoment.lang('en', {
+frozenMoment.locale('en', {
     weekdaysShort : ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 });
 ```
 
-`Language#weekdaysShort` can be a callback function as well.
+`Locale#weekdaysShort` can also be a callback function.
 
 ```javascript
-frozenMoment.lang('en', {
+frozenMoment.locale('en', {
     weekdaysShort : function (momentToFormat, format) {
         return weekdaysShort[momentToFormat.day()];
     }
