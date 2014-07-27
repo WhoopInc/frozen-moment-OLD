@@ -346,13 +346,13 @@ exports.endStartOf = {
     },
 
     "startOf across DST +1" : function (test) {
-        var oldUpdateOffset = frozenMoment.updateOffset,
+        var oldUpdateOffset = momentBuilder.updateOffset,
             // Based on a real story somewhere in America/Los_Angeles
             dstAt = momentBuilder("2014-03-09T02:00:00-08:00").parseZone().freeze(),
             m;
 
-        frozenMoment.updateOffset = function (mom, keepTime) {
-            if (mom.isBefore(dstAt)) {
+        momentBuilder.updateOffset = function (mom, keepTime) {
+            if (mom.freeze().isBefore(dstAt)) {
                 mom.zone(8, keepTime);
             } else {
                 mom.zone(7, keepTime);
@@ -381,19 +381,19 @@ exports.endStartOf = {
 
         // There is no such time as 2:30-7 to try startOf('hour') across that
 
-        frozenMoment.updateOffset = oldUpdateOffset;
+        momentBuilder.updateOffset = oldUpdateOffset;
 
         test.done();
     },
 
     "startOf across DST -1" : function (test) {
-        var oldUpdateOffset = frozenMoment.updateOffset,
+        var oldUpdateOffset = momentBuilder.updateOffset,
             // Based on a real story somewhere in America/Los_Angeles
             dstAt = momentBuilder("2014-11-02T02:00:00-07:00").parseZone().freeze(),
             m;
 
-        frozenMoment.updateOffset = function (mom, keepTime) {
-            if (mom.isBefore(dstAt)) {
+        momentBuilder.updateOffset = function (mom, keepTime) {
+            if (mom.freeze().isBefore(dstAt)) {
                 mom.zone(7, keepTime);
             } else {
                 mom.zone(8, keepTime);
@@ -422,7 +422,7 @@ exports.endStartOf = {
         test.equal(m.format(), "2014-11-02T01:00:00-07:00",
                 "startOf('hour') before +1");
 
-        frozenMoment.updateOffset = oldUpdateOffset;
+        momentBuilder.updateOffset = oldUpdateOffset;
 
         test.done();
     }

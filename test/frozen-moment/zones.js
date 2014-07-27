@@ -129,12 +129,12 @@ exports.zones = {
     },
 
     "update offset after changing any values" : function (test) {
-        var oldOffset = frozenMoment.updateOffset,
+        var oldOffset = momentBuilder.updateOffset,
             m = frozenMoment.utc([2000, 6, 1]);
 
-        frozenMoment.updateOffset = function (mom, keepTime) {
+        momentBuilder.updateOffset = function (mom, keepTime) {
             if (mom.__doChange) {
-                if (+mom > 962409600000) {
+                if (mom.freeze().valueOf() > 962409600000) {
                     mom.zone(120, keepTime);
                 } else {
                     mom.zone(60, keepTime);
@@ -156,7 +156,7 @@ exports.zones = {
         test.equal(m.format("ZZ"), "-0100", "should be at -0100");
         test.equal(m.format("HH:mm"), "23:00", "12AM at +0000 should be 11PM at -0100 timezone");
 
-        frozenMoment.updateOffset = oldOffset;
+        momentBuilder.updateOffset = oldOffset;
 
         test.done();
     },
@@ -335,11 +335,11 @@ exports.zones = {
     },
 
     "add / subtract over dst" : function (test) {
-        var oldOffset = frozenMoment.updateOffset,
+        var oldOffset = momentBuilder.updateOffset,
             m = frozenMoment.utc([2000, 2, 31, 3]);
 
-        frozenMoment.updateOffset = function (mom, keepTime) {
-            if (mom.clone().utc().month() > 2) {
+        momentBuilder.updateOffset = function (mom, keepTime) {
+            if (mom.clone().utc().freeze().month() > 2) {
                 mom.zone(-60, keepTime);
             } else {
                 mom.zone(0, keepTime);
@@ -372,16 +372,17 @@ exports.zones = {
 
         test.equal(m.hour(), 3, "subtracting 1 month should have the same hour");
 
-        frozenMoment.updateOffset = oldOffset;
+        momentBuilder.updateOffset = oldOffset;
 
         test.done();
     },
 
     "isDST" : function (test) {
-        var oldOffset = frozenMoment.updateOffset;
+        var oldOffset = momentBuilder.updateOffset;
 
-        frozenMoment.updateOffset = function (mom, keepTime) {
-            if (mom.month() > 2 && mom.month() < 9) {
+        momentBuilder.updateOffset = function (mom, keepTime) {
+            var month = mom.freeze().month();
+            if (month > 2 && month < 9) {
                 mom.zone(-60, keepTime);
             } else {
                 mom.zone(0, keepTime);
@@ -392,8 +393,9 @@ exports.zones = {
         test.ok(momentBuilder().month(6).freeze().isDST(),   "Jul should be summer dst");
         test.ok(!momentBuilder().month(11).freeze().isDST(), "Dec should not be summer dst");
 
-        frozenMoment.updateOffset = function (mom) {
-            if (mom.month() > 2 && mom.month() < 9) {
+        momentBuilder.updateOffset = function (mom) {
+            var month = mom.freeze().month();
+            if (month > 2 && month < 9) {
                 mom.zone(0);
             } else {
                 mom.zone(-60);
@@ -404,7 +406,7 @@ exports.zones = {
         test.ok(!momentBuilder().month(6).freeze().isDST(), "Jul should not be winter dst");
         test.ok(momentBuilder().month(11).freeze().isDST(), "Dec should be winter dst");
 
-        frozenMoment.updateOffset = oldOffset;
+        momentBuilder.updateOffset = oldOffset;
 
         test.done();
     },

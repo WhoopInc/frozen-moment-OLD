@@ -566,7 +566,7 @@
             rawMonthSetter(mom, rawGetter(mom, 'Month') + months * isAdding);
         }
         if (updateOffset) {
-            frozenMoment.updateOffset(mom, days || months);
+            momentBuilder.updateOffset(mom, days || months);
         }
     }
 
@@ -1921,10 +1921,6 @@
     // Plugins that add properties should also add the key here (null value),
     // so we can properly clone ourselves.
     frozenMoment.instanceProperties = instanceProperties;
-
-    // This function will be called whenever a frozenMoment is mutated.
-    // It is intended to keep the offset in sync with the timezone.
-    frozenMoment.updateOffset = function () {};
 
     // This function allows you to set a threshold for relative time strings
     frozenMoment.relativeTimeThreshold = function (threshold, limit) {
