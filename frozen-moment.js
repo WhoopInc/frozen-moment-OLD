@@ -1895,7 +1895,7 @@
             return input;
         }
         ret = new FrozenDuration(parseDuration(input, key));
-        if (input.hasOwnProperty('_locale')) {
+        if (input && input.hasOwnProperty('_locale')) {
             ret._locale = input._locale;
         }
         return ret;
@@ -1903,7 +1903,7 @@
 
     frozenMoment.duration.build = function (input, key) {
         var ret = new DurationBuilder(parseDuration(input, key));
-        if (input.hasOwnProperty('_locale')) {
+        if (input && input.hasOwnProperty('_locale')) {
             ret._locale = input._locale;
         }
         return ret;
