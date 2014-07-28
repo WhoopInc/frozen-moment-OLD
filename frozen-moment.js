@@ -1742,6 +1742,10 @@
     frozenMoment = function (input, format, locale, strict) {
         var c;
 
+        if (input instanceof FrozenMoment) {
+            return input;
+        }
+
         if (typeof(locale) === "boolean") {
             strict = locale;
             locale = undefined;
@@ -1756,6 +1760,10 @@
         c._strict = strict;
         c._isUTC = false;
         c._pf = defaultParsingFlags();
+
+        if (frozenMoment.isMoment(input) || frozenMoment.isBuilder(input)) {
+            c._offset = input._offset;
+        }
 
         return makeMoment(c);
     };
