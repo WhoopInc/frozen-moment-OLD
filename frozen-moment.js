@@ -1725,7 +1725,7 @@
         if (frozenMoment.isMoment(input) || frozenMoment.isBuilder(input)) {
             config = cloneMoment(input);
             config._isAMomentObject = true;
-            config._d = new Date(valueOfBuilder(input));
+            config._d = new Date(+input._d);
         } else if (format) {
             if (isArray(format)) {
                 makeDateFromStringAndArray(config);
@@ -2070,7 +2070,7 @@
         if (frozenMoment.isMoment(input) || frozenMoment.isBuilder(input)) {
             config = cloneMoment(input);
             config._isAMomentBuilderObject = true;
-            config._d = new Date(valueOfBuilder(input));
+            config._d = new Date(+input._d);
         } else if (format) {
             if (isArray(format)) {
                 makeDateFromStringAndArray(config);
