@@ -38,7 +38,7 @@ Similarly, `frozenMoment.monthsShort` returns abbreviated month names, and `froz
 You can pass an integer into each of those functions to get a specific month or weekday.
 
 ```javascript
-frozenMoment.weekday(3); // 'Wednesday'
+frozenMoment.weekdays(3); // 'Wednesday'
 ```
 
 **Note:** Currently, weekdays always have Sunday as index 0, regardless of the local first day of the week.
