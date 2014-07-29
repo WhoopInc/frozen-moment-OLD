@@ -133,19 +133,16 @@ exports.zones = {
             m = frozenMoment.utc([2000, 6, 1]);
 
         momentBuilder.updateOffset = function (mom, keepTime) {
-            if (mom.__doChange) {
-                if (mom.freeze().valueOf() > 962409600000) {
-                    mom.zone(120, keepTime);
-                } else {
-                    mom.zone(60, keepTime);
-                }
+            if (mom.freeze().valueOf() > 962409600000) {
+                mom.zone(120, keepTime);
+            } else {
+                mom.zone(60, keepTime);
             }
         };
 
         test.equal(m.format("ZZ"), "+0000", "should be at +0000");
         test.equal(m.format("HH:mm"), "00:00", "should start 12AM at +0000 timezone");
 
-        m.__doChange = true;
         m = m.thaw().add(1, 'h').freeze();
 
         test.equal(m.format("ZZ"), "-0200", "should be at -0200");
@@ -494,13 +491,10 @@ exports.zones = {
         test.expect(3);
 
         m = momentBuilder.parseZone("2013 01 01 05 -13:00", "YYYY MM DD HH ZZ").freeze();
-        console.log(m._d, m._d.toISOString());
         test.equal(m.format(), "2013-01-01T05:00:00-13:00", "accept input and format");
         m = momentBuilder.parseZone("2013-01-01-13:00", "YYYY MM DD ZZ", true).freeze();
-        console.log(m._d, m._d.toISOString());
         test.equal(m.isValid(), false, "accept input, format and strict flag");
         m = momentBuilder.parseZone("2013-01-01-13:00", ["DD MM YYYY ZZ", "YYYY MM DD ZZ"]).freeze();
-        console.log(m._d, m._d.toISOString());
         test.equal(m.format(), "2013-01-01T00:00:00-13:00", "accept input and array of formats");
 
         test.done();
