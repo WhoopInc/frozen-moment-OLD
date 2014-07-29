@@ -2301,7 +2301,7 @@ var frozenMoment = require("../../frozen-moment"),
 
 exports.create = {
     setUp : function (done) {
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
         frozenMoment.createFromInputFallback = function () {
             throw new Error("input not handled by frozenMoment");
         };
@@ -2394,9 +2394,8 @@ exports.create = {
     },
 
     "cloning frozenMoment should only copy own properties" : function (test) {
-        test.expect(2);
+        test.expect(1);
         test.ok(!frozenMoment().clone().hasOwnProperty('month'), "Should not clone prototype methods");
-        test.ok(!frozenMoment().clone().hasOwnProperty('_lang'), "Should not clone prototype objects");
         test.done();
     },
 
@@ -2434,7 +2433,7 @@ exports.create = {
     },
 
     "string with format dropped am/pm bug" : function (test) {
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
         test.expect(6);
 
         test.equal(frozenMoment('05/1/2012 12:25:00', 'MM/DD/YYYY h:m:s a').format('MM/DD/YYYY'), '05/01/2012', 'should not break if am/pm is left off from the parsing tokens');
@@ -2506,7 +2505,7 @@ exports.create = {
     },
 
     "string with format" : function (test) {
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
         var a = [
                 ['YYYY-Q',              '2014-4'],
                 ['MM-DD-YYYY',          '12-02-1999'],
@@ -2589,7 +2588,7 @@ exports.create = {
     },
 
     "string with format no separators" : function (test) {
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
         var a = [
                 ['MMDDYYYY',          '12021999'],
                 ['DDMMYYYY',          '12021999'],
@@ -2838,7 +2837,7 @@ exports.create = {
     },
 
     "parsing week year/week/weekday (dow 1, doy 4)" : function (test) {
-        frozenMoment.lang("dow:1,doy:4", {week: {dow: 1, doy: 4}});
+        frozenMoment.locale("dow:1,doy:4", {week: {dow: 1, doy: 4}});
 
         test.equal(frozenMoment.utc("2007-01", "gggg-ww").format(), "2007-01-01T00:00:00+00:00", "2007 week 1 (1st Jan Mon)");
         test.equal(frozenMoment.utc("2008-01", "gggg-ww").format(), "2007-12-31T00:00:00+00:00", "2008 week 1 (1st Jan Tue)");
@@ -2847,11 +2846,13 @@ exports.create = {
         test.equal(frozenMoment.utc("2010-01", "gggg-ww").format(), "2010-01-04T00:00:00+00:00", "2010 week 1 (1st Jan Fri)");
         test.equal(frozenMoment.utc("2011-01", "gggg-ww").format(), "2011-01-03T00:00:00+00:00", "2011 week 1 (1st Jan Sat)");
         test.equal(frozenMoment.utc("2012-01", "gggg-ww").format(), "2012-01-02T00:00:00+00:00", "2012 week 1 (1st Jan Sun)");
+
+        frozenMoment.defineLocale("dow:1,doy:4", null);
         test.done();
     },
 
     "parsing week year/week/weekday (dow 1, doy 7)" : function (test) {
-        frozenMoment.lang("dow:1,doy:7", {week: {dow: 1, doy: 7}});
+        frozenMoment.locale("dow:1,doy:7", {week: {dow: 1, doy: 7}});
 
         test.equal(frozenMoment.utc("2007-01", "gggg-ww").format(), "2007-01-01T00:00:00+00:00", "2007 week 1 (1st Jan Mon)");
         test.equal(frozenMoment.utc("2008-01", "gggg-ww").format(), "2007-12-31T00:00:00+00:00", "2008 week 1 (1st Jan Tue)");
@@ -2860,11 +2861,13 @@ exports.create = {
         test.equal(frozenMoment.utc("2010-01", "gggg-ww").format(), "2009-12-28T00:00:00+00:00", "2010 week 1 (1st Jan Fri)");
         test.equal(frozenMoment.utc("2011-01", "gggg-ww").format(), "2010-12-27T00:00:00+00:00", "2011 week 1 (1st Jan Sat)");
         test.equal(frozenMoment.utc("2012-01", "gggg-ww").format(), "2011-12-26T00:00:00+00:00", "2012 week 1 (1st Jan Sun)");
+
+        frozenMoment.defineLocale("dow:1,doy:7", null);
         test.done();
     },
 
     "parsing week year/week/weekday (dow 0, doy 6)" : function (test) {
-        frozenMoment.lang("dow:0,doy:6", {week: {dow: 0, doy: 6}});
+        frozenMoment.locale("dow:0,doy:6", {week: {dow: 0, doy: 6}});
 
         test.equal(frozenMoment.utc("2007-01", "gggg-ww").format(), "2006-12-31T00:00:00+00:00", "2007 week 1 (1st Jan Mon)");
         test.equal(frozenMoment.utc("2008-01", "gggg-ww").format(), "2007-12-30T00:00:00+00:00", "2008 week 1 (1st Jan Tue)");
@@ -2873,11 +2876,13 @@ exports.create = {
         test.equal(frozenMoment.utc("2010-01", "gggg-ww").format(), "2009-12-27T00:00:00+00:00", "2010 week 1 (1st Jan Fri)");
         test.equal(frozenMoment.utc("2011-01", "gggg-ww").format(), "2010-12-26T00:00:00+00:00", "2011 week 1 (1st Jan Sat)");
         test.equal(frozenMoment.utc("2012-01", "gggg-ww").format(), "2012-01-01T00:00:00+00:00", "2012 week 1 (1st Jan Sun)");
+
+        frozenMoment.defineLocale("dow:0,doy:6", null);
         test.done();
     },
 
     "parsing week year/week/weekday (dow 6, doy 12)" : function (test) {
-        frozenMoment.lang("dow:6,doy:12", {week: {dow: 6, doy: 12}});
+        frozenMoment.locale("dow:6,doy:12", {week: {dow: 6, doy: 12}});
 
         test.equal(frozenMoment.utc("2007-01", "gggg-ww").format(), "2006-12-30T00:00:00+00:00", "2007 week 1 (1st Jan Mon)");
         test.equal(frozenMoment.utc("2008-01", "gggg-ww").format(), "2007-12-29T00:00:00+00:00", "2008 week 1 (1st Jan Tue)");
@@ -3078,23 +3083,23 @@ exports.create = {
         test.done();
     },
 
-    "parsing into a language" : function (test) {
+    "parsing into a locale" : function (test) {
         test.expect(2);
 
-        frozenMoment.lang('parselang', {
+        frozenMoment.defineLocale('parselocale', {
             months : "one_two_three_four_five_six_seven_eight_nine_ten_eleven_twelve".split('_'),
             monthsShort : "one_two_three_four_five_six_seven_eight_nine_ten_eleven_twelve".split("_")
         });
 
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
 
-        test.equal(frozenMoment('2012 seven', 'YYYY MMM', 'parselang').month(), 6, "should be able to parse in a specific language");
+        test.equal(frozenMoment('2012 seven', 'YYYY MMM', 'parselocale').month(), 6, "should be able to parse in a specific locale");
 
-        frozenMoment.lang('parselang');
+        frozenMoment.locale('parselocale');
 
-        test.equal(frozenMoment('2012 july', 'YYYY MMM', 'en').month(), 6, "should be able to parse in a specific language");
+        test.equal(frozenMoment('2012 july', 'YYYY MMM', 'en').month(), 6, "should be able to parse in a specific locale");
 
-        frozenMoment.lang('parselang', null);
+        frozenMoment.defineLocale('parselocale', null);
         test.done();
     },
 
@@ -3161,9 +3166,9 @@ exports.create = {
     'parsing localized weekdays' : function (test) {
         var ver = getVerifier(test);
         try {
-            frozenMoment.lang('fr'); //french uses doy = 4, dow = 1
-            ver('1999 37 4', 'GGGG WW E', "1999 09 16", 'iso ignores language');
-            ver('1999 37 7', 'GGGG WW E', "1999 09 19", 'iso ignores language');
+            frozenMoment.locale('fr'); //french uses doy = 4, dow = 1
+            ver('1999 37 4', 'GGGG WW E', "1999 09 16", 'iso ignores locale');
+            ver('1999 37 7', 'GGGG WW E', "1999 09 19", 'iso ignores locale');
 
             ver('1999 37 0', 'gggg ww e', "1999 09 13", 'localized e uses local doy and dow: 0 = monday');
             ver('1999 37 4', 'gggg ww e', "1999 09 17", 'localized e uses local doy and dow: 4 = friday');
@@ -3179,7 +3184,7 @@ exports.create = {
             ver('1999 37 Di', 'gggg ww dd', "1999 09 19", 'localized d uses 0-indexed days: 0 = sund');
         }
         finally {
-            frozenMoment.lang('en');
+            frozenMoment.locale('en');
             test.done();
         }
     },
@@ -3627,13 +3632,95 @@ exports.duration = {
                 seconds: 20,
                 milliseconds: 12
             }),
-            modified = frozenMoment.duration(1, 'day').add(frozenMoment.duration(1, 'day'));
+            modified = frozenMoment.duration(1, 'day').thaw().add(frozenMoment.duration(1, 'day')).freeze();
 
         test.expect(4);
         test.deepEqual(frozenMoment.duration(simple), simple, "simple clones are equal");
         test.deepEqual(frozenMoment.duration(lengthy), lengthy, "lengthy clones are equal");
         test.deepEqual(frozenMoment.duration(complicated), complicated, "complicated clones are equal");
         test.deepEqual(frozenMoment.duration(modified), modified, "cloning modified duration works");
+        test.done();
+    },
+
+    "instantiation from a duration builder" : function (test) {
+        var simple = frozenMoment.duration.build(1234),
+            lengthy = frozenMoment.duration.build(60 * 60 * 24 * 360 * 1e3),
+            complicated = frozenMoment.duration.build({
+                years: 2,
+                months: 3,
+                weeks: 4,
+                days: 1,
+                hours: 8,
+                minutes: 9,
+                seconds: 20,
+                milliseconds: 12
+            }),
+            modified = frozenMoment.duration.build(1, 'day');
+
+        test.expect(4);
+        modified.add(frozenMoment.duration(1, 'day'));
+
+        test.deepEqual(simple._data, frozenMoment.duration(simple)._data,
+                       "simple durations are equal to their builders");
+        test.deepEqual(lengthy._data, frozenMoment.duration(lengthy)._data,
+                       "lengthy durations are equal to their builders");
+        test.deepEqual(complicated._data, frozenMoment.duration(complicated)._data,
+                       "complicated durations are equal to their builders");
+        test.deepEqual(modified._data, frozenMoment.duration(modified)._data,
+                       "building modified duration works");
+        test.done();
+    },
+
+    "freezing a duration builder" : function (test) {
+        var simple = frozenMoment.duration.build(1234),
+            lengthy = frozenMoment.duration.build(60 * 60 * 24 * 360 * 1e3),
+            complicated = frozenMoment.duration.build({
+                years: 2,
+                months: 3,
+                weeks: 4,
+                days: 1,
+                hours: 8,
+                minutes: 9,
+                seconds: 20,
+                milliseconds: 12
+            }),
+            modified = frozenMoment.duration.build(1, 'day');
+
+        test.expect(4);
+        modified.add(frozenMoment.duration(1, 'day'));
+
+        test.deepEqual(simple._data, simple.freeze()._data,
+                       "simple durations are equal to their builders");
+        test.deepEqual(lengthy._data, lengthy.freeze()._data,
+                       "lengthy durations are equal to their builders");
+        test.deepEqual(complicated._data, complicated.freeze()._data,
+                       "complicated durations are equal to their builders");
+        test.deepEqual(modified._data, modified.freeze()._data,
+                       "building modified duration works");
+        test.done();
+    },
+
+    "thawing a duration" : function (test) {
+        var simple = frozenMoment.duration(1234),
+            lengthy = frozenMoment.duration(60 * 60 * 24 * 360 * 1e3),
+            complicated = frozenMoment.duration({
+                years: 2,
+                months: 3,
+                weeks: 4,
+                days: 1,
+                hours: 8,
+                minutes: 9,
+                seconds: 20,
+                milliseconds: 12
+            });
+
+        test.expect(3);
+        test.deepEqual(simple._data, simple.thaw()._data,
+                       "simple builders are equal to their durations");
+        test.deepEqual(lengthy._data, lengthy.thaw()._data,
+                       "lengthy builders are equal to their durations");
+        test.deepEqual(complicated._data, complicated.thaw()._data,
+                       "complicated builders are equal to their durations");
         test.done();
     },
 
@@ -3826,7 +3913,7 @@ exports.duration = {
 
     "humanize" : function (test) {
         test.expect(32);
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
         test.equal(frozenMoment.duration({seconds: 44}).humanize(),  "a few seconds", "44 seconds = a few seconds");
         test.equal(frozenMoment.duration({seconds: 45}).humanize(),  "a minute",      "45 seconds = a minute");
         test.equal(frozenMoment.duration({seconds: 89}).humanize(),  "a minute",      "89 seconds = a minute");
@@ -3864,7 +3951,7 @@ exports.duration = {
 
     "humanize duration with suffix" : function (test) {
         test.expect(2);
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
         test.equal(frozenMoment.duration({seconds:  44}).humanize(true),  "in a few seconds", "44 seconds = a few seconds");
         test.equal(frozenMoment.duration({seconds: -44}).humanize(true),  "a few seconds ago", "44 seconds = a few seconds");
         test.done();
@@ -3997,7 +4084,7 @@ exports.duration = {
     "add" : function (test) {
         test.expect(4);
 
-        var d = frozenMoment.duration({months: 4, weeks: 3, days: 2});
+        var d = frozenMoment.duration.build({months: 4, weeks: 3, days: 2});
         // for some reason, d._data._months does not get updated; use d._months instead.
         test.equal(d.add(1, 'month')._months, 5, 'Add months');
         test.equal(d.add(5, 'days')._days, 28, 'Add days');
@@ -4010,10 +4097,10 @@ exports.duration = {
     "add and bubble" : function (test) {
         test.expect(4);
 
-        test.equal(frozenMoment.duration(1, 'second').add(1000, 'milliseconds').seconds(), 2, 'Adding milliseconds should bubble up to seconds');
-        test.equal(frozenMoment.duration(1, 'minute').add(60, 'second').minutes(), 2, 'Adding seconds should bubble up to minutes');
-        test.equal(frozenMoment.duration(1, 'hour').add(60, 'minutes').hours(), 2, 'Adding minutes should bubble up to hours');
-        test.equal(frozenMoment.duration(1, 'day').add(24, 'hours').days(), 2, 'Adding hours should bubble up to days');
+        test.equal(frozenMoment.duration.build(1, 'second').add(1000, 'milliseconds').freeze().seconds(), 2, 'Adding milliseconds should bubble up to seconds');
+        test.equal(frozenMoment.duration.build(1, 'minute').add(60, 'second').freeze().minutes(), 2, 'Adding seconds should bubble up to minutes');
+        test.equal(frozenMoment.duration.build(1, 'hour').add(60, 'minutes').freeze().hours(), 2, 'Adding minutes should bubble up to hours');
+        test.equal(frozenMoment.duration.build(1, 'day').add(24, 'hours').freeze().days(), 2, 'Adding hours should bubble up to days');
 
         test.done();
     },
@@ -4021,10 +4108,10 @@ exports.duration = {
     "subtract and bubble" : function (test) {
         test.expect(4);
 
-        test.equal(frozenMoment.duration(2, 'second').subtract(1000, 'milliseconds').seconds(), 1, 'Subtracting milliseconds should bubble up to seconds');
-        test.equal(frozenMoment.duration(2, 'minute').subtract(60, 'second').minutes(), 1, 'Subtracting seconds should bubble up to minutes');
-        test.equal(frozenMoment.duration(2, 'hour').subtract(60, 'minutes').hours(), 1, 'Subtracting minutes should bubble up to hours');
-        test.equal(frozenMoment.duration(2, 'day').subtract(24, 'hours').days(), 1, 'Subtracting hours should bubble up to days');
+        test.equal(frozenMoment.duration.build(2, 'second').subtract(1000, 'milliseconds').freeze().seconds(), 1, 'Subtracting milliseconds should bubble up to seconds');
+        test.equal(frozenMoment.duration.build(2, 'minute').subtract(60, 'second').freeze().minutes(), 1, 'Subtracting seconds should bubble up to minutes');
+        test.equal(frozenMoment.duration.build(2, 'hour').subtract(60, 'minutes').freeze().hours(), 1, 'Subtracting minutes should bubble up to hours');
+        test.equal(frozenMoment.duration.build(2, 'day').subtract(24, 'hours').freeze().days(), 1, 'Subtracting hours should bubble up to days');
 
         test.done();
     },
@@ -4032,7 +4119,7 @@ exports.duration = {
     "subtract" : function (test) {
         test.expect(4);
 
-        var d = frozenMoment.duration({months: 2, weeks: 2, days: 0, hours: 5});
+        var d = frozenMoment.duration.build({months: 2, weeks: 2, days: 0, hours: 5});
         // for some reason, d._data._months does not get updated; use d._months instead.
         test.equal(d.subtract(1, 'months')._months, 1, 'Subtract months');
         test.equal(d.subtract(14, 'days')._days, 0, 'Subtract days');
@@ -4122,7 +4209,7 @@ exports.format = {
     "format escape brackets" : function (test) {
         test.expect(10);
 
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
 
         var b = frozenMoment(new Date(2009, 1, 14, 15, 25, 50, 125));
         test.equal(b.format('[day]'), 'day', 'Single bracket');
@@ -4141,7 +4228,7 @@ exports.format = {
     "handle negative years" : function (test) {
         test.expect(10);
 
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
         test.equal(frozenMoment.utc().thaw().year(-1).freeze().format('YY'), '-01', 'YY with negative year');
         test.equal(frozenMoment.utc().thaw().year(-1).freeze().format('YYYY'), '-0001', 'YYYY with negative year');
         test.equal(frozenMoment.utc().thaw().year(-12).freeze().format('YY'), '-12', 'YY with negative year');
@@ -4261,7 +4348,7 @@ exports.format = {
 
     "escaping quotes" : function (test) {
         test.expect(4);
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
         var date = frozenMoment([2012, 0]);
         test.equal(date.format('MMM \'YY'), "Jan '12", "Should be able to format with single parenthesis");
         test.equal(date.format('MMM "YY'),  'Jan "12', "Should be able to format with double parenthesis");
@@ -4410,7 +4497,7 @@ exports.format = {
             "405-12-31": "0405-52"
         }, i, isoWeekYear, formatted5, formatted4, formatted2;
 
-        frozenMoment.lang('en-gb'); // 1, 4
+        frozenMoment.locale('en-gb'); // 1, 4
         for (i in cases) {
             isoWeekYear = cases[i].split('-')[0];
             formatted5 = frozenMoment(i, 'YYYY-MM-DD').format('ggggg');
@@ -4441,7 +4528,7 @@ exports.format = {
     "weekday formats" : function (test) {
         test.expect(7);
 
-        frozenMoment.lang('dow: 3,doy: 5', {week: {dow: 3, doy: 5}});
+        frozenMoment.locale('dow: 3,doy: 5', {week: {dow: 3, doy: 5}});
         test.equal(frozenMoment([1985, 1,  6]).format('e'), '0', "Feb  6 1985 is Wednesday -- 0th day");
         test.equal(frozenMoment([2029, 8, 20]).format('e'), '1', "Sep 20 2029 is Thursday  -- 1st day");
         test.equal(frozenMoment([2013, 3, 26]).format('e'), '2', "Apr 26 2013 is Friday    -- 2nd day");
@@ -4464,20 +4551,20 @@ exports.format = {
     "toJSON skips postformat" : function (test) {
         test.expect(1);
 
-        frozenMoment.lang('postformat', {
+        frozenMoment.locale('postformat', {
             postformat: function (s) {
                 s.replace(/./g, 'X');
             }
         });
         test.equal(frozenMoment.utc([2000, 0, 1]).toJSON(), "2000-01-01T00:00:00.000Z", "toJSON doesn't postformat");
-        frozenMoment.lang('postformat', null);
+        frozenMoment.locale('postformat', null);
         test.done();
     },
 
     "calendar day timezone" : function (test) {
         test.expect(11);
 
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
         var zones = [60, -60, 90, -90, 360, -360, 720, -720],
             b = frozenMoment.build().utc().startOf('day').subtract({m : 1}).freeze(),
             c = frozenMoment.build().local().startOf('day').subtract({m : 1}).freeze(),
@@ -4498,7 +4585,7 @@ exports.format = {
     },
 
     "invalid" : function (test) {
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
 
         test.equal(frozenMoment.invalid().format(), "Invalid date");
         test.equal(frozenMoment.invalid().format('YYYY-MM-DD'), "Invalid date");
@@ -4701,7 +4788,7 @@ exports.gettersSetters = {
     "setters strings" : function (test) {
         test.expect(7);
 
-        var a = momentBuilder([2012]).lang('en');
+        var a = momentBuilder([2012]).locale('en');
         test.equal(a.day(0).day('Wednesday').freeze().day(), 3, 'day full name');
         test.equal(a.day(0).day('Wed').freeze().day(), 3, 'day short name');
         test.equal(a.day(0).day('We').freeze().day(), 3, 'day minimal name');
@@ -5519,7 +5606,7 @@ exports.isValid = {
     "string with bad month name" : function (test) {
         test.expect(2);
 
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
 
         test.equal(frozenMoment('01-Nam-2012', 'DD-MMM-YYYY').isValid(), false, '"Nam" is an invalid month');
         test.equal(frozenMoment('01-Aug-2012', 'DD-MMM-YYYY').isValid(), true, '"Aug" is a valid month');
@@ -5689,399 +5776,6 @@ exports.isValid = {
     }
 };
 
-var frozenMoment = require("../../frozen-moment"),
-    momentBuilder = frozenMoment.build;
-
-exports.lang = {
-    setUp : function (done) {
-        frozenMoment.createFromInputFallback = function () {
-            throw new Error("input not handled by frozenMoment");
-        };
-        done();
-    },
-
-    "library getter" : function (test) {
-        var r;
-        test.expect(8);
-
-        r = frozenMoment.lang('en');
-        test.equal(r, 'en', 'Lang should return en by default');
-        test.equal(frozenMoment.lang(), 'en', 'Lang should return en by default');
-
-        frozenMoment.lang('fr');
-        test.equal(frozenMoment.lang(), 'fr', 'Lang should return the changed language');
-
-        frozenMoment.lang('en-gb');
-        test.equal(frozenMoment.lang(), 'en-gb', 'Lang should return the changed language');
-
-        frozenMoment.lang('en');
-        test.equal(frozenMoment.lang(), 'en', 'Lang should reset');
-
-        frozenMoment.lang('does-not-exist');
-        test.equal(frozenMoment.lang(), 'en', 'Lang should reset');
-
-        frozenMoment.lang('EN');
-        test.equal(frozenMoment.lang(), 'en', 'Normalize language key case');
-
-        frozenMoment.lang('EN_gb');
-        test.equal(frozenMoment.lang(), 'en-gb', 'Normalize language key underscore');
-
-        test.done();
-    },
-
-    "library getter array of langs" : function (test) {
-        test.equal(frozenMoment.lang(['non-existent', 'fr', 'also-non-existent']), 'fr', "passing an array uses the first valid language");
-        test.equal(frozenMoment.lang(['es', 'fr', 'also-non-existent']), 'es', "passing an array uses the first valid language");
-        test.done();
-    },
-
-    "library getter language substrings" : function (test) {
-        test.equal(frozenMoment.lang('fr-crap'), 'fr', "use substrings");
-        test.equal(frozenMoment.lang('fr-does-not-exist'), 'fr', "uses deep substrings");
-        test.equal(frozenMoment.lang('fr-CA-does-not-exist'), 'fr-ca', "uses deepest substring");
-        test.done();
-    },
-
-    "library getter language array and substrings" : function (test) {
-        test.equal(frozenMoment.lang(['en-CH', 'fr']), 'en', "prefer root languages to shallower ones");
-        test.equal(frozenMoment.lang(['en-gb-leeds', 'en-CA']), 'en-gb', "prefer root languages to shallower ones");
-        test.equal(frozenMoment.lang(['en-fake', 'en-CA']), 'en-ca', "prefer alternatives with shared roots");
-        test.equal(frozenMoment.lang(['en-fake', 'en-fake2', 'en-ca']), 'en-ca', "prefer alternatives with shared roots");
-        test.equals(frozenMoment.lang(['fake-CA', 'fake-MX', 'fr']), 'fr', "always find something if possible");
-        test.equals(frozenMoment.lang(['fake-CA', 'fake-MX', 'fr']), 'fr', "always find something if possible");
-        test.equals(frozenMoment.lang(['fake-CA', 'fake-MX', 'fr-fake-fake-fake']), 'fr', "always find something if possible");
-        test.equals(frozenMoment.lang(['en', 'en-CA']), 'en', "prefer earlier if it works");
-        test.done();
-    },
-
-    "library ensure inheritance" : function (test) {
-        test.expect(2);
-
-        frozenMoment.lang('made-up', {
-            // I put them out of order
-            months : "February_March_April_May_June_July_August_September_October_November_December_January".split("_")
-            // the rest of the properties should be inherited.
-        });
-
-        test.equal(frozenMoment([2012, 5, 6]).format('MMMM'), 'July', 'Override some of the configs');
-        test.equal(frozenMoment([2012, 5, 6]).format('MMM'), 'Jun', 'But not all of them');
-
-        test.done();
-    },
-
-    "library ensure inheritance LT L LL LLL LLLL" : function (test) {
-        test.expect(5);
-
-        var lang = 'test-inherit-lt';
-
-        frozenMoment.lang(lang, {
-            longDateFormat : {
-                LT : "-[LT]-",
-                L : "-[L]-",
-                LL : "-[LL]-",
-                LLL : "-[LLL]-",
-                LLLL : "-[LLLL]-"
-            },
-            calendar : {
-                sameDay : '[sameDay] LT',
-                nextDay : '[nextDay] L',
-                nextWeek : '[nextWeek] LL',
-                lastDay : '[lastDay] LLL',
-                lastWeek : '[lastWeek] LLLL',
-                sameElse : 'L'
-            }
-        });
-
-        frozenMoment.lang('es');
-
-        test.equal(momentBuilder().lang(lang).freeze().calendar(), "sameDay -LT-", "Should use instance lang in LT formatting");
-        test.equal(momentBuilder().add(1, 'days').lang(lang).freeze().calendar(), "nextDay -L-", "Should use instance lang in L formatting");
-        test.equal(momentBuilder().add(-1, 'days').lang(lang).freeze().calendar(), "lastDay -LLL-", "Should use instance lang in LL formatting");
-        test.equal(momentBuilder().add(4, 'days').lang(lang).freeze().calendar(), "nextWeek -LL-", "Should use instance lang in LLL formatting");
-        test.equal(momentBuilder().add(-4, 'days').lang(lang).freeze().calendar(), "lastWeek -LLLL-", "Should use instance lang in LLLL formatting");
-
-        test.done();
-    },
-
-    "library langData" : function (test) {
-        test.expect(3);
-        frozenMoment.lang('en');
-
-        var jan = frozenMoment([2000, 0]);
-
-        test.equal(frozenMoment.langData().months(jan), 'January', 'no arguments returns global');
-        test.equal(frozenMoment.langData('zh-cn').months(jan), '一月', 'a string returns the language based on key');
-        test.equal(frozenMoment.langData(momentBuilder().lang('es').freeze()).months(jan), 'enero', "if you pass in a frozenMoment it uses the frozenMoment's language");
-
-        test.done();
-    },
-
-    "instance lang method" : function (test) {
-        test.expect(3);
-        frozenMoment.lang('en');
-
-        test.equal(frozenMoment([2012, 5, 6]).format('MMMM'), 'June', 'Normally default to global');
-        test.equal(momentBuilder([2012, 5, 6]).lang('es').freeze().format('MMMM'), 'junio', 'Use the instance specific language');
-        test.equal(frozenMoment([2012, 5, 6]).format('MMMM'), 'June', 'Using an instance specific language does not affect other frozenMoments');
-
-        test.done();
-    },
-
-    "instance lang method with array" : function (test) {
-        var m = momentBuilder().lang(['non-existent', 'fr', 'also-non-existent']).freeze();
-        test.equal(m.lang()._abbr, 'fr', "passing an array uses the first valid language");
-        m = momentBuilder().lang(['es', 'fr', 'also-non-existent']).freeze();
-        test.equal(m.lang()._abbr, 'es', "passing an array uses the first valid language");
-        test.done();
-    },
-
-    "instance getter language substrings" : function (test) {
-        var m = momentBuilder();
-
-        m = m.lang('fr-crap');
-        test.equal(m.freeze().lang()._abbr, 'fr', "use substrings");
-
-        m = m.lang('fr-does-not-exist');
-        test.equal(m.freeze().lang()._abbr, 'fr', "uses deep substrings");
-
-        test.done();
-    },
-
-    "instance lang persists with manipulation" : function (test) {
-        test.expect(3);
-        frozenMoment.lang('en');
-
-        test.equal(momentBuilder([2012, 5, 6]).lang('es').add({days: 1}).freeze().format('MMMM'), 'junio', 'With addition');
-        test.equal(momentBuilder([2012, 5, 6]).lang('es').day(0).freeze().format('MMMM'), 'junio', 'With day getter');
-        test.equal(momentBuilder([2012, 5, 6]).lang('es').endOf('day').freeze().format('MMMM'), 'junio', 'With endOf');
-
-        test.done();
-    },
-
-    "instance lang persists with cloning" : function (test) {
-        test.expect(2);
-        frozenMoment.lang('en');
-
-        var a = momentBuilder([2012, 5, 6]).lang('es').freeze(),
-            b = a.clone(),
-            c = frozenMoment(a);
-
-        test.equal(b.format('MMMM'), 'junio', 'using frozenMoment.fn.clone()');
-        test.equal(c.format('MMMM'), 'junio', 'using frozenMoment()');
-
-        test.done();
-    },
-
-    "duration lang method" : function (test) {
-        test.expect(3);
-        frozenMoment.lang('en');
-
-        test.equal(frozenMoment.duration({seconds: 44}).humanize(), 'a few seconds', 'Normally default to global');
-        test.equal(frozenMoment.duration({seconds: 44}).lang('es').humanize(), 'unos segundos', 'Use the instance specific language');
-        test.equal(frozenMoment.duration({seconds: 44}).humanize(), 'a few seconds', 'Using an instance specific language does not affect other durations');
-
-        test.done();
-    },
-
-    "duration lang persists with cloning" : function (test) {
-        test.expect(1);
-        frozenMoment.lang('en');
-
-        var a = frozenMoment.duration({seconds:  44}).lang('es'),
-            b = frozenMoment.duration(a);
-
-        test.equal(b.humanize(), 'unos segundos', 'using frozenMoment.duration()');
-        test.done();
-    },
-
-    "from relative time future" : function (test) {
-        var start = frozenMoment([2007, 1, 28]);
-
-        test.equal(start.from(momentBuilder([2007, 1, 28]).subtract({s: 44})),  "in a few seconds", "44 seconds = a few seconds");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).subtract({s: 45})),  "in a minute",      "45 seconds = a minute");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).subtract({s: 89})),  "in a minute",      "89 seconds = a minute");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).subtract({s: 90})),  "in 2 minutes",     "90 seconds = 2 minutes");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).subtract({m: 44})),  "in 44 minutes",    "44 minutes = 44 minutes");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).subtract({m: 45})),  "in an hour",       "45 minutes = an hour");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).subtract({m: 89})),  "in an hour",       "89 minutes = an hour");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).subtract({m: 90})),  "in 2 hours",       "90 minutes = 2 hours");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).subtract({h: 5})),   "in 5 hours",       "5 hours = 5 hours");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).subtract({h: 21})),  "in 21 hours",      "21 hours = 21 hours");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).subtract({h: 22})),  "in a day",         "22 hours = a day");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).subtract({h: 35})),  "in a day",         "35 hours = a day");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).subtract({h: 36})),  "in 2 days",        "36 hours = 2 days");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).subtract({d: 1})),   "in a day",         "1 day = a day");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).subtract({d: 5})),   "in 5 days",        "5 days = 5 days");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).subtract({d: 25})),  "in 25 days",       "25 days = 25 days");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).subtract({d: 26})),  "in a month",       "26 days = a month");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).subtract({d: 30})),  "in a month",       "30 days = a month");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).subtract({d: 45})),  "in a month",       "45 days = a month");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).subtract({d: 47})),  "in 2 months",      "47 days = 2 months");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).subtract({d: 74})),  "in 2 months",      "74 days = 2 months");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).subtract({d: 78})),  "in 3 months",      "78 days = 3 months");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).subtract({M: 1})),   "in a month",       "1 month = a month");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).subtract({M: 5})),   "in 5 months",      "5 months = 5 months");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).subtract({d: 315})), "in 10 months",     "315 days = 10 months");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).subtract({d: 344})), "in a year",        "344 days = a year");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).subtract({d: 345})), "in a year",        "345 days = a year");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).subtract({d: 548})), "in 2 years",       "548 days = in 2 years");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).subtract({y: 1})),   "in a year",        "1 year = a year");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).subtract({y: 5})),   "in 5 years",       "5 years = 5 years");
-
-        test.done();
-    },
-
-    "from relative time past" : function (test) {
-        var start = frozenMoment([2007, 1, 28]);
-
-        test.equal(start.from(momentBuilder([2007, 1, 28]).add({s: 44})),  "a few seconds ago", "44 seconds = a few seconds");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).add({s: 45})),  "a minute ago",      "45 seconds = a minute");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).add({s: 89})),  "a minute ago",      "89 seconds = a minute");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).add({s: 90})),  "2 minutes ago",     "90 seconds = 2 minutes");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).add({m: 44})),  "44 minutes ago",    "44 minutes = 44 minutes");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).add({m: 45})),  "an hour ago",       "45 minutes = an hour");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).add({m: 89})),  "an hour ago",       "89 minutes = an hour");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).add({m: 90})),  "2 hours ago",       "90 minutes = 2 hours");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).add({h: 5})),   "5 hours ago",       "5 hours = 5 hours");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).add({h: 21})),  "21 hours ago",      "21 hours = 21 hours");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).add({h: 22})),  "a day ago",         "22 hours = a day");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).add({h: 35})),  "a day ago",         "35 hours = a day");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).add({h: 36})),  "2 days ago",        "36 hours = 2 days");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).add({d: 1})),   "a day ago",         "1 day = a day");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).add({d: 5})),   "5 days ago",        "5 days = 5 days");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).add({d: 25})),  "25 days ago",       "25 days = 25 days");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).add({d: 26})),  "a month ago",       "26 days = a month");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).add({d: 30})),  "a month ago",       "30 days = a month");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).add({d: 43})),  "a month ago",       "43 days = a month");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).add({d: 46})),  "2 months ago",      "46 days = 2 months");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).add({d: 74})),  "2 months ago",      "75 days = 2 months");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).add({d: 76})),  "3 months ago",      "76 days = 3 months");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).add({M: 1})),   "a month ago",       "1 month = a month");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).add({M: 5})),   "5 months ago",      "5 months = 5 months");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).add({d: 315})), "10 months ago",     "315 days = 10 months");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).add({d: 344})), "a year ago",        "344 days = a year");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).add({d: 345})), "a year ago",        "345 days = a year");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).add({d: 548})), "2 years ago",       "548 days = 2 years");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).add({y: 1})),   "a year ago",        "1 year = a year");
-        test.equal(start.from(momentBuilder([2007, 1, 28]).add({y: 5})),   "5 years ago",       "5 years = 5 years");
-
-        test.done();
-    },
-
-    "instance lang used with from" : function (test) {
-        test.expect(2);
-        frozenMoment.lang('en');
-
-        var a = momentBuilder([2012, 5, 6]).lang('es').freeze(),
-            b = frozenMoment([2012, 5, 7]);
-
-        test.equal(a.from(b), 'hace un día', 'preserve language of first frozenMoment');
-        test.equal(b.from(a), 'in a day', 'do not preserve language of second frozenMoment');
-
-        test.done();
-    },
-
-    "month name callback function" : function (test) {
-        test.expect(3);
-
-        function fakeReplace(m, format) {
-            if (/test/.test(format)) {
-                return "test";
-            }
-            if (m.date() === 1) {
-                return "date";
-            }
-            return 'default';
-        }
-
-        frozenMoment.lang('made-up-2', {
-            months : fakeReplace,
-            monthsShort : fakeReplace,
-            weekdays : fakeReplace,
-            weekdaysShort : fakeReplace,
-            weekdaysMin : fakeReplace
-        });
-
-        test.equal(frozenMoment().format('[test] dd ddd dddd MMM MMMM'), 'test test test test test test', 'format month name function should be able to access the format string');
-        test.equal(frozenMoment([2011, 0, 1]).format('dd ddd dddd MMM MMMM'), 'date date date date date', 'format month name function should be able to access the frozenMoment object');
-        test.equal(frozenMoment([2011, 0, 2]).format('dd ddd dddd MMM MMMM'), 'default default default default default', 'format month name function should be able to access the frozenMoment object');
-
-        test.done();
-    },
-
-    "changing parts of a language config" : function (test) {
-        test.expect(2);
-
-        frozenMoment.lang('partial-lang', {
-            months : 'a b c d e f g h i j k l'.split(' ')
-        });
-
-        test.equal(frozenMoment([2011, 0, 1]).format('MMMM'), 'a', 'should be able to set language values when creating the language');
-
-        frozenMoment.lang('partial-lang', {
-            monthsShort : 'A B C D E F G H I J K L'.split(' ')
-        });
-
-        test.equal(frozenMoment([2011, 0, 1]).format('MMMM MMM'), 'a A', 'should be able to set language values after creating the language');
-
-        test.done();
-    },
-
-    "start/endOf week feature for first-day-is-monday langs" : function (test) {
-        test.expect(2);
-
-        frozenMoment.lang('monday-lang', {
-            week : {
-                dow : 1 // Monday is the first day of the week
-            }
-        });
-
-        frozenMoment.lang('monday-lang');
-        test.equal(momentBuilder([2013, 0, 1]).startOf('week').freeze().day(), 1, 'for lang monday-lang first day of the week should be monday');
-        test.equal(momentBuilder([2013, 0, 1]).endOf('week').freeze().day(), 0, 'for lang monday-lang last day of the week should be sunday');
-
-        test.done();
-    },
-
-    "meridiem parsing" : function (test) {
-        test.expect(2);
-
-        frozenMoment.lang('meridiem-parsing', {
-            meridiemParse : /[bd]/i,
-            isPM : function (input) {
-                return input === 'b';
-            }
-        });
-
-        frozenMoment.lang('meridiem-parsing');
-        test.equal(frozenMoment('2012-01-01 3b', 'YYYY-MM-DD ha').hour(), 15, 'Custom parsing of meridiem should work');
-        test.equal(frozenMoment('2012-01-01 3d', 'YYYY-MM-DD ha').hour(), 3, 'Custom parsing of meridiem should work');
-
-        test.done();
-    },
-
-    "invalid date formatting" : function (test) {
-        frozenMoment.lang('has-invalid', {
-            invalidDate: 'KHAAAAAAAAAAAN!'
-        });
-
-        test.equal(frozenMoment.invalid().format(), "KHAAAAAAAAAAAN!");
-        test.equal(frozenMoment.invalid().format('YYYY-MM-DD'), "KHAAAAAAAAAAAN!");
-
-        test.done();
-    },
-
-    "return lang name" : function (test) {
-        test.expect(1);
-
-        var registered = frozenMoment.lang('return-this', {});
-
-        test.equal(registered, 'return-this', 'returns the language configured');
-
-        test.done();
-    }
-};
-
 var frozenMoment = require("../../frozen-moment");
 
 exports.leapyear = {
@@ -6107,7 +5801,7 @@ var frozenMoment = require("../../frozen-moment");
 
 exports.listers = {
     setUp : function (cb) {
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
         frozenMoment.createFromInputFallback = function () {
             throw new Error("input not handled by frozenMoment");
         };
@@ -6116,7 +5810,7 @@ exports.listers = {
     },
 
     tearDown : function (cb) {
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
         cb();
     },
 
@@ -6151,7 +5845,7 @@ exports.listers = {
             weekdaysShort = "on_tw_th_fo_fi_si_se".split("_"),
             weekdaysMin = "1_2_3_4_5_6_7".split("_");
 
-        frozenMoment.lang('numerologists', {
+        frozenMoment.locale('numerologists', {
             months : months,
             monthsShort : monthsShort,
             weekdays : weekdays,
@@ -6184,7 +5878,7 @@ exports.listers = {
         var monthsShort = "one_two_three_four_five_six_seven_eight_nine_ten_eleven_twelve".split('_'),
             monthsShortWeird = "onesy_twosy_threesy_foursy_fivesy_sixsy_sevensy_eightsy_ninesy_tensy_elevensy_twelvesy".split('_');
 
-        frozenMoment.lang("difficult", {
+        frozenMoment.locale("difficult", {
 
             monthsShort: function (m, format) {
                 var arr = format.match(/-MMM-/) ? monthsShortWeird : monthsShort;
@@ -6207,9 +5901,440 @@ exports.listers = {
 
 var frozenMoment = require("../../frozen-moment");
 
+exports.locale = {
+    setUp : function (done) {
+        frozenMoment.createFromInputFallback = function () {
+            throw new Error("input not handled by frozenMoment");
+        };
+        frozenMoment.locale('en');
+        done();
+    },
+
+    "library getter" : function (test) {
+        var r;
+        test.expect(8);
+
+        r = frozenMoment.locale('en');
+        test.equal(r, 'en', 'locale should return en by default');
+        test.equal(frozenMoment.locale(), 'en', 'locale should return en by default');
+
+        frozenMoment.locale('fr');
+        test.equal(frozenMoment.locale(), 'fr', 'locale should return the changed locale');
+
+        frozenMoment.locale('en-gb');
+        test.equal(frozenMoment.locale(), 'en-gb', 'locale should return the changed locale');
+
+        frozenMoment.locale('en');
+        test.equal(frozenMoment.locale(), 'en', 'locale should reset');
+
+        frozenMoment.locale('does-not-exist');
+        test.equal(frozenMoment.locale(), 'en', 'locale should reset');
+
+        frozenMoment.locale('EN');
+        test.equal(frozenMoment.locale(), 'en', 'Normalize locale key case');
+
+        frozenMoment.locale('EN_gb');
+        test.equal(frozenMoment.locale(), 'en-gb', 'Normalize locale key underscore');
+
+        test.done();
+    },
+
+    "library getter array of locales" : function (test) {
+        test.equal(frozenMoment.locale(['non-existent', 'fr', 'also-non-existent']), 'fr', "passing an array uses the first valid locale");
+        test.equal(frozenMoment.locale(['es', 'fr', 'also-non-existent']), 'es', "passing an array uses the first valid locale");
+        test.done();
+    },
+
+    "library getter locale substrings" : function (test) {
+        test.equal(frozenMoment.locale('fr-crap'), 'fr', "use substrings");
+        test.equal(frozenMoment.locale('fr-does-not-exist'), 'fr', "uses deep substrings");
+        test.equal(frozenMoment.locale('fr-CA-does-not-exist'), 'fr-ca', "uses deepest substring");
+        test.done();
+    },
+
+    "library getter locale array and substrings" : function (test) {
+        test.equal(frozenMoment.locale(['en-CH', 'fr']), 'en', "prefer root locales to shallower ones");
+        test.equal(frozenMoment.locale(['en-gb-leeds', 'en-CA']), 'en-gb', "prefer root locales to shallower ones");
+        test.equal(frozenMoment.locale(['en-fake', 'en-CA']), 'en-ca', "prefer alternatives with shared roots");
+        test.equal(frozenMoment.locale(['en-fake', 'en-fake2', 'en-ca']), 'en-ca', "prefer alternatives with shared roots");
+        test.equals(frozenMoment.locale(['fake-CA', 'fake-MX', 'fr']), 'fr', "always find something if possible");
+        test.equals(frozenMoment.locale(['fake-CA', 'fake-MX', 'fr']), 'fr', "always find something if possible");
+        test.equals(frozenMoment.locale(['fake-CA', 'fake-MX', 'fr-fake-fake-fake']), 'fr', "always find something if possible");
+        test.equals(frozenMoment.locale(['en', 'en-CA']), 'en', "prefer earlier if it works");
+        test.done();
+    },
+
+    "library ensure inheritance" : function (test) {
+        test.expect(2);
+
+        frozenMoment.locale('made-up', {
+            // I put them out of order
+            months : "February_March_April_May_June_July_August_September_October_November_December_January".split("_")
+            // the rest of the properties should be inherited.
+        });
+
+        test.equal(frozenMoment([2012, 5, 6]).format('MMMM'), 'July', 'Override some of the configs');
+        test.equal(frozenMoment([2012, 5, 6]).format('MMM'), 'Jun', 'But not all of them');
+
+        test.done();
+    },
+
+    "library ensure inheritance LT L LL LLL LLLL" : function (test) {
+        test.expect(5);
+
+        var locale = 'test-inherit-lt';
+
+        frozenMoment.locale(locale, {
+            longDateFormat : {
+                LT : "-[LT]-",
+                L : "-[L]-",
+                LL : "-[LL]-",
+                LLL : "-[LLL]-",
+                LLLL : "-[LLLL]-"
+            },
+            calendar : {
+                sameDay : '[sameDay] LT',
+                nextDay : '[nextDay] L',
+                nextWeek : '[nextWeek] LL',
+                lastDay : '[lastDay] LLL',
+                lastWeek : '[lastWeek] LLLL',
+                sameElse : 'L'
+            }
+        });
+
+        frozenMoment.locale('es');
+
+        test.equal(frozenMoment.build().locale(locale).freeze().calendar(), "sameDay -LT-", "Should use instance locale in LT formatting");
+        test.equal(frozenMoment.build().add(1, 'days').locale(locale).freeze().calendar(), "nextDay -L-", "Should use instance locale in L formatting");
+        test.equal(frozenMoment.build().add(-1, 'days').locale(locale).freeze().calendar(), "lastDay -LLL-", "Should use instance locale in LL formatting");
+        test.equal(frozenMoment.build().add(4, 'days').locale(locale).freeze().calendar(), "nextWeek -LL-", "Should use instance locale in LLL formatting");
+        test.equal(frozenMoment.build().add(-4, 'days').locale(locale).freeze().calendar(), "lastWeek -LLLL-", "Should use instance locale in LLLL formatting");
+
+        test.done();
+    },
+
+    "library localeData" : function (test) {
+        test.expect(3);
+        frozenMoment.locale('en');
+
+        var jan = frozenMoment([2000, 0]);
+
+        test.equal(frozenMoment.localeData().months(jan), 'January', 'no arguments returns global');
+        test.equal(frozenMoment.localeData('zh-cn').months(jan), '一月', 'a string returns the locale based on key');
+        test.equal(frozenMoment.localeData(frozenMoment.build().locale('es').freeze()).months(jan), 'enero', "if you pass in a frozenMoment it uses the frozenMoment's locale");
+
+        test.done();
+    },
+
+    "defineLocale" : function (test) {
+        frozenMoment.locale("en");
+        frozenMoment.defineLocale("dude", {months: ["Movember"]});
+        test.equal(frozenMoment().locale(), "en", "defineLocale doesn't set it");
+        test.equal(frozenMoment.build().locale("dude").freeze().locale(), "dude", "defineLocale defines a locale");
+        test.done();
+    },
+
+    "library convenience" : function (test) {
+        frozenMoment.locale("something", {week: {dow: 3}});
+        frozenMoment.locale("something");
+        test.equal(frozenMoment.locale(), "something", "locale can be used to create the locale too");
+        test.done();
+    },
+
+    "instance locale method" : function (test) {
+        test.expect(3);
+        frozenMoment.locale('en');
+
+        test.equal(frozenMoment([2012, 5, 6]).format('MMMM'), 'June', 'Normally default to global');
+        test.equal(frozenMoment.build([2012, 5, 6]).locale('es').freeze().format('MMMM'), 'junio', 'Use the instance specific locale');
+        test.equal(frozenMoment([2012, 5, 6]).format('MMMM'), 'June', 'Using an instance specific locale does not affect other frozenMoments');
+
+        test.done();
+    },
+
+    "instance locale method with array" : function (test) {
+        var m = frozenMoment.build().locale(['non-existent', 'fr', 'also-non-existent']).freeze();
+        test.equal(m.locale(), 'fr', "passing an array uses the first valid locale");
+        m = frozenMoment.build().locale(['es', 'fr', 'also-non-existent']).freeze();
+        test.equal(m.locale(), 'es', "passing an array uses the first valid locale");
+        test.done();
+    },
+
+    "instance getter locale substrings" : function (test) {
+        var m = frozenMoment.build();
+
+        m = m.locale('fr-crap');
+        test.equal(m.freeze().locale(), 'fr', "use substrings");
+
+        m = m.locale('fr-does-not-exist');
+        test.equal(m.freeze().locale(), 'fr', "uses deep substrings");
+
+        test.done();
+    },
+
+    "instance locale persists with manipulation" : function (test) {
+        test.expect(3);
+        frozenMoment.locale('en');
+
+        test.equal(frozenMoment.build([2012, 5, 6]).locale('es').add({days: 1}).freeze().format('MMMM'), 'junio', 'With addition');
+        test.equal(frozenMoment.build([2012, 5, 6]).locale('es').day(0).freeze().format('MMMM'), 'junio', 'With day getter');
+        test.equal(frozenMoment.build([2012, 5, 6]).locale('es').endOf('day').freeze().format('MMMM'), 'junio', 'With endOf');
+
+        test.done();
+    },
+
+    "instance locale persists with cloning" : function (test) {
+        test.expect(2);
+        frozenMoment.locale('en');
+
+        var a = frozenMoment.build([2012, 5, 6]).locale('es').freeze(),
+            b = a.clone(),
+            c = frozenMoment(a);
+
+        test.equal(b.format('MMMM'), 'junio', 'using frozenMoment.fn.clone()');
+        test.equal(c.format('MMMM'), 'junio', 'using frozenMoment()');
+
+        test.done();
+    },
+
+    "duration locale method" : function (test) {
+        test.expect(3);
+        frozenMoment.locale('en');
+
+        test.equal(frozenMoment.duration({seconds: 44}).humanize(), 'a few seconds', 'Normally default to global');
+        test.equal(frozenMoment.duration.build({seconds: 44}).locale('es').freeze().humanize(), 'unos segundos', 'Use the instance specific locale');
+        test.equal(frozenMoment.duration.build({seconds: 44}).freeze().humanize(), 'a few seconds', 'Using an instance specific locale does not affect other durations');
+
+        test.done();
+    },
+
+    "duration locale persists with cloning" : function (test) {
+        test.expect(1);
+        frozenMoment.locale('en');
+
+        var a = frozenMoment.duration.build({seconds:  44}).locale('es').freeze(),
+            b = frozenMoment.duration(a);
+
+        test.equal(b.humanize(), 'unos segundos', 'using frozenMoment.duration()');
+        test.done();
+    },
+
+    "changing the global locale doesn't affect existing duration instances" : function (test) {
+        var mom = frozenMoment.duration();
+        frozenMoment.locale('fr');
+        test.equal('en', mom.locale());
+        test.done();
+    },
+
+    "from relative time future" : function (test) {
+        var start = frozenMoment([2007, 1, 28]);
+
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).subtract({s: 44})),  "in a few seconds", "44 seconds = a few seconds");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).subtract({s: 45})),  "in a minute",      "45 seconds = a minute");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).subtract({s: 89})),  "in a minute",      "89 seconds = a minute");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).subtract({s: 90})),  "in 2 minutes",     "90 seconds = 2 minutes");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).subtract({m: 44})),  "in 44 minutes",    "44 minutes = 44 minutes");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).subtract({m: 45})),  "in an hour",       "45 minutes = an hour");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).subtract({m: 89})),  "in an hour",       "89 minutes = an hour");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).subtract({m: 90})),  "in 2 hours",       "90 minutes = 2 hours");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).subtract({h: 5})),   "in 5 hours",       "5 hours = 5 hours");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).subtract({h: 21})),  "in 21 hours",      "21 hours = 21 hours");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).subtract({h: 22})),  "in a day",         "22 hours = a day");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).subtract({h: 35})),  "in a day",         "35 hours = a day");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).subtract({h: 36})),  "in 2 days",        "36 hours = 2 days");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).subtract({d: 1})),   "in a day",         "1 day = a day");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).subtract({d: 5})),   "in 5 days",        "5 days = 5 days");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).subtract({d: 25})),  "in 25 days",       "25 days = 25 days");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).subtract({d: 26})),  "in a month",       "26 days = a month");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).subtract({d: 30})),  "in a month",       "30 days = a month");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).subtract({d: 45})),  "in a month",       "45 days = a month");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).subtract({d: 47})),  "in 2 months",      "47 days = 2 months");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).subtract({d: 74})),  "in 2 months",      "74 days = 2 months");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).subtract({d: 78})),  "in 3 months",      "78 days = 3 months");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).subtract({M: 1})),   "in a month",       "1 month = a month");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).subtract({M: 5})),   "in 5 months",      "5 months = 5 months");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).subtract({d: 315})), "in 10 months",     "315 days = 10 months");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).subtract({d: 344})), "in a year",        "344 days = a year");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).subtract({d: 345})), "in a year",        "345 days = a year");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).subtract({d: 548})), "in 2 years",       "548 days = in 2 years");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).subtract({y: 1})),   "in a year",        "1 year = a year");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).subtract({y: 5})),   "in 5 years",       "5 years = 5 years");
+
+        test.done();
+    },
+
+    "from relative time past" : function (test) {
+        var start = frozenMoment([2007, 1, 28]);
+
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).add({s: 44})),  "a few seconds ago", "44 seconds = a few seconds");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).add({s: 45})),  "a minute ago",      "45 seconds = a minute");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).add({s: 89})),  "a minute ago",      "89 seconds = a minute");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).add({s: 90})),  "2 minutes ago",     "90 seconds = 2 minutes");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).add({m: 44})),  "44 minutes ago",    "44 minutes = 44 minutes");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).add({m: 45})),  "an hour ago",       "45 minutes = an hour");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).add({m: 89})),  "an hour ago",       "89 minutes = an hour");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).add({m: 90})),  "2 hours ago",       "90 minutes = 2 hours");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).add({h: 5})),   "5 hours ago",       "5 hours = 5 hours");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).add({h: 21})),  "21 hours ago",      "21 hours = 21 hours");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).add({h: 22})),  "a day ago",         "22 hours = a day");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).add({h: 35})),  "a day ago",         "35 hours = a day");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).add({h: 36})),  "2 days ago",        "36 hours = 2 days");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).add({d: 1})),   "a day ago",         "1 day = a day");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).add({d: 5})),   "5 days ago",        "5 days = 5 days");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).add({d: 25})),  "25 days ago",       "25 days = 25 days");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).add({d: 26})),  "a month ago",       "26 days = a month");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).add({d: 30})),  "a month ago",       "30 days = a month");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).add({d: 43})),  "a month ago",       "43 days = a month");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).add({d: 46})),  "2 months ago",      "46 days = 2 months");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).add({d: 74})),  "2 months ago",      "75 days = 2 months");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).add({d: 76})),  "3 months ago",      "76 days = 3 months");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).add({M: 1})),   "a month ago",       "1 month = a month");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).add({M: 5})),   "5 months ago",      "5 months = 5 months");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).add({d: 315})), "10 months ago",     "315 days = 10 months");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).add({d: 344})), "a year ago",        "344 days = a year");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).add({d: 345})), "a year ago",        "345 days = a year");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).add({d: 548})), "2 years ago",       "548 days = 2 years");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).add({y: 1})),   "a year ago",        "1 year = a year");
+        test.equal(start.from(frozenMoment.build([2007, 1, 28]).add({y: 5})),   "5 years ago",       "5 years = 5 years");
+
+        test.done();
+    },
+
+    "instance locale used with from" : function (test) {
+        test.expect(2);
+        frozenMoment.locale('en');
+
+        var a = frozenMoment.build([2012, 5, 6]).locale('es').freeze(),
+            b = frozenMoment([2012, 5, 7]);
+
+        test.equal(a.from(b), 'hace un día', 'preserve locale of first frozenMoment');
+        test.equal(b.from(a), 'in a day', 'do not preserve locale of second frozenMoment');
+
+        test.done();
+    },
+
+    "instance localeData" : function (test) {
+        frozenMoment.defineLocale("dude", {week: {dow: 3}});
+        test.equal(frozenMoment.build().locale("dude").freeze().localeData()._week.dow, 3);
+        test.done();
+    },
+
+    "month name callback function" : function (test) {
+        test.expect(3);
+
+        function fakeReplace(m, format) {
+            if (/test/.test(format)) {
+                return "test";
+            }
+            if (m.date() === 1) {
+                return "date";
+            }
+            return 'default';
+        }
+
+        frozenMoment.locale('made-up-2', {
+            months : fakeReplace,
+            monthsShort : fakeReplace,
+            weekdays : fakeReplace,
+            weekdaysShort : fakeReplace,
+            weekdaysMin : fakeReplace
+        });
+
+        test.equal(frozenMoment().format('[test] dd ddd dddd MMM MMMM'), 'test test test test test test', 'format month name function should be able to access the format string');
+        test.equal(frozenMoment([2011, 0, 1]).format('dd ddd dddd MMM MMMM'), 'date date date date date', 'format month name function should be able to access the frozenMoment object');
+        test.equal(frozenMoment([2011, 0, 2]).format('dd ddd dddd MMM MMMM'), 'default default default default default', 'format month name function should be able to access the frozenMoment object');
+
+        test.done();
+    },
+
+    "changing parts of a locale config" : function (test) {
+        test.expect(2);
+
+        frozenMoment.locale('partial-locale', {
+            months : 'a b c d e f g h i j k l'.split(' ')
+        });
+
+        test.equal(frozenMoment([2011, 0, 1]).format('MMMM'), 'a', 'should be able to set locale values when creating the locale');
+
+        frozenMoment.locale('partial-locale', {
+            monthsShort : 'A B C D E F G H I J K L'.split(' ')
+        });
+
+        test.equal(frozenMoment([2011, 0, 1]).format('MMMM MMM'), 'a A', 'should be able to set locale values after creating the locale');
+
+        test.done();
+    },
+
+    "start/endOf week feature for first-day-is-monday locales" : function (test) {
+        test.expect(2);
+
+        frozenMoment.locale('monday-locale', {
+            week : {
+                dow : 1 // Monday is the first day of the week
+            }
+        });
+
+        frozenMoment.locale('monday-locale');
+        test.equal(frozenMoment.build([2013, 0, 1]).startOf('week').freeze().day(), 1, 'for locale monday-locale first day of the week should be monday');
+        test.equal(frozenMoment.build([2013, 0, 1]).endOf('week').freeze().day(), 0, 'for locale monday-locale last day of the week should be sunday');
+
+        test.done();
+    },
+
+    "meridiem parsing" : function (test) {
+        test.expect(2);
+
+        frozenMoment.locale('meridiem-parsing', {
+            meridiemParse : /[bd]/i,
+            isPM : function (input) {
+                return input === 'b';
+            }
+        });
+
+        frozenMoment.locale('meridiem-parsing');
+        test.equal(frozenMoment('2012-01-01 3b', 'YYYY-MM-DD ha').hour(), 15, 'Custom parsing of meridiem should work');
+        test.equal(frozenMoment('2012-01-01 3d', 'YYYY-MM-DD ha').hour(), 3, 'Custom parsing of meridiem should work');
+
+        test.done();
+    },
+
+    "invalid date formatting" : function (test) {
+        frozenMoment.locale('has-invalid', {
+            invalidDate: 'KHAAAAAAAAAAAN!'
+        });
+
+        test.equal(frozenMoment.invalid().format(), "KHAAAAAAAAAAAN!");
+        test.equal(frozenMoment.invalid().format('YYYY-MM-DD'), "KHAAAAAAAAAAAN!");
+
+        test.done();
+    },
+
+    "return locale name" : function (test) {
+        test.expect(1);
+
+        var registered = frozenMoment.locale('return-this', {});
+
+        test.equal(registered, 'return-this', 'returns the locale configured');
+
+        test.done();
+    },
+
+    "changing the global locale doesn't affect existing instances" : function (test) {
+        frozenMoment.locale('en');
+        var mom = frozenMoment();
+        frozenMoment.locale('pr');
+        test.equal('en', frozenMoment.locale());
+        frozenMoment.locale('fr');
+        test.equal('en', mom.locale());
+        test.done();
+    }
+};
+
+var frozenMoment = require("../../frozen-moment");
+
 exports.minMax = {
     setUp : function (cb) {
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
         frozenMoment.createFromInputFallback = function () {
             throw new Error("input not handled by frozenMoment");
         };
@@ -6217,7 +6342,7 @@ exports.minMax = {
     },
 
     tearDown : function (cb) {
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
         cb();
     },
 
@@ -6575,7 +6700,7 @@ var frozenMoment = require("../../frozen-moment"),
 
 exports.preparsePostformat = {
     setUp: function (cb) {
-        frozenMoment.lang('symbol', symbolLang);
+        frozenMoment.locale('symbol', symbolLang);
         frozenMoment.createFromInputFallback = function () {
             throw new Error("input not handled by frozenMoment");
         };
@@ -6584,7 +6709,7 @@ exports.preparsePostformat = {
     },
 
     tearDown: function (cb) {
-        frozenMoment.lang('en-gb');
+        frozenMoment.locale('en-gb');
         cb();
     },
 
@@ -6876,7 +7001,7 @@ var frozenMoment = require("../../frozen-moment"),
 
 exports.endStartOf = {
     setUp : function (done) {
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
         frozenMoment.createFromInputFallback = function () {
             throw new Error("input not handled by frozenMoment");
         };
@@ -6884,7 +7009,7 @@ exports.endStartOf = {
     },
 
     tearDown : function (cb) {
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
         cb();
     },
 
@@ -7219,13 +7344,13 @@ exports.endStartOf = {
     },
 
     "startOf across DST +1" : function (test) {
-        var oldUpdateOffset = frozenMoment.updateOffset,
+        var oldUpdateOffset = momentBuilder.updateOffset,
             // Based on a real story somewhere in America/Los_Angeles
             dstAt = momentBuilder("2014-03-09T02:00:00-08:00").parseZone().freeze(),
             m;
 
-        frozenMoment.updateOffset = function (mom, keepTime) {
-            if (mom.isBefore(dstAt)) {
+        momentBuilder.updateOffset = function (mom, keepTime) {
+            if (mom.freeze().isBefore(dstAt)) {
                 mom.zone(8, keepTime);
             } else {
                 mom.zone(7, keepTime);
@@ -7254,19 +7379,19 @@ exports.endStartOf = {
 
         // There is no such time as 2:30-7 to try startOf('hour') across that
 
-        frozenMoment.updateOffset = oldUpdateOffset;
+        momentBuilder.updateOffset = oldUpdateOffset;
 
         test.done();
     },
 
     "startOf across DST -1" : function (test) {
-        var oldUpdateOffset = frozenMoment.updateOffset,
+        var oldUpdateOffset = momentBuilder.updateOffset,
             // Based on a real story somewhere in America/Los_Angeles
             dstAt = momentBuilder("2014-11-02T02:00:00-07:00").parseZone().freeze(),
             m;
 
-        frozenMoment.updateOffset = function (mom, keepTime) {
-            if (mom.isBefore(dstAt)) {
+        momentBuilder.updateOffset = function (mom, keepTime) {
+            if (mom.freeze().isBefore(dstAt)) {
                 mom.zone(7, keepTime);
             } else {
                 mom.zone(8, keepTime);
@@ -7295,7 +7420,7 @@ exports.endStartOf = {
         test.equal(m.format(), "2014-11-02T01:00:00-07:00",
                 "startOf('hour') before +1");
 
-        frozenMoment.updateOffset = oldUpdateOffset;
+        momentBuilder.updateOffset = oldUpdateOffset;
 
         test.done();
     }
@@ -7314,7 +7439,7 @@ exports.stringPrototype = {
     "string prototype overrides call" : function (test) {
         test.expect(1);
 
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
         var prior = String.prototype.call, b;
         String.prototype.call = function () {
             return null;
@@ -7333,7 +7458,7 @@ var frozenMoment = require("../../frozen-moment");
 
 exports.utc = {
     setUp : function (done) {
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
         frozenMoment.createFromInputFallback = function () {
             throw new Error("input not handled by frozenMoment");
         };
@@ -7342,7 +7467,7 @@ exports.utc = {
     },
 
     tearDown : function (cb) {
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
         cb();
     },
 
@@ -7486,7 +7611,7 @@ exports.weekYear = {
         test.expect(31);
 
         // Some examples taken from http://en.wikipedia.org/wiki/ISO_week
-        frozenMoment.lang('dow: 1,doy: 4', {week: {dow: 1, doy: 4}}); // like iso
+        frozenMoment.locale('dow: 1,doy: 4', {week: {dow: 1, doy: 4}}); // like iso
         test.equal(frozenMoment([2005, 0, 1]).weekYear(), 2004);
         test.equal(frozenMoment([2005, 0, 2]).weekYear(), 2004);
         test.equal(frozenMoment([2005, 0, 3]).weekYear(), 2005);
@@ -7507,7 +7632,7 @@ exports.weekYear = {
         test.equal(frozenMoment([2010, 0, 3]).weekYear(), 2009);
         test.equal(frozenMoment([2010, 0, 4]).weekYear(), 2010);
 
-        frozenMoment.lang('dow: 1,doy: 7', {week: {dow: 1, doy: 7}});
+        frozenMoment.locale('dow: 1,doy: 7', {week: {dow: 1, doy: 7}});
         test.equal(frozenMoment([2004, 11, 26]).weekYear(), 2004);
         test.equal(frozenMoment([2004, 11, 27]).weekYear(), 2005);
         test.equal(frozenMoment([2005, 11, 25]).weekYear(), 2005);
@@ -7540,7 +7665,7 @@ exports.weekYear = {
         test.expect(7 * 7);
 
         for (i = 0; i < 7; ++i) {
-            frozenMoment.lang('dow:' + i + ',doy: 6', {week: {dow: i, doy: 6}});
+            frozenMoment.locale('dow:' + i + ',doy: 6', {week: {dow: i, doy: 6}});
             test.equal(frozenMoment([1985, 1,  4]).isoWeekday(), 1, "Feb  4 1985 is Monday    -- 1st day");
             test.equal(frozenMoment([2029, 8, 18]).isoWeekday(), 2, "Sep 18 2029 is Tuesday   -- 2nd day");
             test.equal(frozenMoment([2013, 3, 24]).isoWeekday(), 3, "Apr 24 2013 is Wednesday -- 3rd day");
@@ -7594,7 +7719,7 @@ exports.weekYear = {
     "weekday first day of week Sunday (dow 0)": function (test) {
         test.expect(7);
 
-        frozenMoment.lang('dow: 0,doy: 6', {week: {dow: 0, doy: 6}});
+        frozenMoment.locale('dow: 0,doy: 6', {week: {dow: 0, doy: 6}});
         test.equal(frozenMoment([1985, 1,  3]).weekday(), 0, "Feb  3 1985 is Sunday    -- 0th day");
         test.equal(frozenMoment([2029, 8, 17]).weekday(), 1, "Sep 17 2029 is Monday    -- 1st day");
         test.equal(frozenMoment([2013, 3, 23]).weekday(), 2, "Apr 23 2013 is Tuesday   -- 2nd day");
@@ -7608,7 +7733,7 @@ exports.weekYear = {
     "weekday first day of week Monday (dow 1)": function (test) {
         test.expect(7);
 
-        frozenMoment.lang('dow: 1,doy: 6', {week: {dow: 1, doy: 6}});
+        frozenMoment.locale('dow: 1,doy: 6', {week: {dow: 1, doy: 6}});
         test.equal(frozenMoment([1985, 1,  4]).weekday(), 0, "Feb  4 1985 is Monday    -- 0th day");
         test.equal(frozenMoment([2029, 8, 18]).weekday(), 1, "Sep 18 2029 is Tuesday   -- 1st day");
         test.equal(frozenMoment([2013, 3, 24]).weekday(), 2, "Apr 24 2013 is Wednesday -- 2nd day");
@@ -7622,7 +7747,7 @@ exports.weekYear = {
     "weekday first day of week Tuesday (dow 2)": function (test) {
         test.expect(7);
 
-        frozenMoment.lang('dow: 2,doy: 6', {week: {dow: 2, doy: 6}});
+        frozenMoment.locale('dow: 2,doy: 6', {week: {dow: 2, doy: 6}});
         test.equal(frozenMoment([1985, 1,  5]).weekday(), 0, "Feb  5 1985 is Tuesday   -- 0th day");
         test.equal(frozenMoment([2029, 8, 19]).weekday(), 1, "Sep 19 2029 is Wednesday -- 1st day");
         test.equal(frozenMoment([2013, 3, 25]).weekday(), 2, "Apr 25 2013 is Thursday  -- 2nd day");
@@ -7636,7 +7761,7 @@ exports.weekYear = {
     "weekday first day of week Wednesday (dow 3)": function (test) {
         test.expect(7);
 
-        frozenMoment.lang('dow: 3,doy: 6', {week: {dow: 3, doy: 6}});
+        frozenMoment.locale('dow: 3,doy: 6', {week: {dow: 3, doy: 6}});
         test.equal(frozenMoment([1985, 1,  6]).weekday(), 0, "Feb  6 1985 is Wednesday -- 0th day");
         test.equal(frozenMoment([2029, 8, 20]).weekday(), 1, "Sep 20 2029 is Thursday  -- 1st day");
         test.equal(frozenMoment([2013, 3, 26]).weekday(), 2, "Apr 26 2013 is Friday    -- 2nd day");
@@ -7644,14 +7769,14 @@ exports.weekYear = {
         test.equal(frozenMoment([1970, 0,  4]).weekday(), 4, "Jan  4 1970 is Sunday    -- 4th day");
         test.equal(frozenMoment([2001, 4, 14]).weekday(), 5, "May 14 2001 is Monday    -- 5th day");
         test.equal(frozenMoment([2000, 0,  4]).weekday(), 6, "Jan  4 2000 is Tuesday   -- 6th day");
-        frozenMoment.lang('dow:3,doy:6', null);
+        frozenMoment.locale('dow:3,doy:6', null);
         test.done();
     },
 
     "weekday first day of week Thursday (dow 4)": function (test) {
         test.expect(7);
 
-        frozenMoment.lang('dow: 4,doy: 6', {week: {dow: 4, doy: 6}});
+        frozenMoment.locale('dow: 4,doy: 6', {week: {dow: 4, doy: 6}});
 
         test.equal(frozenMoment([1985, 1,  7]).weekday(), 0, "Feb  7 1985 is Thursday  -- 0th day");
         test.equal(frozenMoment([2029, 8, 21]).weekday(), 1, "Sep 21 2029 is Friday    -- 1st day");
@@ -7666,7 +7791,7 @@ exports.weekYear = {
     "weekday first day of week Friday (dow 5)": function (test) {
         test.expect(7);
 
-        frozenMoment.lang('dow: 5,doy: 6', {week: {dow: 5, doy: 6}});
+        frozenMoment.locale('dow: 5,doy: 6', {week: {dow: 5, doy: 6}});
         test.equal(frozenMoment([1985, 1,  8]).weekday(), 0, "Feb  8 1985 is Friday    -- 0th day");
         test.equal(frozenMoment([2029, 8, 22]).weekday(), 1, "Sep 22 2029 is Staturday -- 1st day");
         test.equal(frozenMoment([2013, 3, 28]).weekday(), 2, "Apr 28 2013 is Sunday    -- 2nd day");
@@ -7680,7 +7805,7 @@ exports.weekYear = {
     "weekday first day of week Saturday (dow 6)": function (test) {
         test.expect(7);
 
-        frozenMoment.lang('dow: 6,doy: 6', {week: {dow: 6, doy: 6}});
+        frozenMoment.locale('dow: 6,doy: 6', {week: {dow: 6, doy: 6}});
         test.equal(frozenMoment([1985, 1,  9]).weekday(), 0, "Feb  9 1985 is Staturday -- 0th day");
         test.equal(frozenMoment([2029, 8, 23]).weekday(), 1, "Sep 23 2029 is Sunday    -- 1st day");
         test.equal(frozenMoment([2013, 3, 29]).weekday(), 2, "Apr 29 2013 is Monday    -- 2nd day");
@@ -7697,7 +7822,7 @@ var frozenMoment = require("../../frozen-moment"),
 
 exports.weeks = {
     setUp : function (done) {
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
         frozenMoment.createFromInputFallback = function () {
             throw new Error("input not handled by frozenMoment");
         };
@@ -7706,7 +7831,7 @@ exports.weeks = {
     },
 
     tearDown : function (cb) {
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
         cb();
     },
 
@@ -8020,7 +8145,7 @@ exports.weeksInYear = {
     },
 
     "weeksInYear doy/dow = 1/4": function (test) {
-        frozenMoment.lang('1/4', {week: {dow: 1, doy: 4}});
+        frozenMoment.locale('1/4', {week: {dow: 1, doy: 4}});
 
         test.equal(frozenMoment([2004]).weeksInYear(), 53, "2004 has 53 weeks");
         test.equal(frozenMoment([2005]).weeksInYear(), 52, "2005 has 53 weeks");
@@ -8039,7 +8164,7 @@ exports.weeksInYear = {
     },
 
     "weeksInYear doy/dow = 6/12": function (test) {
-        frozenMoment.lang('6/12', {week: {dow: 6, doy: 12}});
+        frozenMoment.locale('6/12', {week: {dow: 6, doy: 12}});
 
         test.equal(frozenMoment([2004]).weeksInYear(), 53, "2004 has 53 weeks");
         test.equal(frozenMoment([2005]).weeksInYear(), 52, "2005 has 53 weeks");
@@ -8058,7 +8183,7 @@ exports.weeksInYear = {
     },
 
     "weeksInYear doy/dow = 1/7": function (test) {
-        frozenMoment.lang('1/7', {week: {dow: 1, doy: 7}});
+        frozenMoment.locale('1/7', {week: {dow: 1, doy: 7}});
 
         test.equal(frozenMoment([2004]).weeksInYear(), 52, "2004 has 53 weeks");
         test.equal(frozenMoment([2005]).weeksInYear(), 52, "2005 has 53 weeks");
@@ -8077,7 +8202,7 @@ exports.weeksInYear = {
     },
 
     "weeksInYear doy/dow = 0/6": function (test) {
-        frozenMoment.lang('0/6', {week: {dow: 0, doy: 6}});
+        frozenMoment.locale('0/6', {week: {dow: 0, doy: 6}});
 
         test.equal(frozenMoment([2004]).weeksInYear(), 52, "2004 has 53 weeks");
         test.equal(frozenMoment([2005]).weeksInYear(), 53, "2005 has 53 weeks");
@@ -8100,7 +8225,7 @@ var frozenMoment = require('../../frozen-moment');
 
 exports.zoneSwitching = {
     setUp : function (done) {
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
         frozenMoment.createFromInputFallback = function () {
             throw new Error("input not handled by frozenMoment");
         };
@@ -8217,7 +8342,7 @@ var frozenMoment = require("../../frozen-moment"),
 
 exports.zones = {
     setUp : function (done) {
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
         frozenMoment.createFromInputFallback = function () {
             throw new Error("input not handled by frozenMoment");
         };
@@ -8226,7 +8351,7 @@ exports.zones = {
     },
 
     tearDown : function (cb) {
-        frozenMoment.lang('en');
+        frozenMoment.locale('en');
         cb();
     },
 
@@ -8343,23 +8468,20 @@ exports.zones = {
     },
 
     "update offset after changing any values" : function (test) {
-        var oldOffset = frozenMoment.updateOffset,
+        var oldOffset = momentBuilder.updateOffset,
             m = frozenMoment.utc([2000, 6, 1]);
 
-        frozenMoment.updateOffset = function (mom, keepTime) {
-            if (mom.__doChange) {
-                if (+mom > 962409600000) {
-                    mom.zone(120, keepTime);
-                } else {
-                    mom.zone(60, keepTime);
-                }
+        momentBuilder.updateOffset = function (mom, keepTime) {
+            if (mom.freeze().valueOf() > 962409600000) {
+                mom.zone(120, keepTime);
+            } else {
+                mom.zone(60, keepTime);
             }
         };
 
         test.equal(m.format("ZZ"), "+0000", "should be at +0000");
         test.equal(m.format("HH:mm"), "00:00", "should start 12AM at +0000 timezone");
 
-        m.__doChange = true;
         m = m.thaw().add(1, 'h').freeze();
 
         test.equal(m.format("ZZ"), "-0200", "should be at -0200");
@@ -8370,7 +8492,7 @@ exports.zones = {
         test.equal(m.format("ZZ"), "-0100", "should be at -0100");
         test.equal(m.format("HH:mm"), "23:00", "12AM at +0000 should be 11PM at -0100 timezone");
 
-        frozenMoment.updateOffset = oldOffset;
+        momentBuilder.updateOffset = oldOffset;
 
         test.done();
     },
@@ -8549,11 +8671,11 @@ exports.zones = {
     },
 
     "add / subtract over dst" : function (test) {
-        var oldOffset = frozenMoment.updateOffset,
+        var oldOffset = momentBuilder.updateOffset,
             m = frozenMoment.utc([2000, 2, 31, 3]);
 
-        frozenMoment.updateOffset = function (mom, keepTime) {
-            if (mom.clone().utc().month() > 2) {
+        momentBuilder.updateOffset = function (mom, keepTime) {
+            if (mom.clone().utc().freeze().month() > 2) {
                 mom.zone(-60, keepTime);
             } else {
                 mom.zone(0, keepTime);
@@ -8586,16 +8708,17 @@ exports.zones = {
 
         test.equal(m.hour(), 3, "subtracting 1 month should have the same hour");
 
-        frozenMoment.updateOffset = oldOffset;
+        momentBuilder.updateOffset = oldOffset;
 
         test.done();
     },
 
     "isDST" : function (test) {
-        var oldOffset = frozenMoment.updateOffset;
+        var oldOffset = momentBuilder.updateOffset;
 
-        frozenMoment.updateOffset = function (mom, keepTime) {
-            if (mom.month() > 2 && mom.month() < 9) {
+        momentBuilder.updateOffset = function (mom, keepTime) {
+            var month = mom.freeze().month();
+            if (month > 2 && month < 9) {
                 mom.zone(-60, keepTime);
             } else {
                 mom.zone(0, keepTime);
@@ -8606,8 +8729,9 @@ exports.zones = {
         test.ok(momentBuilder().month(6).freeze().isDST(),   "Jul should be summer dst");
         test.ok(!momentBuilder().month(11).freeze().isDST(), "Dec should not be summer dst");
 
-        frozenMoment.updateOffset = function (mom) {
-            if (mom.month() > 2 && mom.month() < 9) {
+        momentBuilder.updateOffset = function (mom) {
+            var month = mom.freeze().month();
+            if (month > 2 && month < 9) {
                 mom.zone(0);
             } else {
                 mom.zone(-60);
@@ -8618,7 +8742,7 @@ exports.zones = {
         test.ok(!momentBuilder().month(6).freeze().isDST(), "Jul should not be winter dst");
         test.ok(momentBuilder().month(11).freeze().isDST(), "Dec should be winter dst");
 
-        frozenMoment.updateOffset = oldOffset;
+        momentBuilder.updateOffset = oldOffset;
 
         test.done();
     },
@@ -8706,13 +8830,10 @@ exports.zones = {
         test.expect(3);
 
         m = momentBuilder.parseZone("2013 01 01 05 -13:00", "YYYY MM DD HH ZZ").freeze();
-        console.log(m._d, m._d.toISOString());
         test.equal(m.format(), "2013-01-01T05:00:00-13:00", "accept input and format");
         m = momentBuilder.parseZone("2013-01-01-13:00", "YYYY MM DD ZZ", true).freeze();
-        console.log(m._d, m._d.toISOString());
         test.equal(m.isValid(), false, "accept input, format and strict flag");
         m = momentBuilder.parseZone("2013-01-01-13:00", ["DD MM YYYY ZZ", "YYYY MM DD ZZ"]).freeze();
-        console.log(m._d, m._d.toISOString());
         test.equal(m.format(), "2013-01-01T00:00:00-13:00", "accept input and array of formats");
 
         test.done();

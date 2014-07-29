@@ -26,8 +26,8 @@
         SECOND = 5,
         MILLISECOND = 6,
 
-        // internal storage for language config files
-        languages = {},
+        // internal storage for locale config files
+        locales = {},
 
         // frozenMoment internal properties
         instanceProperties = {
@@ -39,7 +39,7 @@
             _isUTC : null,
             _offset : null,  // optional. Combine with _isUTC
             _pf : null,
-            _lang : null  // optional
+            _locale : null  // optional
         },
 
         // check for nodeJS
@@ -162,10 +162,10 @@
                 return this.month() + 1;
             },
             MMM  : function (format) {
-                return this.lang().monthsShort(this, format);
+                return this.localeData().monthsShort(this, format);
             },
             MMMM : function (format) {
-                return this.lang().months(this, format);
+                return this.localeData().months(this, format);
             },
             D    : function () {
                 return this.date();
@@ -177,13 +177,13 @@
                 return this.day();
             },
             dd   : function (format) {
-                return this.lang().weekdaysMin(this, format);
+                return this.localeData().weekdaysMin(this, format);
             },
             ddd  : function (format) {
-                return this.lang().weekdaysShort(this, format);
+                return this.localeData().weekdaysShort(this, format);
             },
             dddd : function (format) {
-                return this.lang().weekdays(this, format);
+                return this.localeData().weekdays(this, format);
             },
             w    : function () {
                 return this.week();
@@ -229,10 +229,10 @@
                 return this.isoWeekday();
             },
             a    : function () {
-                return this.lang().meridiem(this.hours(), this.minutes(), true);
+                return this.localeData().meridiem(this.hours(), this.minutes(), true);
             },
             A    : function () {
-                return this.lang().meridiem(this.hours(), this.minutes(), false);
+                return this.localeData().meridiem(this.hours(), this.minutes(), false);
             },
             H    : function () {
                 return this.hours();
@@ -353,7 +353,7 @@
     }
     function ordinalizeToken(func, period) {
         return function (a) {
-            return this.lang().ordinal(func.call(this, a), period);
+            return this.localeData().ordinal(func.call(this, a), period);
         };
     }
 
@@ -372,8 +372,8 @@
         Constructors
     ************************************/
 
-    // Language constructor
-    function Language() {
+    // Locale constructor
+    function Locale() {
     }
 
     // MomentBuilder constructor
@@ -387,8 +387,8 @@
         extend(this, config);
     }
 
-    // Duration constructor
-    function Duration(duration) {
+    // DurationBuilder constructor
+    function DurationBuilder(duration) {
         var normalizedInput = normalizeObjectUnits(duration),
             years = normalizedInput.year || 0,
             quarters = normalizedInput.quarter || 0,
@@ -418,7 +418,43 @@
 
         this._data = {};
 
-        this._bubble();
+        bubbleDuration(this);
+    }
+
+    // FrozenDuration constructor
+    function FrozenDuration(duration) {
+        var normalizedInput = normalizeObjectUnits(duration),
+            years = normalizedInput.year || 0,
+            quarters = normalizedInput.quarter || 0,
+            months = normalizedInput.month || 0,
+            weeks = normalizedInput.week || 0,
+            days = normalizedInput.day || 0,
+            hours = normalizedInput.hour || 0,
+            minutes = normalizedInput.minute || 0,
+            seconds = normalizedInput.second || 0,
+            milliseconds = normalizedInput.millisecond || 0;
+
+        // representation for dateAddRemove
+        this._milliseconds = +milliseconds +
+            seconds * 1e3 + // 1000
+            minutes * 6e4 + // 1000 * 60
+            hours * 36e5; // 1000 * 60 * 60
+        // Because dateAddRemove treats 24 hours as different from a
+        // day when working around DST, we need to store them separately
+        this._days = +days +
+            weeks * 7;
+        // It is impossible to translate months into days without knowing
+        // which months you are are talking about, so we have to store
+        // it separately.
+        this._months = +months +
+            quarters * 3 +
+            years * 12;
+
+        this._data = {};
+
+        this._locale = frozenMoment.localeData();
+
+        bubbleDuration(this);
     }
 
 
@@ -530,7 +566,7 @@
             rawMonthSetter(mom, rawGetter(mom, 'Month') + months * isAdding);
         }
         if (updateOffset) {
-            frozenMoment.updateOffset(mom, days || months);
+            momentBuilder.updateOffset(mom, days || months);
         }
     }
 
@@ -601,7 +637,7 @@
 
         frozenMoment[field] = function (format, index) {
             var i, getter,
-                method = frozenMoment.fn._lang[field],
+                method = frozenMoment.fn._locale[field],
                 results = [];
 
             if (typeof format === 'number') {
@@ -611,7 +647,7 @@
 
             getter = function (i) {
                 var m = frozenMoment().thaw().utc().set(setter, i).freeze();
-                return method.call(frozenMoment.fn._lang, m, format || '');
+                return method.call(frozenMoment.fn._locale, m, format || '');
             };
 
             if (index != null) {
@@ -696,8 +732,44 @@
         return m._isValid;
     }
 
-    function normalizeLanguage(key) {
+    function normalizeLocale(key) {
         return key ? key.toLowerCase().replace('_', '-') : key;
+    }
+
+    // pick the locale from the array
+    // try ['en-au', 'en-gb'] as 'en-au', 'en-gb', 'en', as in move through the list trying each
+    // substring from most specific to least, but move to the next array item if it's a more specific variant than the current root
+    function chooseLocale(names) {
+        var i = 0, j, next, locale, split;
+
+        while (i < names.length) {
+            split = normalizeLocale(names[i]).split('-');
+            j = split.length;
+            next = normalizeLocale(names[i + 1]);
+            next = next ? next.split('-') : null;
+            while (j > 0) {
+                locale = loadLocale(split.slice(0, j).join('-'));
+                if (locale) {
+                    return locale;
+                }
+                if (next && next.length >= j && compareArrays(split, next, true) >= j - 1) {
+                    //the next array item is better than a shallower substring of this one
+                    break;
+                }
+                j--;
+            }
+            i++;
+        }
+        return null;
+    }
+
+    function loadLocale(name) {
+        if (!locales[name] && hasModule) {
+            try {
+                require('./locale/' + name);
+            } catch (e) { }
+        }
+        return locales[name];
     }
 
     // Return a momentBuilder from input, that is local/utc/zone equivalent to
@@ -708,11 +780,11 @@
     }
 
     /************************************
-        Languages
+        Locale
     ************************************/
 
 
-    extend(Language.prototype, {
+    extend(Locale.prototype, {
 
         set : function (config) {
             var prop, i;
@@ -895,78 +967,6 @@
         }
     });
 
-    // Loads a language definition into the `languages` cache.  The function
-    // takes a key and optionally values.  If not in the browser and no values
-    // are provided, it will load the language file module.  As a convenience,
-    // this function also returns the language values.
-    function loadLang(key, values) {
-        values.abbr = key;
-        if (!languages[key]) {
-            languages[key] = new Language();
-        }
-        languages[key].set(values);
-        return languages[key];
-    }
-
-    // Remove a language from the `languages` cache. Mostly useful in tests.
-    function unloadLang(key) {
-        delete languages[key];
-    }
-
-    // Determines which language definition to use and returns it.
-    //
-    // With no parameters, it will return the global language.  If you
-    // pass in a language key, such as 'en', it will return the
-    // definition for 'en', so long as 'en' has already been loaded using
-    // frozenMoment.lang.
-    function getLangDefinition(key) {
-        var i = 0, j, lang, next, split,
-            get = function (k) {
-                if (!languages[k] && hasModule) {
-                    try {
-                        require('./lang/' + k);
-                    } catch (e) { }
-                }
-                return languages[k];
-            };
-
-        if (!key) {
-            return frozenMoment.fn._lang;
-        }
-
-        if (!isArray(key)) {
-            //short-circuit everything else
-            lang = get(key);
-            if (lang) {
-                return lang;
-            }
-            key = [key];
-        }
-
-        //pick the language from the array
-        //try ['en-au', 'en-gb'] as 'en-au', 'en-gb', 'en', as in move through the list trying each
-        //substring from most specific to least, but move to the next array item if it's a more specific variant than the current root
-        while (i < key.length) {
-            split = normalizeLanguage(key[i]).split('-');
-            j = split.length;
-            next = normalizeLanguage(key[i + 1]);
-            next = next ? next.split('-') : null;
-            while (j > 0) {
-                lang = get(split.slice(0, j).join('-'));
-                if (lang) {
-                    return lang;
-                }
-                if (next && next.length >= j && compareArrays(split, next, true) >= j - 1) {
-                    //the next array item is better than a shallower substring of this one
-                    break;
-                }
-                j--;
-            }
-            i++;
-        }
-        return frozenMoment.fn._lang;
-    }
-
     /************************************
         Formatting
     ************************************/
@@ -1002,10 +1002,10 @@
     // format date using native date object
     function formatMoment(m, format) {
         if (!isValid(m)) {
-            return m.lang().invalidDate();
+            return m.localeData().invalidDate();
         }
 
-        format = expandFormat(format, m.lang());
+        format = expandFormat(format, m.localeData());
 
         if (!formatFunctions[format]) {
             formatFunctions[format] = makeFormatFunction(format);
@@ -1014,11 +1014,11 @@
         return formatFunctions[format](m);
     }
 
-    function expandFormat(format, lang) {
+    function expandFormat(format, locale) {
         var i = 5;
 
         function replaceLongDateFormatTokens(input) {
-            return lang.longDateFormat(input) || input;
+            return locale.longDateFormat(input) || input;
         }
 
         localFormattingTokens.lastIndex = 0;
@@ -1083,7 +1083,7 @@
             return parseTokenWord;
         case 'a':
         case 'A':
-            return getLangDefinition(config._l)._meridiemParse;
+            return config._locale._meridiemParse;
         case 'X':
             return parseTokenTimestampMs;
         case 'Z':
@@ -1155,7 +1155,7 @@
             break;
         case 'MMM' : // fall through to MMMM
         case 'MMMM' :
-            a = getLangDefinition(config._l).monthsParse(input);
+            a = config._locale.monthsParse(input);
             // if we didn't find a month name, mark the date as invalid.
             if (a != null) {
                 datePartArray[MONTH] = a;
@@ -1195,7 +1195,7 @@
         // AM / PM
         case 'a' : // fall through to A
         case 'A' :
-            config._isPm = getLangDefinition(config._l).isPM(input);
+            config._isPm = config._locale.isPM(input);
             break;
         // 24 HOUR
         case 'H' : // fall through to hh
@@ -1235,11 +1235,11 @@
         case 'dd':
         case 'ddd':
         case 'dddd':
-            a = getLangDefinition(config._l).weekdaysParse(input);
+            a = config._locale.weekdaysParse(input);
             // if we didn't get a weekday name, mark the date as invalid
             if (a != null) {
                 config._w = config._w || {};
-                config._w['d'] = a;
+                config._w.d = a;
             } else {
                 config._pf.invalidWeekday = input;
             }
@@ -1271,7 +1271,7 @@
     }
 
     function dayOfYearFromWeekInfo(config) {
-        var w, weekYear, week, weekday, dow, doy, temp, lang;
+        var w, weekYear, week, weekday, dow, doy, temp;
 
         w = config._w;
         if (w.GG != null || w.W != null || w.E != null) {
@@ -1286,9 +1286,8 @@
             week = dfl(w.W, 1);
             weekday = dfl(w.E, 1);
         } else {
-            lang = getLangDefinition(config._l);
-            dow = lang._week.dow;
-            doy = lang._week.doy;
+            dow = config._locale._week.dow;
+            doy = config._locale._week.doy;
 
             weekYear = dfl(w.gg, config._a[YEAR], weekOfYear(frozenMoment(), dow, doy).year);
             week = dfl(w.w, 1);
@@ -1413,13 +1412,12 @@
 
         // This array is used to make a Date, either with `new Date` or
         // `Date.UTC`
-        var lang = getLangDefinition(config._l),
-            string = '' + config._i,
+        var string = '' + config._i,
             i, parsedInput, tokens, token, skipped,
             stringLength = string.length,
             totalParsedInputLength = 0;
 
-        tokens = expandFormat(config._f, lang).match(formattingTokens) || [];
+        tokens = expandFormat(config._f, config._locale).match(formattingTokens) || [];
 
         for (i = 0; i < tokens.length; i++) {
             token = tokens[i];
@@ -1603,13 +1601,13 @@
         return date;
     }
 
-    function parseWeekday(input, language) {
+    function parseWeekday(input, locale) {
         if (typeof input === 'string') {
             if (!isNaN(input)) {
                 input = parseInt(input, 10);
             }
             else {
-                input = language.weekdaysParse(input);
+                input = locale.weekdaysParse(input);
                 if (typeof input !== 'number') {
                     return null;
                 }
@@ -1624,12 +1622,12 @@
 
 
     // helper function for frozenMoment.fn.from, frozenMoment.fn.fromNow, and frozenMoment.duration.fn.humanize
-    function substituteTimeAgo(string, number, withoutSuffix, isFuture, lang) {
-        return lang.relativeTime(number || 1, !!withoutSuffix, string, isFuture);
+    function substituteTimeAgo(string, number, withoutSuffix, isFuture, locale) {
+        return locale.relativeTime(number || 1, !!withoutSuffix, string, isFuture);
     }
 
-    function relativeTime(posNegDuration, withoutSuffix, lang) {
-        var duration = frozenMoment.duration(posNegDuration).abs(),
+    function relativeTime(posNegDuration, withoutSuffix, locale) {
+        var duration = frozenMoment.duration.build(posNegDuration).abs().freeze(),
             seconds = round(duration.as('s')),
             minutes = round(duration.as('m')),
             hours = round(duration.as('h')),
@@ -1650,7 +1648,7 @@
 
         args[2] = withoutSuffix;
         args[3] = +posNegDuration > 0;
-        args[4] = lang;
+        args[4] = locale;
         return substituteTimeAgo.apply({}, args);
     }
 
@@ -1711,21 +1709,23 @@
         var input = config._i,
             format = config._f;
 
+        config._locale = config._locale || frozenMoment.localeData(config._l);
+
         if (input === null || (format === undefined && input === '')) {
             return frozenMoment.invalid({nullInput: true});
         }
-        if (frozenMoment instanceof FrozenMoment) {
+        if (input instanceof FrozenMoment) {
             return input;
         }
 
         if (typeof input === 'string') {
-            config._i = input = getLangDefinition().preparse(input);
+            config._i = input = config._locale.preparse(input);
         }
 
         if (frozenMoment.isMoment(input) || frozenMoment.isBuilder(input)) {
             config = cloneMoment(input);
             config._isAMomentObject = true;
-            config._d = new Date(valueOfBuilder(input));
+            config._d = new Date(+input._d);
         } else if (format) {
             if (isArray(format)) {
                 makeDateFromStringAndArray(config);
@@ -1739,12 +1739,16 @@
         return new FrozenMoment(config);
     }
 
-    frozenMoment = function (input, format, lang, strict) {
+    frozenMoment = function (input, format, locale, strict) {
         var c;
 
-        if (typeof(lang) === 'boolean') {
-            strict = lang;
-            lang = undefined;
+        if (input instanceof FrozenMoment) {
+            return input;
+        }
+
+        if (typeof(locale) === "boolean") {
+            strict = locale;
+            locale = undefined;
         }
         // object construction must be done this way.
         // https://github.com/moment/moment/issues/1423
@@ -1752,10 +1756,14 @@
         c._isAMomentObject = true;
         c._i = input;
         c._f = format;
-        c._l = lang;
+        c._l = locale;
         c._strict = strict;
         c._isUTC = false;
         c._pf = defaultParsingFlags();
+
+        if (frozenMoment.isMoment(input) || frozenMoment.isBuilder(input)) {
+            c._offset = input._offset;
+        }
 
         return makeMoment(c);
     };
@@ -1797,12 +1805,12 @@
     };
 
     // creating with utc
-    frozenMoment.utc = function (input, format, lang, strict) {
+    frozenMoment.utc = function (input, format, locale, strict) {
         var c;
 
-        if (typeof(lang) === 'boolean') {
-            strict = lang;
-            lang = undefined;
+        if (typeof(locale) === "boolean") {
+            strict = locale;
+            locale = undefined;
         }
         // object construction must be done this way.
         // https://github.com/moment/moment/issues/1423
@@ -1810,7 +1818,7 @@
         c._isAMomentObject = true;
         c._useUTC = true;
         c._isUTC = true;
-        c._l = lang;
+        c._l = locale;
         c._i = input;
         c._f = format;
         c._strict = strict;
@@ -1825,7 +1833,7 @@
     };
 
     // duration
-    frozenMoment.duration = function (input, key) {
+    function parseDuration(input, key) {
         var duration = input,
             // matching against regexp is expensive, do it on demand
             match = null,
@@ -1834,11 +1842,11 @@
             parseIso,
             diffRes;
 
-        if (frozenMoment.isDuration(input)) {
-            duration = {
-                ms: input._milliseconds,
+        if (frozenMoment.isDuration(input) || frozenMoment.isDurationBuilder(input)) {
+            return {
+                M: input._months,
                 d: input._days,
-                M: input._months
+                ms: input._milliseconds
             };
         } else if (typeof input === 'number') {
             duration = {};
@@ -1880,17 +1888,32 @@
                 ('from' in duration || 'to' in duration)) {
             diffRes = momentsDifference(frozenMoment(duration.from), frozenMoment(duration.to));
 
-            duration = {};
-            duration.ms = diffRes.milliseconds;
-            duration.M = diffRes.months;
+            duration = {
+                ms: diffRes.milliseconds,
+                M: diffRes.months
+            };
         }
 
-        ret = new Duration(duration);
+        return duration;
+    }
 
-        if (frozenMoment.isDuration(input) && input.hasOwnProperty('_lang')) {
-            ret._lang = input._lang;
+    frozenMoment.duration = function (input, key) {
+        var ret;
+        if (frozenMoment.isDuration(input)) {
+            return input;
         }
+        ret = new FrozenDuration(parseDuration(input, key));
+        if (input && input.hasOwnProperty('_locale')) {
+            ret._locale = input._locale;
+        }
+        return ret;
+    };
 
+    frozenMoment.duration.build = function (input, key) {
+        var ret = new DurationBuilder(parseDuration(input, key));
+        if (input && input.hasOwnProperty('_locale')) {
+            ret._locale = input._locale;
+        }
         return ret;
     };
 
@@ -1907,10 +1930,6 @@
     // so we can properly clone ourselves.
     frozenMoment.instanceProperties = instanceProperties;
 
-    // This function will be called whenever a frozenMoment is mutated.
-    // It is intended to keep the offset in sync with the timezone.
-    frozenMoment.updateOffset = function () {};
-
     // This function allows you to set a threshold for relative time strings
     frozenMoment.relativeTimeThreshold = function (threshold, limit) {
         if (relativeTimeThresholds[threshold] === undefined) {
@@ -1923,32 +1942,64 @@
         return true;
     };
 
-    // This function will load languages and then set the global language.  If
+    // This function will load locale and then set the global locale.  If
     // no arguments are passed in, it will simply return the current global
-    // language key.
-    frozenMoment.lang = function (key, values) {
-        var r;
-        if (!key) {
-            return frozenMoment.fn._lang._abbr;
+    // locale key.
+    frozenMoment.locale = function (key, values) {
+        var data;
+        if (key) {
+            if (typeof(values) !== "undefined") {
+                data = frozenMoment.defineLocale(key, values);
+            }
+            else {
+                data = frozenMoment.localeData(key);
+            }
+
+            if (data) {
+                frozenMoment.duration.fn._locale = frozenMoment.fn._locale = data;
+            }
         }
-        if (values) {
-            loadLang(normalizeLanguage(key), values);
-        } else if (values === null) {
-            unloadLang(key);
-            key = 'en';
-        } else if (!languages[key]) {
-            getLangDefinition(key);
-        }
-        r = frozenMoment.duration.fn._lang = frozenMoment.fn._lang = getLangDefinition(key);
-        return r._abbr;
+
+        return frozenMoment.fn._locale._abbr;
     };
 
-    // returns language data
-    frozenMoment.langData = function (key) {
-        if (key && key._lang && key._lang._abbr) {
-            key = key._lang._abbr;
+    frozenMoment.defineLocale = function (name, values) {
+        if (values !== null) {
+            values.abbr = name;
+            if (!locales[name]) {
+                locales[name] = new Locale();
+            }
+            locales[name].set(values);
+            return locales[name];
+        } else {
+            // useful for testing
+            delete locales[name];
+            return null;
         }
-        return getLangDefinition(key);
+    };
+
+    // returns locale data
+    frozenMoment.localeData = function (key) {
+        var locale;
+
+        if (key && key._locale && key._locale._abbr) {
+            key = key._locale._abbr;
+        }
+
+        if (!key) {
+            return frozenMoment.fn._locale;
+        }
+
+        if (!isArray(key)) {
+            //short-circuit everything else
+            locale = loadLocale(key);
+            if (locale) {
+                return locale;
+            }
+            key = [key];
+        }
+
+        return chooseLocale(key);
     };
 
     // for typechecking FrozenMoment objects
@@ -1963,9 +2014,14 @@
             (obj != null && obj.hasOwnProperty('_isAMomentBuilderObject'));
     };
 
-    // for typechecking Duration objects
+    // for typechecking FrozenDuration objects
     frozenMoment.isDuration = function (obj) {
-        return obj instanceof Duration;
+        return obj instanceof FrozenDuration;
+    };
+
+    // for typechecking DurationBuilder objects
+    frozenMoment.isDurationBuilder = function (obj) {
+        return obj instanceof DurationBuilder;
     };
 
     for (i = lists.length - 1; i >= 0; --i) {
@@ -2006,14 +2062,14 @@
             return momentBuilder.invalid({nullInput: true});
         }
 
+        config._locale = config._locale || frozenMoment.localeData(config._l);
         if (typeof input === 'string') {
-            config._i = input = getLangDefinition().preparse(input);
+            config._i = input = config._locale.preparse(input);
         }
 
         if (frozenMoment.isMoment(input) || frozenMoment.isBuilder(input)) {
             config = cloneMoment(input);
             config._isAMomentBuilderObject = true;
-
             config._d = new Date(+input._d);
         } else if (format) {
             if (isArray(format)) {
@@ -2028,12 +2084,12 @@
         return new MomentBuilder(config);
     }
 
-    momentBuilder = function (input, format, lang, strict) {
+    momentBuilder = function (input, format, locale, strict) {
         var c;
 
-        if (typeof(lang) === 'boolean') {
-            strict = lang;
-            lang = undefined;
+        if (typeof(locale) === 'boolean') {
+            strict = locale;
+            locale = undefined;
         }
         // object construction must be done this way.
         // https://github.com/moment/moment/issues/1423
@@ -2041,7 +2097,7 @@
         c._isAMomentBuilderObject = true;
         c._i = input;
         c._f = format;
-        c._l = lang;
+        c._l = locale;
         c._strict = strict;
         c._isUTC = false;
         c._pf = defaultParsingFlags();
@@ -2070,24 +2126,6 @@
         }
         relativeTimeThresholds[threshold] = limit;
         return true;
-    };
-
-    // This function will load languages and then set the global language.
-    momentBuilder.lang = function (key, values) {
-        var r;
-        if (!key) {
-            throw new Error("momentBuilder.lang() requires at least one argument");
-        }
-        if (values) {
-            loadLang(normalizeLanguage(key), values);
-        } else if (values === null) {
-            unloadLang(key);
-            key = 'en';
-        } else if (!languages[key]) {
-            getLangDefinition(key);
-        }
-        r = momentBuilder.duration.fn._lang = momentBuilder.fn._lang = getLangDefinition(key);
-        return r._abbr;
     };
 
     for (i = lists.length - 1; i >= 0; --i) {
@@ -2163,7 +2201,7 @@
 
         day : function (input) {
             var day = this._isUTC ? this._d.getUTCDay() : this._d.getDay();
-            input = parseWeekday(input, this.freeze().lang());
+            input = parseWeekday(input, this.freeze().localeData());
             return this.add(input - day, 'd');
         },
 
@@ -2275,7 +2313,7 @@
 
         weekYear : function (input) {
             var frozen = this.freeze(),
-                year = weekOfYear(frozen, frozen.lang()._week.dow, frozen.lang()._week.doy).year;
+                year = weekOfYear(frozen, frozen.localeData()._week.dow, frozen.localeData()._week.doy).year;
             return this.add((input - year), 'y');
         },
 
@@ -2286,7 +2324,7 @@
 
         week : function (input) {
             var frozen = this.freeze(),
-                week = frozen.lang().week(frozen);
+                week = frozen.localeData().week(frozen);
             return this.add((input - week) * 7, 'd');
         },
 
@@ -2297,7 +2335,7 @@
 
         weekday : function (input) {
             var frozen = this.freeze(),
-                weekday = (frozen.day() + 7 - frozen.lang()._week.dow) % 7;
+                weekday = (frozen.day() + 7 - frozen.localeData()._week.dow) % 7;
             return this.add(input - weekday, 'd');
         },
 
@@ -2315,9 +2353,9 @@
             return this;
         },
 
-        // Sets the language for this instance.
-        lang : function (key) {
-            this._lang = getLangDefinition(key);
+        // Set the locale for this instance using the provided locale key.
+        locale : function (key) {
+            this._locale = frozenMoment.localeData(key);
             return this;
         }
     });
@@ -2327,7 +2365,7 @@
 
         // TODO: Move this out of here!
         if (typeof value === 'string') {
-            value = mom.freeze().lang().monthsParse(value);
+            value = mom.freeze().localeData().monthsParse(value);
             // TODO: Another silent failure?
             if (typeof value !== 'number') {
                 return mom;
@@ -2403,7 +2441,7 @@
         },
 
         toString : function () {
-            return this.thaw().lang('en').freeze().format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ');
+            return this.thaw().locale('en').freeze().format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ');
         },
 
         toDate : function () {
@@ -2454,7 +2492,7 @@
 
         format : function (inputString) {
             var output = formatMoment(this, inputString || frozenMoment.defaultFormat);
-            return this.lang().postformat(output);
+            return this.localeData().postformat(output);
         },
 
         diff : function (input, units, asFloat) {
@@ -2494,7 +2532,7 @@
         },
 
         from : function (time, withoutSuffix) {
-            return frozenMoment.duration({to: this, from: time}).lang(this.lang()._abbr).humanize(!withoutSuffix);
+            return frozenMoment.duration.build({to: this, from: time}).locale(this.locale()).freeze().humanize(!withoutSuffix);
         },
 
         fromNow : function (withoutSuffix) {
@@ -2513,7 +2551,7 @@
                     diff < 1 ? 'sameDay' :
                     diff < 2 ? 'nextDay' :
                     diff < 7 ? 'nextWeek' : 'sameElse';
-            return this.format(this.lang().calendar(format, this));
+            return this.format(this.localeData().calendar(format, this));
         },
 
         isLeapYear : function () {
@@ -2582,7 +2620,7 @@
         },
 
         weekYear : function () {
-            return weekOfYear(this, this.lang()._week.dow, this.lang()._week.doy).year;
+            return weekOfYear(this, this.localeData()._week.dow, this.localeData()._week.doy).year;
         },
 
         isoWeekYear : function () {
@@ -2590,7 +2628,7 @@
         },
 
         week : function () {
-            return this.lang().week(this);
+            return this.localeData().week(this);
         },
 
         isoWeek : function () {
@@ -2598,7 +2636,7 @@
         },
 
         weekday : function () {
-            return (this.day() + 7 - this.lang()._week.dow) % 7;
+            return (this.day() + 7 - this.localeData()._week.dow) % 7;
         },
 
         isoWeekday : function (input) {
@@ -2612,7 +2650,7 @@
         },
 
         weeksInYear : function () {
-            var weekInfo = this._lang._week;
+            var weekInfo = this.localeData()._week;
             return weeksInYear(this.year(), weekInfo.dow, weekInfo.doy);
         },
 
@@ -2621,9 +2659,13 @@
             return this[units]();
         },
 
-        // Returns the language configuration variables for this instance.
-        lang : function () {
-            return this._lang;
+        // Returns the locale configuration variables for this instance.
+        locale : function () {
+            return this._locale._abbr;
+        },
+
+        localeData : function () {
+            return this._locale;
         }
     });
 
@@ -2659,7 +2701,7 @@
 
 
     /************************************
-        Duration Prototype
+        DurationBuilder Prototype
     ************************************/
 
     function daysToYears (days) {
@@ -2671,49 +2713,57 @@
         return years * 146097 / 400;
     }
 
-    extend(frozenMoment.duration.fn = Duration.prototype, {
+    function bubbleDuration (duration) {
+        var milliseconds = duration._milliseconds,
+            days = duration._days,
+            months = duration._months,
+            data = duration._data,
+            seconds, minutes, hours, years = 0;
 
-        _bubble : function () {
-            var milliseconds = this._milliseconds,
-                days = this._days,
-                months = this._months,
-                data = this._data,
-                seconds, minutes, hours, years = 0;
+        // The following code bubbles up values, see the tests for
+        // examples of what that means.
+        data.milliseconds = milliseconds % 1000;
 
-            // The following code bubbles up values, see the tests for
-            // examples of what that means.
-            data.milliseconds = milliseconds % 1000;
+        seconds = absRound(milliseconds / 1000);
+        data.seconds = seconds % 60;
 
-            seconds = absRound(milliseconds / 1000);
-            data.seconds = seconds % 60;
+        minutes = absRound(seconds / 60);
+        data.minutes = minutes % 60;
 
-            minutes = absRound(seconds / 60);
-            data.minutes = minutes % 60;
+        hours = absRound(minutes / 60);
+        data.hours = hours % 24;
 
-            hours = absRound(minutes / 60);
-            data.hours = hours % 24;
+        days += absRound(hours / 24);
 
-            days += absRound(hours / 24);
+        // Accurately convert days to years, assume start from year 0.
+        years = absRound(daysToYears(days));
+        days -= absRound(yearsToDays(years));
 
-            // Accurately convert days to years, assume start from year 0.
-            years = absRound(daysToYears(days));
-            days -= absRound(yearsToDays(years));
+        // 30 days to a month
+        // TODO (iskren): Use anchor date (like 1st Jan) to compute this.
+        months += absRound(days / 30);
+        days %= 30;
 
-            // 30 days to a month
-            // TODO (iskren): Use anchor date (like 1st Jan) to compute this.
-            months += absRound(days / 30);
-            days %= 30;
+        // 12 months -> 1 year
+        years += absRound(months / 12);
+        months %= 12;
 
-            // 12 months -> 1 year
-            years += absRound(months / 12);
-            months %= 12;
+        data.days = days;
+        data.months = months;
+        data.years = years;
+    }
 
-            data.days = days;
-            data.months = months;
-            data.years = years;
+    extend(frozenMoment.duration.build.fn = DurationBuilder.prototype, {
+
+        freeze: function () {
+            return frozenMoment.duration(this);
         },
 
-        abs : function () {
+        clone: function () {
+            return frozenMoment.duration.build(this);
+        },
+
+        abs: function () {
             this._milliseconds = Math.abs(this._milliseconds);
             this._days = Math.abs(this._days);
             this._months = Math.abs(this._months);
@@ -2728,28 +2778,7 @@
             return this;
         },
 
-        weeks : function () {
-            return absRound(this.days() / 7);
-        },
-
-        valueOf : function () {
-            return this._milliseconds +
-              this._days * 864e5 +
-              (this._months % 12) * 2592e6 +
-              toInt(this._months / 12) * 31536e6;
-        },
-
-        humanize : function (withSuffix) {
-            var output = relativeTime(this, !withSuffix, this.lang());
-
-            if (withSuffix) {
-                output = this.lang().pastFuture(+this, output);
-            }
-
-            return this.lang().postformat(output);
-        },
-
-        add : function (input, val) {
+        add: function (input, val) {
             // supports only 2.0-style add(1, 's') or add(moment)
             var dur = frozenMoment.duration(input, val);
 
@@ -2757,29 +2786,68 @@
             this._days += dur._days;
             this._months += dur._months;
 
-            this._bubble();
+            bubbleDuration(this);
 
             return this;
         },
 
-        subtract : function (input, val) {
+        subtract: function (input, val) {
             var dur = frozenMoment.duration(input, val);
 
             this._milliseconds -= dur._milliseconds;
             this._days -= dur._days;
             this._months -= dur._months;
 
-            this._bubble();
+            bubbleDuration(this);
 
             return this;
         },
 
-        get : function (units) {
+        // Set the locale for this instance using the provided locale key.
+        locale: function (key) {
+            this._locale = frozenMoment.localeData(key);
+            return this;
+        }
+    });
+
+
+    /************************************
+        FrozenDuration Prototype
+    ************************************/
+
+    extend(frozenMoment.duration.fn = FrozenDuration.prototype, {
+
+        thaw: function () {
+            return frozenMoment.duration.build(this);
+        },
+
+        weeks: function () {
+            return absRound(this.days() / 7);
+        },
+
+        valueOf: function () {
+            return this._milliseconds +
+              this._days * 864e5 +
+              (this._months % 12) * 2592e6 +
+              toInt(this._months / 12) * 31536e6;
+        },
+
+        humanize: function (withSuffix) {
+            var output = relativeTime(this, !withSuffix, this.localeData());
+
+            if (withSuffix) {
+                output = this.localeData().pastFuture(+this, output);
+            }
+
+            return this.localeData().postformat(output);
+        },
+
+        get: function (units) {
             units = normalizeUnits(units);
             return this[units.toLowerCase() + 's']();
         },
 
-        as : function (units) {
+        as: function (units) {
             var days, months;
             units = normalizeUnits(units);
 
@@ -2801,20 +2869,8 @@
             }
         },
 
-        // If passed a language key, it will set the language for this
-        // instance.  Otherwise, it will return the language configuration
-        // variables for this instance.
-        lang : function (key) {
-            if (key === undefined) {
-                return this._lang;
-            } else {
-                this._lang = getLangDefinition(key);
-                return this;
-            }
-        },
-
-        toISOString : function () {
-            // inspired by https://github.com/dordille/moment-isoduration/blob/master/moment.isoduration.js
+        toISOString: function () {
+            // inspired by https://github.com/dordille/moment-isoduration/blob/master/frozenMoment.isoduration.js
             var years = Math.abs(this.years()),
                 months = Math.abs(this.months()),
                 days = Math.abs(this.days()),
@@ -2837,6 +2893,14 @@
                 (hours ? hours + 'H' : '') +
                 (minutes ? minutes + 'M' : '') +
                 (seconds ? seconds + 'S' : '');
+        },
+
+        locale : function () {
+            return this._locale._abbr;
+        },
+
+        localeData : function () {
+            return this._locale;
         }
     });
 
@@ -2877,13 +2941,13 @@
         return this.as('y');
     };
 
+
     /************************************
-        Default Lang
+        Default Locale
     ************************************/
 
-
-    // Set default language, other languages will inherit from English.
-    frozenMoment.lang('en', {
+    // Set default locale, other locale will inherit from English.
+    frozenMoment.locale('en', {
         ordinal : function (number) {
             var b = number % 10,
                 output = (toInt(number % 100 / 10) === 1) ? 'th' :
@@ -2894,7 +2958,8 @@
         }
     });
 
-    /* EMBED_LANGUAGES */
+    /* EMBED_LOCALES */
+
 
     /************************************
         Exposing Moment
