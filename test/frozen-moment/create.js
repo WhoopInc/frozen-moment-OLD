@@ -129,6 +129,18 @@ exports.create = {
         test.done();
     },
 
+    "cloning respects frozenMoment.instanceProperties" : function (test) {
+        var m = frozenMoment.build();
+
+        test.equal(m.clone()._special, undefined, "cloning ignores extra properties");
+        m._special = "bacon";
+        frozenMoment.instanceProperties.push("_special");
+        test.equal(m.clone()._special, "bacon", "cloning respects instanceProperties");
+        frozenMoment.instanceProperties.pop();
+
+        test.done();
+    },
+
     "undefined" : function (test) {
         test.expect(1);
         test.ok(frozenMoment().toDate() instanceof Date, "undefined");
