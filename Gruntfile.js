@@ -187,6 +187,11 @@ module.exports = function (grunt) {
             moment: 'frozen-moment.js',
             dest: embedLocaleDest,
             targetLocales: embedLocaleSrc
+        },
+        benchmark: {
+            all: {
+                src: ['benchmarks/*.js']
+            }
         }
     });
 

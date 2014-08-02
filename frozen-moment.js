@@ -29,18 +29,8 @@
         // internal storage for locale config files
         locales = {},
 
-        // frozenMoment internal properties
-        instanceProperties = {
-            _i : null,
-            _f : null,
-            _l : null,
-            _strict : null,
-            _tzm : null,
-            _isUTC : null,
-            _offset : null,  // optional. Combine with _isUTC
-            _pf : null,
-            _locale : null  // optional
-        },
+        // extra frozenMoment internal properties (plugins register props here)
+        instanceProperties = [],
 
         // check for nodeJS
         hasModule = (typeof module !== 'undefined' && module.exports),
@@ -378,13 +368,19 @@
 
     // MomentBuilder constructor
     function MomentBuilder(config) {
-        extend(this, config);
+        copyConfig(this, config);
+        this._d = new Date(+config._d);
+        this._isAMomentBuilderObject = true;
     }
 
     // FrozenMoment constructor
-    function FrozenMoment(config) {
-        checkOverflow(config);
-        extend(this, config);
+    function FrozenMoment(config, skipOverflow) {
+        if (skipOverflow !== false) {
+            checkOverflow(config);
+        }
+        copyConfig(this, config);
+        this._d = new Date(+config._d);
+        this._isAMomentObject = true;
     }
 
     // DurationBuilder constructor
@@ -480,15 +476,48 @@
         return a;
     }
 
-    function cloneMoment(m) {
-        var result = {}, i;
-        for (i in m) {
-            if (m.hasOwnProperty(i) && instanceProperties.hasOwnProperty(i)) {
-                result[i] = m[i];
+    function copyConfig(to, from) {
+        var i, prop, val;
+
+        if (typeof from._i !== 'undefined') {
+            to._i = from._i;
+        }
+        if (typeof from._f !== 'undefined') {
+            to._f = from._f;
+        }
+        if (typeof from._l !== 'undefined') {
+            to._l = from._l;
+        }
+        if (typeof from._strict !== 'undefined') {
+            to._strict = from._strict;
+        }
+        if (typeof from._tzm !== 'undefined') {
+            to._tzm = from._tzm;
+        }
+        if (typeof from._isUTC !== 'undefined') {
+            to._isUTC = from._isUTC;
+        }
+        if (typeof from._offset !== 'undefined') {
+            to._offset = from._offset;
+        }
+        if (typeof from._pf !== 'undefined') {
+            to._pf = from._pf;
+        }
+        if (typeof from._locale !== 'undefined') {
+            to._locale = from._locale;
+        }
+
+        if (instanceProperties.length > 0) {
+            for (i in instanceProperties) {
+                prop = instanceProperties[i];
+                val = from[prop];
+                if (typeof val !== 'undefined') {
+                    to[prop] = val;
+                }
             }
         }
 
-        return result;
+        return to;
     }
 
     function absRound(number) {
@@ -1492,7 +1521,7 @@
 
         for (i = 0; i < config._f.length; i++) {
             currentScore = 0;
-            tempConfig = extend({}, config);
+            tempConfig = copyConfig({}, config);
             tempConfig._pf = defaultParsingFlags();
             tempConfig._f = config._f[i];
             makeDateFromStringAndFormat(tempConfig);
@@ -1723,9 +1752,7 @@
         }
 
         if (frozenMoment.isMoment(input) || frozenMoment.isBuilder(input)) {
-            config = cloneMoment(input);
-            config._isAMomentObject = true;
-            config._d = new Date(+input._d);
+            return new FrozenMoment(input, true);
         } else if (format) {
             if (isArray(format)) {
                 makeDateFromStringAndArray(config);
@@ -1753,7 +1780,6 @@
         // object construction must be done this way.
         // https://github.com/moment/moment/issues/1423
         c = {};
-        c._isAMomentObject = true;
         c._i = input;
         c._f = format;
         c._l = locale;
@@ -1815,7 +1841,6 @@
         // object construction must be done this way.
         // https://github.com/moment/moment/issues/1423
         c = {};
-        c._isAMomentObject = true;
         c._useUTC = true;
         c._isUTC = true;
         c._l = locale;
@@ -2068,9 +2093,7 @@
         }
 
         if (frozenMoment.isMoment(input) || frozenMoment.isBuilder(input)) {
-            config = cloneMoment(input);
-            config._isAMomentBuilderObject = true;
-            config._d = new Date(+input._d);
+            return new MomentBuilder(input);
         } else if (format) {
             if (isArray(format)) {
                 makeDateFromStringAndArray(config);
@@ -2094,7 +2117,6 @@
         // object construction must be done this way.
         // https://github.com/moment/moment/issues/1423
         c = {};
-        c._isAMomentBuilderObject = true;
         c._i = input;
         c._f = format;
         c._l = locale;
