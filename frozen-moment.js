@@ -2534,7 +2534,7 @@
         diff : function (input, units, asFloat) {
             var thatBuilder = makeAsBuilder(input, this),
                 that = thatBuilder.freeze(),
-                diff, zoneDiff, thisMonth, thatMonth, output;
+                diff, zoneDiff, thisMonth, thatMonth, output, daysAdjust;
 
             units = normalizeUnits(units);
 
@@ -2547,10 +2547,11 @@
                 // and dst in the given months.
                 thisMonth = this.thaw().startOf('month').freeze();
                 thatMonth = thatBuilder.startOf('month').freeze();
-                output += ((this - thisMonth) - (that - thatMonth)) / diff;
+                daysAdjust = (this - thisMonth) - (that - thatMonth);
                 // same as above but with zones, to negate all dst
-                output -= ((this.zone() - thisMonth.zone()) -
-                        (that.zone() - thatMonth.zone())) * 6e4 / diff;
+                daysAdjust -= ((this.zone() - thisMonth.zone()) -
+                        (that.zone() - thatMonth.zone())) * 6e4;
+                output += daysAdjust / diff;
                 if (units === 'year') {
                     output = output / 12;
                 }
