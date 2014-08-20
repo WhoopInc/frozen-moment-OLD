@@ -375,6 +375,17 @@ exports.duration = {
         test.done();
     },
 
+    'toString acts as toISOString' : function (test) {
+        test.expect(6);
+        test.equal(moment.duration({y: 1, M: 2, d: 3, h: 4, m: 5, s: 6}).toString(), 'P1Y2M3DT4H5M6S', 'all fields');
+        test.equal(moment.duration({M: -1}).toString(), '-P1M', 'one month ago');
+        test.equal(moment.duration({m: -1}).toString(), '-PT1M', 'one minute ago');
+        test.equal(moment.duration({s: -0.5}).toString(), '-PT0.5S', 'one half second ago');
+        test.equal(moment.duration({y: -0.5, M: 1}).toString(), '-P5M', 'a month after half a year ago');
+        test.equal(moment.duration({}).toString(), 'P0D', 'zero duration');
+        test.done();
+    },
+
     '`isodate` (python) test cases' : function (test) {
         test.expect(24);
         test.equal(frozenMoment.duration('P18Y9M4DT11H9M8S').asSeconds(), frozenMoment.duration({y: 18, M: 9, d: 4, h: 11, m: 9, s: 8}).asSeconds(), 'python isodate 1');
