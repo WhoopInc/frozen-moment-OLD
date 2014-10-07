@@ -3045,7 +3045,7 @@
     if (hasModule) {  // node
         module.exports = frozenMoment;
     } else if (typeof define === 'function' && define.amd) {  // amd
-        define('frozenMoment', function (require, exports, module) {
+        define(function (require, exports, module) {
             if (module.config && module.config() && module.config().noGlobal === true) {
                 // release the global variable
                 globalScope.frozenMoment = oldGlobalMoment;
