@@ -272,7 +272,7 @@
                 return this.zoneName();
             },
             x    : function () {
-                return this.unixms();
+                return this.valueOf();
             },
             X    : function () {
                 return this.unix();
@@ -1877,11 +1877,6 @@
         return makeMoment(c).thaw().utc().freeze();
     };
 
-    // creating with unix offset (in milliseconds)
-    moment.unixms = function (input) {
-        return moment(input);
-    };
-
     // creating with unix timestamp (in seconds)
     frozenMoment.unix = function (input) {
         return frozenMoment(input * 1000);
@@ -2493,10 +2488,6 @@
 
         valueOf : function () {
             return +this._d + ((this._offset || 0) * 60000);
-        },
-
-        unixms: function () {
-            return +this;
         },
 
         unix : function () {
