@@ -8,7 +8,7 @@
     } else if (typeof exports === 'object') {
         module.exports = factory(require('../frozen-moment')); // Node
     } else {
-        factory((typeof global !== undefined ? global : this).frozenMoment); // Browser global
+        factory((typeof global !== undefined ? global : this).frozenMoment); // node or other global
     }
 }(function (frozenMoment) {
     var months = 'leden_únor_březen_duben_květen_červen_červenec_srpen_září_říjen_listopad_prosinec'.split('_'),
