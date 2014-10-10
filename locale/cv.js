@@ -8,7 +8,7 @@
     } else if (typeof exports === 'object') {
         module.exports = factory(require('../frozen-moment')); // Node
     } else {
-        factory(window.frozenMoment); // Browser global
+        factory((typeof global !== undefined ? global : this).frozenMoment); // Browser global
     }
 }(function (frozenMoment) {
     return frozenMoment.defineLocale('cv', {

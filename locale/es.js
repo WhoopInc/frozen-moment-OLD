@@ -8,7 +8,7 @@
     } else if (typeof exports === 'object') {
         module.exports = factory(require('../frozen-moment')); // Node
     } else {
-        factory(window.frozenMoment); // Browser global
+        factory((typeof global !== undefined ? global : this).frozenMoment); // Browser global
     }
 }(function (frozenMoment) {
     var monthsShortDot = 'ene._feb._mar._abr._may._jun._jul._ago._sep._oct._nov._dic.'.split('_'),
