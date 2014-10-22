@@ -807,8 +807,18 @@
     // Return a momentBuilder from input, that is local/utc/zone equivalent to
     // model.
     function makeAsBuilder(input, model) {
-        return model._isUTC ? momentBuilder(input).zone(model._offset || 0) :
-            momentBuilder(input).local();
+        var res, diff;
+        if (model._isUTC) {
+            res = momentBuilder(model);
+            diff = (moment.isMoment(input) || isDate(input) ?
+                    +input : +moment(input)) - (+res);
+            // Use low-level api, because this fn is low-level api.
+            res._d.setTime(+res._d + diff);
+            momentBuilder.updateOffset(res, false);
+            return res;
+        } else {
+            return momentBuilder(input).local();
+        }
     }
 
     /************************************
