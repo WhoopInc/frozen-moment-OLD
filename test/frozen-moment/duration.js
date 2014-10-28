@@ -591,9 +591,9 @@ exports.duration = {
     },
 
     'as getters for small units' : function (test) {
-        var dS = moment.duration(1, 'milliseconds'),
-        ds = moment.duration(3, 'seconds'),
-        dm = moment.duration(13, 'minutes');
+        var dS = frozenMoment.duration(1, 'milliseconds'),
+        ds = frozenMoment.duration(3, 'seconds'),
+        dm = frozenMoment.duration(13, 'minutes');
 
         test.expect(6);
         // Tests for issue #1867.
