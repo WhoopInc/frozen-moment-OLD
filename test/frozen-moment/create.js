@@ -941,9 +941,9 @@ exports.create = {
     },
 
     'utc with array of formats' : function (test) {
-        test.equal(moment.utc('2014-01-01', ['YYYY-MM-DD', 'YYYY-MM']).format(),
+        test.equal(frozenMoment.utc('2014-01-01', ['YYYY-MM-DD', 'YYYY-MM']).format(),
                 '2014-01-01T00:00:00+00:00',
-                'moment.utc works with array of formats');
+                'frozenMoment.utc works with array of formats');
         test.done();
     }
 
