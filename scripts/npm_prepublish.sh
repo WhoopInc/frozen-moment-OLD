@@ -29,7 +29,7 @@ git clone $basename $src
 mkdir $dest
 
 
-cp $src/moment.js $dest
+cp $src/frozen-moment.js $dest
 cp $src/package.json $dest
 cp $src/README.md $dest
 cp $src/LICENSE $dest
