@@ -302,7 +302,7 @@ exports.create = {
 
     'unix offset milliseconds' :  function (test) {
         test.expect(1);
-        test.equal(moment('1234567890123', 'x').valueOf(), 1234567890123, 'x matches unix offset in milliseconds');
+        test.equal(frozenMoment('1234567890123', 'x').valueOf(), 1234567890123, 'x matches unix offset in milliseconds');
         test.done();
     },
 

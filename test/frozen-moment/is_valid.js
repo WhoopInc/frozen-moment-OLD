@@ -229,31 +229,31 @@ exports.isValid = {
 
     'valid Unix offset milliseconds' : function (test) {
         test.expect(2);
-        test.equal(moment(1234567890123, 'x').isValid(), true, 'number integer');
-        test.equal(moment('1234567890123', 'x').isValid(), true, 'string integer');
+        test.equal(frozenMoment(1234567890123, 'x').isValid(), true, 'number integer');
+        test.equal(frozenMoment('1234567890123', 'x').isValid(), true, 'string integer');
         test.done();
     },
 
     'invalid Unix offset milliseconds' : function (test) {
         test.expect(8);
-        test.equal(moment(undefined, 'x').isValid(), false, 'undefined');
-        test.equal(moment('undefined', 'x').isValid(), false, 'string undefined');
+        test.equal(frozenMoment(undefined, 'x').isValid(), false, 'undefined');
+        test.equal(frozenMoment('undefined', 'x').isValid(), false, 'string undefined');
         try {
-            test.equal(moment(null, 'x').isValid(), false, 'null');
+            test.equal(frozenMoment(null, 'x').isValid(), false, 'null');
         } catch (e) {
             test.ok(true, 'null');
         }
 
-        test.equal(moment('null', 'x').isValid(), false, 'string null');
-        test.equal(moment([], 'x').isValid(), false, 'array');
-        test.equal(moment('{}', 'x').isValid(), false, 'object');
+        test.equal(frozenMoment('null', 'x').isValid(), false, 'string null');
+        test.equal(frozenMoment([], 'x').isValid(), false, 'array');
+        test.equal(frozenMoment('{}', 'x').isValid(), false, 'object');
         try {
-            test.equal(moment('', 'x').isValid(), false, 'string empty');
+            test.equal(frozenMoment('', 'x').isValid(), false, 'string empty');
         } catch (e) {
             test.ok(true, 'string empty');
         }
 
-        test.equal(moment(' ', 'x').isValid(), false, 'string space');
+        test.equal(frozenMoment(' ', 'x').isValid(), false, 'string space');
         test.done();
     },
 

@@ -131,10 +131,10 @@ exports.format = {
     'unix offset milliseconds' :  function (test) {
         test.expect(2);
 
-        var m = moment('1234567890123', 'x');
+        var m = frozenMoment('1234567890123', 'x');
         test.equals(m.format('x'), '1234567890123', 'unix offset in milliseconds');
 
-        m = moment(1234567890123, 'x');
+        m = frozenMoment(1234567890123, 'x');
         test.equals(m.format('x'), '1234567890123', 'unix offset in milliseconds as integer');
 
         test.done();
