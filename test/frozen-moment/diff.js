@@ -232,8 +232,9 @@ exports.diff = {
         var m1, m2;
         for (m1 = 0; m1 < 12; ++m1) {
             for (m2 = m1; m2 < 12; ++m2) {
-                test.equal(moment([2013, m2, 15]).diff(moment([2013, m1, 15]), 'months', true), m2 - m1,
-                'month diff from 2013-' + m1 + '-15 to 2013-' + m2 + '-15');
+                test.equal(frozenMoment([2013, m2, 15]).diff(frozenMoment([2013, m1, 15]), 'months', true),
+                        m2 - m1,
+                        'month diff from 2013-' + m1 + '-15 to 2013-' + m2 + '-15');
             }
         }
         test.done();
