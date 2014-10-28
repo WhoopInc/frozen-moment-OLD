@@ -810,8 +810,7 @@
         var res, diff;
         if (model._isUTC) {
             res = momentBuilder(model);
-            diff = (moment.isMoment(input) || isDate(input) ?
-                    +input : +moment(input)) - (+res);
+            diff = (+frozenMoment(input)) - (+res.freeze());
             // Use low-level api, because this fn is low-level api.
             res._d.setTime(+res._d + diff);
             momentBuilder.updateOffset(res, false);
