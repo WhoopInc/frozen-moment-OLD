@@ -1,0 +1,1204 @@
+[
+    {
+        "slug": "use-it",
+        "items": [
+            {
+                "title": "Where to use it",
+                "body": "\n\n\nFrozenMoment was designed to work both in the browser and in Node.js.\n\nWe don't have a CI system set up for this fork yet.  When we do, we'll probably\nreplicate the browser portfolio used for upstream testing: IE 8, IE 9 on\nWindows 7, stable Chrome on Windows XP, Safari 10.8 on Mac, and stable\nFirefox on Linux.\n\nAll code should work in both environments (browser and Node.js). Note that this\nfork is a new project under heavy initial development and things will be a bit\nrough around the edges. All unit tests will be run in both environments once we\nhave a CI system in place.\n",
+                "slug": "use-it/intro",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/00-use-it/00-intro.md"
+            },
+            {
+                "title": "Node.js",
+                "body": "\n\n\n```\nnpm install git+https://github.com/WhoopInc/frozen-moment.git\n```\n\n```javascript\nvar frozenMoment = require('frozen-moment');\nfrozenMoment().format();\n```\n\nThe globally exported frozenMoment object is not available to Node.js.\n",
+                "slug": "use-it/node-js",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/00-use-it/01-node-js.md"
+            },
+            {
+                "title": "Browser",
+                "body": "\n\n\n```\n<script src=\"frozen-moment.js\"></script>\n<script>\n\tfrozenMoment().format();\n</script>\n```\n\nWe recommend that you download a copy of frozen-moment.js and concatenate it with the rest of your scripts to minimize http requests.\n",
+                "slug": "use-it/browser",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/00-use-it/02-browser.md"
+            },
+            {
+                "title": "Bower",
+                "body": "\n\n\n```\nbower install --save https://github.com/WhoopInc/frozen-moment.git\n```\n\nNotable files are `frozen-moment.js`, `lang/*.js` and `min/frozen-moment-with-langs.js`.\n",
+                "slug": "use-it/bower",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/00-use-it/03-bower.md"
+            },
+            {
+                "title": "Require.js",
+                "body": "\n\n\n```javascript\nrequire.config({\n    paths: {\n        \"frozenMoment\": \"path/to/frozen-moment\",\n    }\n});\ndefine([\"frozenMoment\"], function (frozenMoment) {\n    frozenMoment().format();\n});\n```\n\nFrozenMoment will only create a `frozenMoment` global when running in the browser in a traditional `<script>` tag. This is useful to plugins and other third-party code.\n\nIf you want a `frozenMoment` global in other environments, you'll have to export it yourself.\n\nFor version `2.5.x`, in case you use other plugins that rely on FrozenMoment but are\nnot AMD-compatible you may need to add [`wrapShim:\ntrue`](https://github.com/jrburke/r.js/blob/b8a6982d2923ae8389355edaa50d2b7f8065a01a/build/example.build.js#L68-L78)\nto your r.js config.\n",
+                "slug": "use-it/require-js",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/00-use-it/04-require-js.md"
+            },
+            {
+                "title": "NuGet",
+                "body": "\n\n[NuGet](http://www.nuget.org/)\n\n```\nInstall-Package FrozenMoment\n```\n\n**WARNING: we haven't published a build with NuGet yet.**  If you need this,\nplease [open an issue](https://github.com/WhoopInc/frozen-moment/issues/new) to\nlet us know.  Thanks!\n",
+                "slug": "use-it/nuget",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/00-use-it/05-nuget.md"
+            },
+            {
+                "title": "spm",
+                "body": "\n\n[Static Package Manager](http://spmjs.io/)\n\n```\nspm install frozen-moment --save\n```\n\n**WARNING: we haven't published a build with SPM yet.**  If you need this,\nplease [open an issue](https://github.com/WhoopInc/frozen-moment/issues/new) to\nlet us know.  Thanks!\n",
+                "slug": "use-it/spm",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/00-use-it/06-spm.md"
+            },
+            {
+                "title": "Other",
+                "body": "\n\nTo use under **Java/Rhino**, check out [these instructions](https://gist.github.com/UnquietCode/5614860).\n\nTo use in **Demandware**, see [these instructions](https://github.com/moment/moment/issues/1034).\n\nBoth of these sets of instructions were written for use with the original Moment project, but the process for working with FrozenMoment should be very similar.",
+                "slug": "use-it/other",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/00-use-it/07-other.md"
+            },
+            {
+                "title": "Troubleshooting",
+                "body": "\n\nIf you are having any troubles, please [search for related issues](https://github.com/WhoopInc/frozen-moment/issues) or [open a new issue](https://github.com/WhoopInc/frozen-moment/issues/new) if nobody has posted about your problem yet.\n",
+                "slug": "use-it/troubleshooting",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/00-use-it/08-troubleshooting.md"
+            }
+        ],
+        "title": "Where to use it"
+    },
+    {
+        "slug": "parsing",
+        "items": [
+            {
+                "title": "Parse",
+                "body": "\n\nInstead of modifying the native `Date.prototype`, FrozenMoment creates a wrapper for the `Date` object. To get this wrapper object, simply call `frozenMoment()` with one of the supported input types.\n\nThe `FrozenMoment` prototype is exposed through `frozenMoment.fn`. If you want to add your own functions, that is where you would put them.\n\nFor ease of reference, any method on the `FrozenMoment.prototype` will be referenced in the docs as `frozenMoment#method`. So `FrozenMoment.prototype.format` == `frozenMoment.fn.format` == `frozenMoment#format`.\n",
+                "slug": "parsing/intro",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/01-parsing/00-intro.md"
+            },
+            {
+                "title": "Now",
+                "version": "1.0.0",
+                "signature": "\nfrozenMoment();\nfrozenMoment.build();\n",
+                "body": "\n\n\nTo get the current date and time, just call `frozenMoment()` with no parameters.\n\n```javascript\nvar now = frozenMoment();\n```\n\nThis is essentially the same as calling `frozenMoment(new Date())`.\n",
+                "slug": "parsing/now",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/01-parsing/01-now.md"
+            },
+            {
+                "title": "String",
+                "version": "1.0.0",
+                "signature": "\nfrozenMoment(String);\nfrozenMoment.build(String);\n",
+                "body": "\n\n\nYou can create a frozenMoment from a string. FrozenMoment would try a few ISO patterns and then try the native js Date.\n\n```javascript\nvar day = frozenMoment(\"Dec 25, 1995\");\n```\n\n**Warning** Browser support for this is inconsistent. Because there is no specification on which formats should be supported, what works in some browsers will not work in other browsers.\n\n**Warning** We currently intend to remove this functionality (inherited from upstream Moment) before the first release of FrozenMoment.\n\nFor more consistent results, you should use [String + Format](#/parsing/string-format/).\n\nThere is one exception: FrozenMoment does detect if you are using an ISO-8601 string and will parse that correctly without a format string.\n\nThe following ISO-8601 formats are supported across all browsers.\n\n```javascript\n\"2013-02-08\"\n\"2013-02-08T09\"\n\"2013-02-08 09\"\n\"2013-02-08T09:30\"\n\"2013-02-08 09:30\"\n\"2013-02-08T09:30:26\"\n\"2013-02-08 09:30:26\"\n\"2013-02-08T09:30:26.123\"\n\"2013-02-08 09:30:26.123\"\n\"2013-02-08T09:30:26 Z\"\n\"2013-02-08 09:30:26 Z\"\n\"2013-W06-5\"\n\"2013-W06-5T09\"\n\"2013-W06-5 09\"\n\"2013-W06-5T09:30\"\n\"2013-W06-5 09:30\"\n\"2013-W06-5T09:30:26\"\n\"2013-W06-5 09:30:26\"\n\"2013-W06-5T09:30:26.123\"\n\"2013-W06-5 09:30:26.123\"\n\"2013-W06-5T09:30:26 Z\"\n\"2013-W06-5 09:30:26 Z\"\n\"2013-039\"\n\"2013-039T09\"\n\"2013-039 09\"\n\"2013-039T09:30\"\n\"2013-039 09:30\"\n\"2013-039T09:30:26\"\n\"2013-039 09:30:26\"\n\"2013-039T09:30:26.123\"\n\"2013-039 09:30:26.123\"\n\"2013-039T09:30:26 Z\"\n\"2013-039 09:30:26 Z\"\n```\n\n**Note:** Automatic cross browser ISO-8601 support was added in version **1.5.0**. Support for the week and ordinal formats was added in version **2.3.0**.\n\nIf a string does not match any of the above formats and is not able to be parsed with `Date.parse`, `frozenMoment#isValid` will return false.\n\n```javascript\nfrozenMoment(\"not a real date\").isValid(); // false\n```\n\nWhen invoked as `frozenMoment.build()`, this API creates a builder object instead of a frozenMoment object.  See `frozenMoment#thaw` for more information about builder objects.\n",
+                "slug": "parsing/string",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/01-parsing/02-string.md"
+            },
+            {
+                "title": "String + Format",
+                "version": "1.0.0",
+                "signature": "\nfrozenMoment(String, String);\nfrozenMoment.build(String, String);\nfrozenMoment(String, String, String);\nfrozenMoment.build(String, String, String);\nfrozenMoment(String, String, Boolean);\nfrozenMoment.build(String, String, Boolean);\nfrozenMoment(String, String, String, Boolean);\nfrozenMoment.build(String, String, String, Boolean);\n",
+                "body": "\n\n\nIf you know the format of an input string, you can use that to parse a frozenMoment.\n\n```javascript\nfrozenMoment(\"12-25-1995\", \"MM-DD-YYYY\");\n```\n\nThe parser ignores non-alphanumeric characters, so both of the following will return the same thing.\n\n```javascript\nfrozenMoment(\"12-25-1995\", \"MM-DD-YYYY\");\nfrozenMoment(\"12\\25\\1995\", \"MM-DD-YYYY\");\n```\n\nThe parsing tokens are similar to the formatting tokens used in `frozenMoment#format`.\n\n<table class=\"table table-striped table-bordered\">\n  <tbody>\n    <tr>\n      <th>Input</th>\n      <th>Output</th>\n    </tr>\n    <tr>\n      <td>M, MM</td>\n      <td>Month Number (1 - 12)</td>\n    </tr>\n    <tr>\n      <td>MMM, MMMM</td>\n      <td>Month Name (In the default locale, which is set with `frozenMoment.locale()`)</td>\n    </tr>\n    <tr>\n      <td>Q</td>\n      <td>Quarter (1 - 4) -- sets the month to the first month in that quarter</td>\n    <tr>\n      <td>D, DD</td>\n      <td>Day of month</td>\n    </tr>\n    <tr>\n      <td>Do</td>\n      <td>Ordinal day of month (from `2.6.0`)</td>\n    </tr>\n    <tr>\n      <td>DDD, DDDD</td>\n      <td>Day of year</td>\n    </tr>\n    <tr>\n      <td>d, dd, ddd, dddd</td>\n      <td>Day of week (NOTE: these formats only make sense when combined with \"ww\")\n    </tr>\n    <tr>\n      <td>e</td>\n      <td>Day of week (locale) (NOTE: this formats only makes sense when combined with \"ww\")\n    </tr>\n    <tr>\n      <td>E</td>\n      <td>Day of week (ISO) (NOTE: this format only makes sense when combined with \"WW\")\n    </tr>\n    <tr>\n      <td>w, ww</td>\n      <td>Week of the year (NOTE: combine this format with \"gg\" or \"gggg\" instead of \"YY\" or \"YYYY\")\n    </tr>\n    <tr>\n    <tr>\n      <td>W, WW</td>\n      <td>Week of the year (ISO) (NOTE: combine this format with \"GG\" or \"GGGG\" instead of \"YY\" or \"YYYY\")\n    </tr>\n    <tr>\n    <tr>\n      <td>YY</td>\n      <td>2 digit year (see below)</td>\n    </tr>\n    <tr>\n      <td>YYYY</td>\n      <td>4 digit year</td>\n    </tr>\n    <tr>\n      <td>gg</td>\n      <td>2 digit week year (if greater than 68 will return 1900's, otherwise 2000's)</td>\n    </tr>\n    <tr>\n      <td>gggg</td>\n      <td>4 digit week year</td>\n    </tr>\n    <tr>\n      <td>GG</td>\n      <td>2 digit week year (ISO) (if greater than 68 will return 1900's, otherwise 2000's)</td>\n    </tr>\n    <tr>\n      <td>GGGG</td>\n      <td>4 digit week year (ISO)</td>\n    </tr>\n    <tr>\n      <td>a, A</td>\n      <td>AM/PM</td>\n    </tr>\n    <tr>\n      <td>H, HH</td>\n      <td>24 hour time</td>\n    </tr>\n    <tr>\n      <td>h, hh</td>\n      <td>12 hour time (use in conjunction with a or A)</td>\n    </tr>\n    <tr>\n      <td>m, mm</td>\n      <td>Minutes</td>\n    </tr>\n    <tr>\n      <td>s, ss</td>\n      <td>Seconds</td>\n    </tr>\n    <tr>\n      <td>S</td>\n      <td>Deciseconds (1/10th of a second)</td>\n    </tr>\n    <tr>\n      <td>SS</td>\n      <td>Centiseconds (1/100th of a second)</td>\n    </tr>\n    <tr>\n      <td>SSS</td>\n      <td>Milliseconds (1/1000th of a second)</td>\n    </tr>\n    <tr>\n      <td>Z, ZZ</td>\n      <td>\n        Timezone offset as `+07:00` or `+0700`\n      </td>\n    </tr>\n    <tr>\n      <td>X</td>\n      <td>\n        Unix timestamp\n      </td>\n    </tr>\n\t<tr>\n\t  <td>LT, L, LL, LLL, LLLL</td>\n\t  <td>Locale dependent date and time representation</td>\n\t</tr>\n  </tbody>\n</table>\n\n`Z ZZ` were added in **1.2.0**. `S SS SSS` were added in **1.6.0**. `X` was\nadded in `2.0.0`, `LT`, `L`, `LL`, `LLL`, `LLLL` were added in `2.2.1`.\n\nUnless you specify a timezone offset, parsing a string will create a date in the current timezone.\n\n```javascript\nfrozenMoment(\"2010-10-20 4:30\", \"YYYY-MM-DD HH:mm\"); // parsed as 4:30 local time\nfrozenMoment(\"2010-10-20 4:30 +0000\", \"YYYY-MM-DD HH:mm Z\"); // parsed as 4:30 GMT\n```\n\nIf the moment that results from the parsed input does not exist, `frozenMoment#isValid` will return false.\n\n```javascript\nfrozenMoment(\"2010 13\", \"YYYY MM\").isValid(); // false (not a real month)\nfrozenMoment(\"2010 11 31\", \"YYYY MM DD\").isValid(); // false (not a real day)\nfrozenMoment(\"2010 2 29\", \"YYYY MM DD\").isValid(); // false (not a leap year)\nfrozenMoment(\"2010 notamonth 29\", \"YYYY MMM DD\").isValid(); // false (not a real month name)\n```\n\nAs of version **2.0.0**, a locale key can be passed as the third parameter to `frozenMoment()` and `frozenMoment.utc()`.\n\n```javascript\nfrozenMoment('2012 juillet', 'YYYY MMM', 'fr');\nfrozenMoment('2012 July', 'YYYY MMM', 'en');\n```\n\nFrozenMoment's parser is very forgiving, and this can lead to undesired behavior. As of version **2.3.0**, you may specify a boolean for the last argument to make FrozenMoment use strict parsing. Strict parsing requires that the format and input match exactly.\n\n**Warning** We may remove the forgiving parser mode from FrozenMoment core prior to release.  In that case, strict parsing would become the only mode\navailable.  If you have strong opinions about this one way or the other, please\ncomment in our GitHub Issues.\n\n```javascript\nfrozenMoment('It is 2012-05-25', 'YYYY-MM-DD').isValid();        // true\nfrozenMoment('It is 2012-05-25', 'YYYY-MM-DD', true).isValid();  // false\nfrozenMoment('2012-05-25', 'YYYY-MM-DD', true).isValid();        // true\n```\n\nYou can use both locale and strictness.\n\n```javascript\nfrozenMoment('2012-10-14', 'YYYY-MM-DD', 'fr', true);\n```\n\nTwo digit year parser by default assumes years above 68 to be in the 1900's and\nbelow in the 2000's. This can be changed by replacing the\n`frozenMoment.parseTwoDigitYear`.\n\nAll of these syntaxes can also be invoked as `frozenMoment.build()` to create a builder object instead of a frozenMoment object.  See `frozenMoment#thaw` for more information about builder objects.\n",
+                "slug": "parsing/string-format",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/01-parsing/03-string-format.md"
+            },
+            {
+                "title": "String + Formats",
+                "version": "1.0.0",
+                "signature": "\nfrozenMoment(String, String[], String, Boolean);\nfrozenMoment.build(String, String[], String, Boolean);\n",
+                "body": "\n\n\nIf you don't know the exact format of an input string, but know it could be one of many, you can use an array of formats.\n\nThis is the same as [String + Format](#/parsing/string-format/), only it will try to match the input to multiple formats.\n\n```javascript\nfrozenMoment(\"12-25-1995\", [\"MM-DD-YYYY\", \"YYYY-MM-DD\"]);\n```\n\nStarting in **2.3.0**, FrozenMoment uses some simple heuristics to determine which format to use. In order:\n\n * Prefer formats resulting in [valid](#/parsing/is-valid/) dates over invalid ones.\n * Prefer formats that parse more of the string than less and use more of the format more of the format than less, i.e. prefer stricter parsing.\n * Prefer formats earlier in the array than later.\n\n```javascript\nfrozenMoment(\"29-06-1995\", [\"MM-DD-YYYY\", \"DD-MM\", \"DD-MM-YYYY\"]); //uses the last format\nfrozenMoment(\"05-06-1995\", [\"MM-DD-YYYY\", \"DD-MM-YYYY\"]); // uses the first format\n```\n\nYou may also specify a locale and strictness argument; they work the same was as they do in the single format case.\n\n**Note:** Parsing multiple formats is considerably slower than parsing a single format. If you can avoid it, it is much faster to parse a single format.\n\nThis syntax can also be invoked as `frozenMoment.build()` to create a builder object instead of a frozenMoment object.  See `frozenMoment#thaw` for more information about builder objects.\n",
+                "slug": "parsing/string-formats",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/01-parsing/04-string-formats.md"
+            },
+            {
+                "title": "Special Formats",
+                "version": "2.7.0",
+                "signature": "\nfrozenMoment(String, frozenMoment.CUSTOM_FORMAT, [String], [Boolean]);\nfrozenMoment.build(String, frozenMoment.CUSTOM_FORMAT, [String], [Boolean]);\nfrozenMoment(String, [..., frozenMoment.ISO_8601, ...], [String], [Boolean]);\nfrozenMoment.build(String, [..., frozenMoment.ISO_8601, ...], [String], [Boolean]);\n",
+                "body": "\n\n[ISO-8601](http://en.wikipedia.org/wiki/ISO_8601) is a standard for time and duration display. FrozenMoment already supports parsing iso-8601 strings, but this can be specified explicitly in the format/list of formats when constructing a frozenMoment.\n\nTo specify iso-8601 parsing use `frozenMoment.ISO_8601` constant. More formats will be added in the future.\n\nExamples:\n\n```javascript\nfrozenMoment(\"2010-01-01T05:06:07\", frozenMoment.ISO_8601);\nfrozenMoment(\"2010-01-01T05:06:07\", [\"YYYY\", frozenMoment.ISO_8601]);\n```\n\nThis syntax can also be invoked as `frozenMoment.build()` to create a builder object instead of a frozenMoment object.  See `frozenMoment#thaw` for more information about builder objects.\n",
+                "slug": "parsing/special-formats",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/01-parsing/05-special-formats.md"
+            },
+            {
+                "title": "Object",
+                "version": "2.2.1",
+                "signature": "\nfrozenMoment({unit: value, ...});\nfrozenMoment.build({unit: value, ...});\n",
+                "body": "\n\n\n```javascript\nfrozenMoment({hour: 15, minute: 10});\nfrozenMoment({y: 2010, M: 3, d: 5, h: 15, m: 10, s: 3, ms: 123});\nfrozenMoment({year: 2010, month: 3, day: 5, hour: 15, minute: 10, second: 3, millisecond: 123});\nfrozenMoment({years: 2010, months: 3, days: 5, hours: 15, minutes: 10, seconds: 3, milliseconds: 123});\n```\n\nYou can create a FrozenMoment object specifying some of the units in an object.\nOmitted units are defaulted to 0 or current date/month/year.\n\nThis syntax can also be invoked as `frozenMoment.build()` to create a builder object instead of a frozenMoment object.  See `frozenMoment#thaw` for more information about builder objects.\n",
+                "slug": "parsing/object",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/01-parsing/06-object.md"
+            },
+            {
+                "title": "Unix Offset (milliseconds)",
+                "version": "1.0.0",
+                "signature": "\nfrozenMoment(Number);\nfrozenMoment.build(Number);\n",
+                "body": "\n\n\nSimilar to `new Date(Number)`, you can create a FrozenMoment by passing an integer value representing the number of *milliseconds* since the Unix Epoch (Jan 1 1970 12AM UTC).\n\n```javascript\nvar day = frozenMoment(1318781876406);\n```\n\nThis syntax can also be invoked as `frozenMoment.build()` to create a builder object instead of a frozenMoment object.  See `frozenMoment#thaw` for more information about builder objects.\n",
+                "slug": "parsing/unix-offset",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/01-parsing/07-unix-offset.md"
+            },
+            {
+                "title": "Unix Timestamp (seconds)",
+                "version": "1.6.0",
+                "signature": "\nfrozenMoment.unix(Number)\nfrozenMoment.build.unix(Number)\n",
+                "body": "\n\n\nTo create a FrozenMoment from a Unix timestamp (*seconds* since the Unix Epoch), use `frozenMoment.unix(Number)`.\n\n```javascript\nvar day = frozenMoment.unix(1318781876);\n```\n\nThis is implemented as `frozenMoment(timestamp * 1000)`, so partial seconds in the input timestamp are included.\n\n```javascript\nvar day = frozenMoment.unix(1318781876.721);\n```\n\nThis syntax can also be invoked as `frozenMoment.build.unix()` to create a builder object instead of a frozenMoment object.  See `frozenMoment#thaw` for more information about builder objects.\n",
+                "slug": "parsing/unix-timestamp",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/01-parsing/08-unix-timestamp.md"
+            },
+            {
+                "title": "Date",
+                "version": "1.0.0",
+                "signature": "\nfrozenMoment(Date);\nfrozenMoment.build(Date);\n",
+                "body": "\n\n\nYou can create a `FrozenMoment` with a pre-existing native Javascript `Date` object.\n\n```javascript\nvar day = new Date(2011, 9, 16);\nvar dayWrapper = frozenMoment(day);\n```\n\nThis clones `Date` object; further changes to the `Date` won't affect the `FrozenMoment`, and vice-versa.\n\nThis is the fastest way to get a FrozenMoment wrapper.\n\nThis syntax can also be invoked as `frozenMoment.build()` to create a builder object instead of a frozenMoment object.  See `frozenMoment#thaw` for more information about builder objects.\n",
+                "slug": "parsing/date",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/01-parsing/09-date.md"
+            },
+            {
+                "title": "Array",
+                "version": "1.0.0",
+                "signature": "\nfrozenMoment(Number[]);\nfrozenMoment.build(Number[]);\n",
+                "body": "\n\n\nYou can create a FrozenMoment with an array of numbers that mirror the parameters passed to [new Date()](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Date)\n\n```javascript\n[year, month, day, hour, minute, second, millisecond]\nfrozenMoment([2010, 1, 14, 15, 25, 50, 125]); // February 14th, 3:25:50.125 PM\n```\n\nAny value past the year is optional, and will default to the lowest possible number.\n\n```javascript\nfrozenMoment([2010]); // January 1st\nfrozenMoment([2010, 6]); // July 1st\nfrozenMoment([2010, 6, 10]); // July 10th\n```\n\nConstruction with an array will create a date in the current timezone. To create a date from an array at UTC, use `frozenMoment.utc(Number[])`.\n\n```javascript\nfrozenMoment.utc([2010, 1, 14, 15, 25, 50, 125]);\n```\n\n**Note:** Because this mirrors the native Date parameters, the following parameters are all zero indexed: months, hours, minutes, seconds, and milliseconds. Years and days of the month are 1 indexed.\n\nThis is often the cause of frustration, especially with months, so take note!\n\nIf the date represented by the array does not exist, `frozenMoment#isValid` will return false.\n\n```javascript\nfrozenMoment([2010, 13]).isValid(); // false (not a real month)\nfrozenMoment([2010, 10, 31]).isValid(); // false (not a real day)\nfrozenMoment([2010, 1, 29]).isValid(); // false (not a leap year)\n```\n\nThis syntax can also be invoked as `frozenMoment.build()` to create a builder object instead of a frozenMoment object.  See `frozenMoment#thaw` for more information about builder objects.\n",
+                "slug": "parsing/array",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/01-parsing/10-array.md"
+            },
+            {
+                "title": "ASP.NET JSON Date",
+                "version": "1.3.0",
+                "signature": "\nfrozenMoment(String);\nfrozenMoment.build(String);\n",
+                "body": "\n\n\nASP.NET returns dates in JSON as `/Date(1198908717056)/` or `/Date(1198908717056-0700)/`\n\nIf a string that matches this format is passed in, it will be parsed correctly.\n\n```javascript\nfrozenMoment(\"/Date(1198908717056-0700)/\"); // December 28 2007 10:11 PM\n```\n\nThis syntax can also be invoked as `frozenMoment.build()` to create a builder object instead of a frozenMoment object.  See `frozenMoment#thaw` for more information about builder objects.\n",
+                "slug": "parsing/asp-net-json-date",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/01-parsing/11-asp-net-json-date.md"
+            },
+            {
+                "title": "FrozenMoment Clone",
+                "version": "1.2.0",
+                "signature": "\nfrozenMoment.build(FrozenMoment);\n",
+                "body": "\n\n\nAll moments are immutable, so cloning is unnecessary. Builder objects are mutable, however. If you want a clone of a frozenMoment builder, you can do so explicitly or implicitly.\n\nCalling `frozenMoment.build()` on a FrozenMoment or a MomentBuilder will create a new MomentBuilder object initialized with a copy of the internal state of the provided FrozenMoment or MomentBuilder.\n\n```javascript\nvar a = frozenMoment.build([2012]);\nvar b = frozenMoment.build(a);\na.year(2000);\nb.freeze().year(); // 2012\n```\n\nAdditionally, you can call `frozenMoment.build#clone` to clone an existing MomentBuilder.\n\n```javascript\nvar a = frozenMoment.build([2012]);\nvar b = a.clone();\na.year(2000);\nb.freeze().year(); // 2012\n```\n\nAt time of writing, `frozenMoment#clone` also exists but should return a reference to the original frozenMoment object.  This will probably be removed prior to release.\n",
+                "slug": "parsing/moment-clone",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/01-parsing/12-moment-clone.md"
+            },
+            {
+                "title": "UTC",
+                "version": "1.5.0",
+                "signature": "\nfrozenMoment.utc();\nfrozenMoment.build().utc();\nfrozenMoment.utc(Number);\nfrozenMoment.build().utc(Number);\nfrozenMoment.utc(Number[]);\nfrozenMoment.build().utc(Number[]);\nfrozenMoment.utc(String);\nfrozenMoment.build().utc(String);\nfrozenMoment.utc(String, String);\nfrozenMoment.build().utc(String, String);\nfrozenMoment.utc(String, String[]);\nfrozenMoment.build().utc(String, String[]);\nfrozenMoment.utc(String, String, String);\nfrozenMoment.build().utc(String, String, String);\nfrozenMoment.utc(FrozenMoment);\nfrozenMoment.build().utc(FrozenMoment);\nfrozenMoment.utc(Date);\nfrozenMoment.build().utc(Date);\n",
+                "body": "\n\n**Warning** FrozenMoment's handling of UTC vs local time is entirely subject to reconsideration prior to release.  If you have strong opinions about how this should work, please comment in an appropriate GitHub Issue.\n\n\nBy default, FrozenMoment parses and displays in local time.\n\nIf you want to parse or display a moment in UTC, you can use `frozenMoment.utc()` instead of `frozenMoment()`.\n\nThis brings us to an interesting feature of FrozenMoment. UTC mode.\n\nWhile in UTC mode, all display methods will display in UTC time instead of local time, and all getters will internally use the `Date#getUTC*` methods instead of the `Date#get*` methods.\n\n```javascript\nfrozenMoment().format();     // 2013-02-04T10:35:24-08:00\nfrozenMoment.utc().format(); // 2013-02-04T18:35:24+00:00\nfrozenMoment.utc().seconds() === new Date().getUTCSeconds();\n```\n\nIt is important to note that though the displays differ above, they are both the same moment in time.\n\n```javascript\nvar a = frozenMoment();\nvar b = frozenMoment.utc();\na.format();  // 2013-02-04T10:35:24-08:00\nb.format();  // 2013-02-04T18:35:24+00:00\na.valueOf(); // 1360002924000\nb.valueOf(); // 1360002924000\n```\n\nAdditionally, when a MomentBuilder is in UTC mode, all setters will internally use the `Date#setUTC*` methods instead of the `Date#set*` methods.\n\n```javascript\nfrozenMoment.build.utc().seconds(30) === new Date().setUTCSeconds(30);\n```\n\nAny moment created with `frozenMoment.utc()` will be in UTC mode, and any moment created with `frozenMoment()` will not.\n\nTo switch from UTC to local time, you can use [frozenMoment.build#utc](#/manipulating/utc/) or [frozenMoment.build#local](#/manipulating/local/).\n\n```javascript\nvar a = frozenMoment.utc([2011, 0, 1, 8]);\na.hours(); // 8 UTC\na = a.thaw().local().freeze();\na.hours(); // 0 PST\n```\n",
+                "slug": "parsing/utc",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/01-parsing/13-utc.md"
+            },
+            {
+                "title": "parseZone",
+                "version": "2.3.0",
+                "signature": "\nfrozenMoment.build.parseZone(String)\n",
+                "body": "\n\n\nFrozenMoment and MomentBuilder normally interprets input times as local times (or UTC times if `frozenMoment.utc()` is used). However, often the input string itself contains time zone information. `frozenMoment.build#parseZone` parses the time and then sets the zone according to the input string.\n\n```javascript\nfrozenMoment.build.parseZone(\"2013-01-01T00:00:00-13:00\").zone(); // 780\n```\n\n`frozenMoment.build.parseZone` is equivalent to parsing the string and using `frozenMoment.build#zone` to parse the zone.\n\n```javascript\nvar s = \"2013-01-01T00:00:00-13:00\";\nfrozenMoment.build(s).zone(s);\n```\n\n**Note**: this method only works for a single string argument, not a string and format.\n",
+                "slug": "parsing/parse-zone",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/01-parsing/14-parse-zone.md"
+            },
+            {
+                "title": "Validation",
+                "version": "1.7.0",
+                "signature": "\nfrozenMoment().isValid();\n",
+                "body": "\n\n\nFrozenMoment applies stricter initialization rules than the `Date` constructor.\n\n```js\nnew Date(2013, 25, 14).toString(); // \"Sat Feb 14 2015 00:00:00 GMT-0500 (EST)\"\nfrozenMoment([2015, 25, 35]).format();   // 'Invalid date'\n```\n\nYou can check whether the FrozenMoment considers the date invalid using `frozenMoment#isValid`. You can check the metrics used by `#isValid` using `frozenMoment#parsingFlags` which returns an object\n\nThe following parsing flags result in an invalid date:\n\n * `overflow`: An overflow of a date field, such as a 13th month, a 32nd day of the month (or a 29th of February on non-leap years), a 367th day of the year, etc. `overflow` contains the index of the invalid unit to match `#invalidAt` (see below); `-1` means no overflow.\n * `invalidMonth`: An invalid month name, such as ```frozenMoment('Marbruary', 'MMMM');```. Contains the invalid month string itself, or else null.\n * `empty`: An input string that contains nothing parsable, such as `frozenMoment('this is nonsense');`. Boolean.\n * `nullInput`: A `null` input, like `frozenMoment(null);`. Boolean.\n * `invalidFormat`: An empty list of formats, such as `frozenMoment('2013-05-25', [])`. Boolean.\n * `userInvalidated`: A date created explicitly as invalid, such as `frozenMoment.invalid()`. Boolean.\n\nAdditionally, if the FrozenMoment is parsed in strict mode, these flags must be empty for the FrozenMoment to be valid:\n\n * `unusedTokens`: array of format substrings not found in the input string\n * `unusedInput`: array of input substrings not matched to the format string\n\n**Note:** FrozenMoment's concept of validity became more strict and consistent between 2.2 and 2.3.\n\nAdditionally, you can use `frozenMoment#invalidAt` to determine which date unit overflowed.\n\n```javascript\nvar m = frozenMoment(\"2011-10-10T10:20:90\");\nm.isValid(); // false\nm.invalidAt(); // 5 for seconds\n```\n\nThe return value has the following meaning:\n\n<ol>\n  <li>years</li>\n  <li>months</li>\n  <li>days</li>\n  <li>hours</li>\n  <li>minutes</li>\n  <li>seconds</li>\n  <li>milliseconds</li>\n</ol>\n\n**Note:** In case of multiple wrong units the first one is returned (because\ndays validity may depend on month, for example).\n",
+                "slug": "parsing/is-valid",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/01-parsing/15-is-valid.md"
+            },
+            {
+                "title": "Defaults",
+                "version": "2.2.1",
+                "signature": "\nfrozenMoment(\"15\", \"hh\")\nfrozenMoment.build(\"15\", \"hh\")\n",
+                "body": "\n\n\nYou can create a FrozenMoment object specifying only some of the units, and the rest\nwill be defaulted to the current day, month or year, or 0 for hours, minutes,\nseconds and milliseconds.\n\nDefaulting to now, when nothing is passed:\n```javascript\nfrozenMoment();  // current date and time\n```\n\nDefaulting to today, when only hours, minutes, seconds and milliseconds are passed:\n```javasript\nfrozenMoment(5, \"HH\");  // today, 5:00:00.000\nfrozenMoment({hour: 5});  // today, 5:00:00.000\nfrozenMoment({hour: 5, minute: 10});  // today, 5:10.00.000\nfrozenMoment({hour: 5, minute: 10, seconds: 20});  // today, 5:10.20.000\nfrozenMoment({hour: 5, minute: 10, seconds: 20, milliseconds: 300});  // today, 5:10.20.300\n```\n\nDefaulting to this month and year, when only days and smaller units are passed:\n```javascript\nfrozenMoment(5, \"DD\");  // this month, 5th day-of-month\nfrozenMoment(\"4 05:06:07\", \"DD hh:mm:ss\");  // this month, 4th day-of-month, 05:06:07.000\n```\n\nDefaulting to this year, if year is not specified:\n```javascript\nfrozenMoment(3, \"MM\");  // this year, 3th month (April)\nfrozenMoment(\"Apr 4 05:06:07\", \"MMM DD hh:mm:ss\");  // this year, 5th April, 05:06:07.000\n```\n",
+                "slug": "parsing/defaults",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/01-parsing/16-defaults.md"
+            }
+        ],
+        "title": "Parse"
+    },
+    {
+        "slug": "get",
+        "items": [
+            {
+                "title": "Get",
+                "body": "\n\n\nFrozenMoment's getters are straightforward -- invoke them without any arguments, and you'll get the appropriate value for that frozenMoment instance.\n\nEach of these getters maps to the corresponding function on the native `Date` object.\n\n```javascript\nfrozenMoment().seconds() === new Date().getSeconds();\n```\n\nIf you are in [UTC mode](#/manipulating/utc/), they will map to the UTC equivalent.\n\n```javascript\nfrozenMoment.utc().seconds() === new Date().getUTCSeconds();\n```\n\nFor convenience, both singular and plural method names exist as of version `2.0.0`.\n",
+                "slug": "get/intro",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/02-get/00-intro.md"
+            },
+            {
+                "title": "Millisecond",
+                "version": "1.3.0",
+                "signature": "\nfrozenMoment().millisecond(); // Number\nfrozenMoment().milliseconds(); // Number\n",
+                "body": "\n\n\nGets the milliseconds.\n",
+                "slug": "get/millisecond",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/02-get/01-millisecond.md"
+            },
+            {
+                "title": "Second",
+                "version": "1.0.0",
+                "signature": "\nfrozenMoment().second(); // Number\nfrozenMoment().seconds(); // Number\n",
+                "body": "\n\n\nGets the seconds.\n",
+                "slug": "get/second",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/02-get/02-second.md"
+            },
+            {
+                "title": "Minute",
+                "version": "1.0.0",
+                "signature": "\nfrozenMoment().minute(); // Number\nfrozenMoment().minutes(); // Number\n",
+                "body": "\n\n\nGets the minutes.\n",
+                "slug": "get/minute",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/02-get/03-minute.md"
+            },
+            {
+                "title": "Hour",
+                "version": "1.0.0",
+                "signature": "\nfrozenMoment().hour(); // Number\nfrozenMoment().hours(); // Number\n",
+                "body": "\n\n\nGets the hour.\n",
+                "slug": "get/hour",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/02-get/04-hour.md"
+            },
+            {
+                "title": "Date of Month",
+                "version": "1.0.0",
+                "signature": "\nfrozenMoment().date(); // Number\n",
+                "body": "\n\n\nGets the day of the month.\n\n**Note:** `FrozenMoment#date` is for the date of the month, and `FrozenMoment#day` is for the day of the week.\n",
+                "slug": "get/date",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/02-get/05-date.md"
+            },
+            {
+                "title": "Day of Week",
+                "version": "1.3.0",
+                "signature": "\nfrozenMoment().day(); // Number\nfrozenMoment().days(); // Number\n",
+                "body": "\n\n\nGets the day of the week.\n\n**Note:** `FrozenMoment#date` is for the date of the month, and `FrozenMoment#day` is for the day of the week.\n",
+                "slug": "get/day",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/02-get/06-day.md"
+            },
+            {
+                "title": "Day of Week (Locale Aware)",
+                "version": "2.1.0",
+                "signature": "\nfrozenMoment().weekday(); // Number\n",
+                "body": "\n\n\nGets the day of the week according to the locale.\n\nIf the locale assigns Monday as the first day of the week, `frozenMoment.build().weekday(0).freeze().weekday()` will be Monday.\nIf Sunday is the first day of the week, `frozenMoment.build().weekday(0).freeze().weekday()` will be Sunday.\n",
+                "slug": "get/weekday",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/02-get/07-weekday.md"
+            },
+            {
+                "title": "ISO Day of Week",
+                "version": "2.1.0",
+                "signature": "\nfrozenMoment().isoWeekday(); // Number\n",
+                "body": "\n\n\nGets the [ISO day of the week](http://en.wikipedia.org/wiki/ISO_week_date) with `1` being Monday and `7` being Sunday.\n\n```javascript\nfrozenMoment.build().isoWeekday(1).freeze().isoWeekday(); // Monday\nfrozenMoment.build().isoWeekday(7).freeze().isoWeekday(); // Sunday\n```\n",
+                "slug": "get/iso-weekday",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/02-get/08-iso-weekday.md"
+            },
+            {
+                "title": "Day of Year",
+                "version": "2.0.0",
+                "signature": "\nfrozenMoment().dayOfYear(); // Number\n",
+                "body": "\n\n\nGets the day of the year.\n",
+                "slug": "get/day-of-year",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/02-get/09-day-of-year.md"
+            },
+            {
+                "title": "Week of Year",
+                "version": "2.0.0",
+                "signature": "\nfrozenMoment().week(); // Number\nfrozenMoment().weeks(); // Number\n",
+                "body": "\n\n\nGets the week of the year.\n\nBecause different locales define week of year numbering differently, FrozenMoment added `frozenMoment#week` to get the localized week of the year.\n\nThe week of the year varies depending on which day is the first day of the week (Sunday, Monday, etc), and which week is the first week of the year.\n\nFor example, in the United States, Sunday is the first day of the week. The week with January 1st in it is the first week of the year.\n\nIn France, Monday is the first day of the week, and the week with January 4th is the first week of the year.\n\nThe output of `frozenMoment#week` will depend on the [locale/locale](#/i18n) for that frozenMoment.\n",
+                "slug": "get/week",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/02-get/10-week.md"
+            },
+            {
+                "title": "Week of Year (ISO)",
+                "version": "2.0.0",
+                "signature": "\nfrozenMoment().isoWeek(); // Number\nfrozenMoment().isoWeeks(); // Number\n",
+                "body": "\n\n\nGets the [ISO week of the year](http://en.wikipedia.org/wiki/ISO_week_date).\n",
+                "slug": "get/iso-week",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/02-get/11-iso-week.md"
+            },
+            {
+                "title": "Month",
+                "version": "1.0.0",
+                "signature": "\nfrozenMoment().month(); // Number\nfrozenMoment().months(); // Number\n",
+                "body": "\n\n\nGets the month.\n\n**Note**: Months are zero indexed, so January is month 0.\n",
+                "slug": "get/month",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/02-get/12-month.md"
+            },
+            {
+                "title": "Quarter",
+                "version": "2.6.0",
+                "signature": "\nfrozenMoment().quarter(); // Number\n",
+                "body": "\n\n\nGets the quarter (1 to 4).\n\n```javascript\nfrozenMoment('2013-01-01T00:00:00.000').quarter() // 1\nfrozenMoment('2013-04-01T00:00:00.000').subtract(1, 'ms').quarter() // 1\nfrozenMoment('2013-04-01T00:00:00.000').quarter() // 2\nfrozenMoment('2013-07-01T00:00:00.000').subtract(1, 'ms').quarter() // 2\nfrozenMoment('2013-07-01T00:00:00.000').quarter() // 3\nfrozenMoment('2013-10-01T00:00:00.000').subtract(1, 'ms').quarter() // 3\nfrozenMoment('2013-10-01T00:00:00.000').quarter() // 4\nfrozenMoment('2014-01-01T00:00:00.000').subtract(1, 'ms').quarter() // 4\n```\n",
+                "slug": "get/quarter",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/02-get/13-quarter.md"
+            },
+            {
+                "title": "Year",
+                "version": "1.0.0",
+                "signature": "\nfrozenMoment().year(); // Number\n",
+                "body": "\n\n\nGets the year.\n",
+                "slug": "get/year",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/02-get/14-year.md"
+            },
+            {
+                "title": "Week Year",
+                "version": "2.1.0",
+                "signature": "\nfrozenMoment().weekYear(); // Number\n",
+                "body": "\n\n\nGets the week-year according to the locale.\n\nBecause the first day of the first week does not always fall on the first day of the year, sometimes the week-year will differ from the month year.\n\nFor example, in the US, the week that contains Jan 1 is always the first week. In the US, weeks also start on Sunday. If Jan 1 was a Monday, Dec 31 would belong to the same week as Jan 1, and thus the same week-year as Jan 1. Dec 30 would have a different week-year than Dec 31.\n",
+                "slug": "get/week-year",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/02-get/15-week-year.md"
+            },
+            {
+                "title": "Week Year (ISO)",
+                "version": "2.1.0",
+                "signature": "\nfrozenMoment().isoWeekYear(); // Number\n",
+                "body": "\n\n\nGets the [ISO week-year](http://en.wikipedia.org/wiki/ISO_week_date).\n",
+                "slug": "get/iso-week-year",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/02-get/16-iso-week-year.md"
+            },
+            {
+                "title": "Weeks In Year",
+                "version": "2.6.0",
+                "signature": "\nfrozenMoment().weeksInYear();\n",
+                "body": "\n\n\nGets the number of weeks according to locale in the current moment's year.\n",
+                "slug": "get/weeks-in-year",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/02-get/17-weeks-in-year.md"
+            },
+            {
+                "title": "Weeks In Year (ISO)",
+                "version": "2.6.0",
+                "signature": "\nfrozenMoment().isoWeeksInYear();\n",
+                "body": "\n\n\nGets the number of weeks in the current moment's year, according to [ISO weeks](http://en.wikipedia.org/wiki/ISO_week_date).\n",
+                "slug": "get/iso-weeks-in-year",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/02-get/18-iso-weeks-in-year.md"
+            },
+            {
+                "title": "Get",
+                "version": "2.2.1",
+                "signature": "\nfrozenMoment().get('year');\nfrozenMoment().get('month');  // 0 to 11\nfrozenMoment().get('date');\nfrozenMoment().get('hour');\nfrozenMoment().get('minute');\nfrozenMoment().get('second');\nfrozenMoment().get('millisecond');\n",
+                "body": "\n\n\nString getter. In general\n\n```javascript\nfrozenMoment().get(unit) === frozenMoment()[unit]()\n```\n\nUnits are case insensitive, and support plural and short forms: year (years,\ny), month (months, M), date (dates, D), hour (hours, h), minute (minutes, m),\nsecond (seconds, s), millisecond (milliseconds, ms).\n",
+                "slug": "get/get",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/02-get/19-get.md"
+            },
+            {
+                "title": "Minimum",
+                "version": "2.7.0",
+                "signature": "\nfrozenMoment.min(Moment[,Moment...]);\n",
+                "body": "\n\nReturns the minimum (most distant past) of the given frozenMoment instances.\n\nFor example:\n```javascript\nvar a = frozenMoment.build().subtract(1, 'day').freeze();\nvar b = frozenMoment.build().add(1, 'day').freeze();\nfrozenMoment.min(a, b);  // a\n```\n\nWith no arguments the function returns a frozenMoment instance with the current time.\n",
+                "slug": "get/min",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/02-get/20-min.md"
+            },
+            {
+                "title": "Maximum",
+                "version": "2.7.0",
+                "signature": "\nfrozenMoment.max(Moment[,Moment...]);\n",
+                "body": "\n\nReturns the maximum (most distant future) of the given frozenMoment instances.\n\nFor example:\n```javascript\nvar a = frozenMoment.build().subtract(1, 'day').freeze();\nvar b = frozenMoment.build().add(1, 'day').freeze();\nfrozenMoment.max(a, b);  // b\n```\n\nWith no arguments the function returns a frozenMoment instance with the current time.\n",
+                "slug": "get/max",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/02-get/21-max.md"
+            }
+        ],
+        "title": "Get"
+    },
+    {
+        "slug": "set",
+        "items": [
+            {
+                "title": "Set",
+                "body": "\n\n\nFrozenMoment.build provides a single-argument setter for every getter on FrozenMoment.\n\nThese setters map to the corresponding functions on the native `Date` object.\n\n```javascript\nfrozenMoment.build().seconds(30) === new Date().setSeconds(30);\n```\n\nIf you are in [UTC mode](#/manipulating/utc/), they will map to the UTC equivalent.\n\n```javascript\nfrozenMoment.build.utc().seconds(30) === new Date().setUTCSeconds(30);\n```\n\nFor convenience, both singular and plural method names exist as of version `2.0.0`.\n",
+                "slug": "set/intro",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/03-set/00-intro.md"
+            },
+            {
+                "title": "Millisecond",
+                "version": "1.3.0",
+                "signature": "\nfrozenMoment().millisecond(Number);\nfrozenMoment().milliseconds(Number);\n",
+                "body": "\n\n\nSets the milliseconds.\n\nAccepts numbers from 0 to 999. If the range is exceeded, it will bubble up to the seconds.\n",
+                "slug": "set/millisecond",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/03-set/01-millisecond.md"
+            },
+            {
+                "title": "Second",
+                "version": "1.0.0",
+                "signature": "\nfrozenMoment().second(Number);\nfrozenMoment().seconds(Number);\n",
+                "body": "\n\n\nSets the seconds.\n\nAccepts numbers from 0 to 59. If the range is exceeded, it will bubble up to the minutes.\n",
+                "slug": "set/second",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/03-set/02-second.md"
+            },
+            {
+                "title": "Minute",
+                "version": "1.0.0",
+                "signature": "\nfrozenMoment().minute(Number);\nfrozenMoment().minutes(Number);\n",
+                "body": "\n\n\nSets the minutes.\n\nAccepts numbers from 0 to 59. If the range is exceeded, it will bubble up to the hours.\n",
+                "slug": "set/minute",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/03-set/03-minute.md"
+            },
+            {
+                "title": "Hour",
+                "version": "1.0.0",
+                "signature": "\nfrozenMoment().hour(Number);\nfrozenMoment().hours(Number);\n",
+                "body": "\n\n\nSets the hour.\n\nAccepts numbers from 0 to 23. If the range is exceeded, it will bubble up to the day.\n",
+                "slug": "set/hour",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/03-set/04-hour.md"
+            },
+            {
+                "title": "Date of Month",
+                "version": "1.0.0",
+                "signature": "\nfrozenMoment().date(Number);\nfrozenMoment().dates(Number);\n",
+                "body": "\n\n\nSets the day of the month.\n\nAccepts numbers from 1 to 31. If the range is exceeded, it will bubble up to the months.\n\n**Note:** `FrozenMoment.build#date` is for the date of the month, and `FrozenMoment.build#day` is for the day of the week.\n",
+                "slug": "set/date",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/03-set/05-date.md"
+            },
+            {
+                "title": "Day of Week",
+                "version": "1.3.0",
+                "signature": "\nfrozenMoment().day(Number|String);\nfrozenMoment().days(Number|String);\n",
+                "body": "\n\n\nSets the day of the week.\n\nThis method can be used to set the day of the week, with Sunday as 0 and Saturday as 6.\n\nIf the range is exceeded, it will bubble up to other weeks.\n\n```javascript\nfrozenMoment.build().day(-7); // last Sunday (0 - 7)\nfrozenMoment.build().day(7);  // next Sunday (0 + 7)\nfrozenMoment.build().day(10); // next Wednesday (3 + 7)\nfrozenMoment.build().day(24); // 3 Wednesdays from now (3 + 7 + 7 + 7)\n```\n\n**Note:** `FrozenMoment.build#date` is for the date of the month, and `FrozenMoment.build#day` is for the day of the week.\n\nAs of **2.1.0**, a week name is also supported. This is parsed in the builder's current locale.\n\n```javascript\nfrozenMoment.build().day(\"Sunday\");\nfrozenMoment.build().day(\"Monday\");\n```\n",
+                "slug": "set/day",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/03-set/06-day.md"
+            },
+            {
+                "title": "Day of Week (Locale Aware)",
+                "version": "2.1.0",
+                "signature": "\nfrozenMoment().weekday(Number);\n",
+                "body": "\n\n\nSets the day of the week according to the locale.\n\nIf the locale assigns Monday as the first day of the week, `frozenMoment.build().weekday(0)` will be Monday.\nIf Sunday is the first day of the week, `frozenMoment.build().weekday(0)` will be Sunday.\n\nAs with `frozenMoment.build#day`, if the range is exceeded, it will bubble up to other weeks.\n\n```javascript\n// when Monday is the first day of the week\nfrozenMoment.build().weekday(-7); // last Monday\nfrozenMoment.build().weekday(7); // next Monday\n// when Sunday is the first day of the week\nfrozenMoment.build().weekday(-7); // last Sunday\nfrozenMoment.build().weekday(7); // next Sunday\n```\n",
+                "slug": "set/weekday",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/03-set/07-weekday.md"
+            },
+            {
+                "title": "ISO Day of Week",
+                "version": "2.1.0",
+                "signature": "\nfrozenMoment().isoWeekday(Number);\n",
+                "body": "\n\n\nSets the [ISO day of the week](http://en.wikipedia.org/wiki/ISO_week_date) with `1` being Monday and `7` being Sunday.\n\n```javascript\nfrozenMoment().isoWeekday(1); // Monday\nfrozenMoment().isoWeekday(7); // Sunday\n```\n",
+                "slug": "set/iso-weekday",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/03-set/08-iso-weekday.md"
+            },
+            {
+                "title": "Day of Year",
+                "version": "2.0.0",
+                "signature": "\nfrozenMoment().dayOfYear(Number);\n",
+                "body": "\n\n\nSets the day of the year.\n\nAccepts numbers from 1 to 366. If the range is exceeded, it will bubble up to the years.\n",
+                "slug": "set/day-of-year",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/03-set/09-day-of-year.md"
+            },
+            {
+                "title": "Week of Year",
+                "version": "2.0.0",
+                "signature": "\nfrozenMoment().week(Number);\nfrozenMoment().weeks(Number);\n",
+                "body": "\n\n\nSets the week of the year.\n\nBecause different locales define week of year numbering differently, FrozenMoment added `frozenMoment.build#week` to set the localized week of the year.\n\nThe week of the year varies depending on which day is the first day of the week (Sunday, Monday, etc), and which week is the first week of the year.\n\nFor example, in the United States, Sunday is the first day of the week. The week with January 1st in it is the first week of the year.\n\nIn France, Monday is the first day of the week, and the week with January 4th is the first week of the year.\n\nThe output of `frozenMoment.build#week` will depend on the [locale/locale](#/i18n) for that builder object.\n\nWhen setting the week of the year, the day of the week is retained.\n",
+                "slug": "set/week",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/03-set/10-week.md"
+            },
+            {
+                "title": "Week of Year (ISO)",
+                "version": "2.0.0",
+                "signature": "\nfrozenMoment().isoWeek(Number);\nfrozenMoment().isoWeeks(Number);\n",
+                "body": "\n\n\nSets the [ISO week of the year](http://en.wikipedia.org/wiki/ISO_week_date).\n\nWhen setting the week of the year, the day of the week is retained.\n",
+                "slug": "set/iso-week",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/03-set/11-iso-week.md"
+            },
+            {
+                "title": "Month",
+                "version": "1.0.0",
+                "signature": "\nfrozenMoment().month(Number|String);\nfrozenMoment().months(Number|String);\n",
+                "body": "\n\n\nSets the month.\n\nAccepts numbers from 0 to 11. If the range is exceeded, it will bubble up to the year.\n\n**Note**: Months are zero indexed, so January is month 0.\n\nAs of **2.1.0**, a month name is also supported. This is parsed in the moment's current locale.\n\n```javascript\nfrozenMoment.build().month(\"January\");\nfrozenMoment.build().month(\"Feb\");\n```\n\nAs of version **2.1.0**, if a moment changes months and the new month does not have enough days to keep the current day of month, the date will be clamped to the end of the target month.\n\n```javascript\nfrozenMoment.build([2012, 0, 31]).month(1).freeze().format(\"YYYY-MM-DD\"); // 2012-02-29\n```\n",
+                "slug": "set/month",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/03-set/12-month.md"
+            },
+            {
+                "title": "Quarter",
+                "version": "2.6.0",
+                "signature": "\nfrozenMoment().quarter(Number);\n",
+                "body": "\n\n\nSets the quarter (1 to 4).\n\n```javascript\nfrozenMoment('2013-01-01T00:00:00.000').quarter(2) // '2013-01-01T00:00:00.000'\nfrozenMoment('2013-02-05T05:06:07.000').quarter(2).format() // '2013-05-05T05:06:07-07:00'\n```\n",
+                "slug": "set/quarter",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/03-set/13-quarter.md"
+            },
+            {
+                "title": "Year",
+                "version": "1.0.0",
+                "signature": "\nfrozenMoment().year(Number);\n",
+                "body": "\n\n\nSets the year.\n\nAccepts numbers from -270,000 to 270,000.\n",
+                "slug": "set/year",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/03-set/14-year.md"
+            },
+            {
+                "title": "Week Year",
+                "version": "2.1.0",
+                "signature": "\nfrozenMoment().weekYear(Number);\n",
+                "body": "\n\n\nSets the week-year according to the locale.\n\nBecause the first day of the first week does not always fall on the first day of the year, sometimes the week-year will differ from the month year.\n\nFor example, in the US, the week that contains Jan 1 is always the first week. In the US, weeks also start on Sunday. If Jan 1 was a Monday, Dec 31 would belong to the same week as Jan 1, and thus the same week-year as Jan 1. Dec 30 would have a different week-year than Dec 31.\n",
+                "slug": "set/week-year",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/03-set/15-week-year.md"
+            },
+            {
+                "title": "Week Year (ISO)",
+                "version": "2.1.0",
+                "signature": "\nfrozenMoment().isoWeekYear(Number);\n",
+                "body": "\n\n\nSets the [ISO week-year](http://en.wikipedia.org/wiki/ISO_week_date).\n",
+                "slug": "set/iso-week-year",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/03-set/16-iso-week-year.md"
+            },
+            {
+                "title": "Set",
+                "version": "2.2.1",
+                "signature": "\nfrozenMoment().set('year', 2013);\nfrozenMoment().set('month', 3);  // April\nfrozenMoment().set('date', 1);\nfrozenMoment().set('hour', 13);\nfrozenMoment().set('minute', 20);\nfrozenMoment().set('second', 30);\nfrozenMoment().set('millisecond', 123);\n",
+                "body": "\n\n\nString setter. In general:\n\n```javascript\nfrozenMoment.build().set(unit, value)  // same as frozenMoment.build()[unit](value)\n```\n\nUnits are case insensitive, and support plural and short forms: year (years,\ny), month (months, M), date (dates, D), hour (hours, h), minute (minutes, m),\nsecond (seconds, s), millisecond (milliseconds, ms).\n",
+                "slug": "set/set",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/03-set/17-set.md"
+            }
+        ],
+        "title": "Set"
+    },
+    {
+        "slug": "manipulating",
+        "items": [
+            {
+                "title": "Manipulate",
+                "body": "\n\n\nOnce you have a `FrozenMoment`, you may want to manipulate it in some way.  To do this, you must create a builder object from your moment:\n\n```javascript\nfrozenMoment().thaw()\n```\n\nThere are a number of manipulation methods available on your builder object, using the [fluent interface pattern](http://en.wikipedia.org/wiki/Fluent_interface) (also known as [method chaining](http://en.wikipedia.org/wiki/Method_chaining)).  They are described in detail later in the section.  When you're done manipulating the builder, you can convert it back to a FrozenMoment by calling `.freeze()`:\n\n```javascript\nfrozenMoment().thaw().add('days', 7).subtract('months', 1).year(2009).hours(0).minutes(0).seconds(0).freeze().getISOString();\n```\n\nIf you don't have a FrozenMoment instance yet, you can start with a fresh builder object:\n\n```javascript\n// produces the same output as the example above\nfrozenMoment.build().add('days', 7).subtract('months', 1).year(2009).hours(0).minutes(0).seconds(0).freeze().getISOString();\n```\n\n**Note:** It should be noted that builder objects are mutable, unlike FrozenMoments. Calling any of the manipulation methods will change the original builder.\n\nIf you want to create a copy of a builder object and manipulate it, you should use `frozenMoment.build#clone` before manipulating the builder. [More info on cloning.](#/parsing/moment-clone/)\n",
+                "slug": "manipulating/intro",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/04-manipulating/00-intro.md"
+            },
+            {
+                "title": "Add",
+                "version": "1.0.0",
+                "signature": "\nfrozenMoment.build().add(String, Number);\nfrozenMoment.build().add(Number, String); // 2.0.0\nfrozenMoment.build().add(String, String); // 2.7.0\nfrozenMoment.build().add(Duration); // 1.6.0\nfrozenMoment.build().add(Object);\n",
+                "body": "\n\n\nMutates the original builder by adding time.\n\nThis is a pretty robust function for adding time to an existing builder. To add time, pass the key of what time you want to add, and the amount you want to add.\n\n```javascript\nfrozenMoment.build().add(7, 'days');\n```\n\nThere are some shorthand keys as well if you're into that whole brevity thing.\n\n```javascript\nfrozenMoment.build().add(7, 'd');\n```\n\n<table class=\"table table-striped table-bordered\">\n  <tbody>\n    <tr>\n      <th>Key</th>\n      <th>Shorthand</th>\n    </tr>\n    <tr>\n      <td>years</td>\n      <td>y</td>\n    </tr>\n    <tr>\n      <td>months</td>\n      <td>M</td>\n    </tr>\n    <tr>\n      <td>weeks</td>\n      <td>w</td>\n    </tr>\n    <tr>\n      <td>days</td>\n      <td>d</td>\n    </tr>\n    <tr>\n      <td>hours</td>\n      <td>h</td>\n    </tr>\n    <tr>\n      <td>minutes</td>\n      <td>m</td>\n    </tr>\n    <tr>\n      <td>seconds</td>\n      <td>s</td>\n    </tr>\n    <tr>\n      <td>milliseconds</td>\n      <td>ms</td>\n    </tr>\n  </tbody>\n</table>\n\nIf you want to add multiple different keys at the same time, you can pass them in as an object literal.\n\n```javascript\nfrozenMoment.build().add(7, 'days').add(1, 'month'); // with chaining\nfrozenMoment.build().add({days: 7, months: 1}); // with object literal\n```\n\nThere are no upper limits for the amounts, so you can overload any of the parameters.\n\n```javascript\nfrozenMoment.build().add(1000000, 'milliseconds'); // a million milliseconds\nfrozenMoment.build().add(360, 'days'); // 360 days\n```\n\n#### Special considerations for months and years\n\nIf the day of the month on the original date is greater than the number of days in the final month,\nthe day of the month will change to the last day in the final month.\n\n```javascript\nfrozenMoment.build([2010, 0, 31]);                  // January 31\nfrozenMoment.build([2010, 0, 31]).add('months', 1); // February 28\n```\n\nThere are also special considerations to keep in mind when adding time that crosses over Daylight Savings Time.\nIf you are adding years, months, weeks, or days, the original hour will always match the added hour.\n\n```javascript\nvar m = frozenMoment.build(new Date(2011, 2, 12, 5, 0, 0)); // the day before DST in the US\nm.freeze().hours(); // 5\nm.add(1, 'day').freeze().hours(); // 5\n```\n\nIf you are adding hours, minutes, seconds, or milliseconds, the assumption is that you want precision to the hour, and will result in a different hour.\n\n```javascript\nvar m = frozenMoment.build(new Date(2011, 2, 12, 5, 0, 0)); // the day before DST in the US\nm.freeze().hours(); // 5\nm.add(24, 'hours').freeze().hours(); // 6\n```\n\nAlternatively, you can use [durations](#/durations/) to add to moments.\n\n```javascript\nvar duration = frozenMoment.duration({'days' : 1});\nfrozenMoment.build([2012, 0, 31]).add(duration); // February 1\n```\n\nAs of version **2.7.0**, `add` supports numeric values (number of seconds, hours, days etc) to be specified in `String` form, for example:\n\n```javascript\nfrozenMoment.build().add('1', 'seconds');\n```\n\n**NOTE**: Moment's `add(unit, value)` syntax is **not** supported. Use `add(value, unit)` instead -- it's easier to read and more consistent with the duration interface.\n",
+                "slug": "manipulating/add",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/04-manipulating/01-add.md"
+            },
+            {
+                "title": "Subtract",
+                "version": "1.0.0",
+                "signature": "\nfrozenMoment().subtract(String, Number);\nfrozenMoment().subtract(Number, String); // 2.0.0\nfrozenMoment().subtract(String, String); // 2.7.0\nfrozenMoment().subtract(Duration); // 1.6.0\nfrozenMoment().subtract(Object);\n",
+                "body": "\n\n\nMutates the original builder by subtracting time.\n\nThis is exactly the same as `frozenMoment.build#add`, only instead of adding time, it subtracts time.\n\n```javascript\nfrozenMoment.build().subtract(7, 'days');\n```\n\nAs of version **2.7.0**, `subtract` supports numeric values (number of seconds, hours, days etc) to be specified in `String` form, for example:\n\n```javascript\nfrozenMoment.build().subtract('1', 'seconds');\n```\n\n**NOTE**: Moment's `subtract(unit, value)` syntax is **not** supported. Use `subtract(value, unit)` instead -- it's easier to read and more consistent with the duration interface.\n",
+                "slug": "manipulating/subtract",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/04-manipulating/02-subtract.md"
+            },
+            {
+                "title": "Start of Time",
+                "version": "1.7.0",
+                "signature": "\nfrozenMoment().startOf(String);\n",
+                "body": "\n\n\nMutates the original builder by setting it to the start of a unit of time.\n\n```javascript\nfrozenMoment.build().startOf('year');    // set to January 1st, 12:00 am this year\nfrozenMoment.build().startOf('month');   // set to the first of this month, 12:00 am\nfrozenMoment.build().startOf('quarter');  // set to the beginning of the current quarter, 1st day of months, 12:00 am\nfrozenMoment.build().startOf('week');    // set to the first day of this week, 12:00 am\nfrozenMoment.build().startOf('isoWeek'); // set to the first day of this week according to ISO 8601, 12:00 am\nfrozenMoment.build().startOf('day');     // set to 12:00 am today\nfrozenMoment.build().startOf('hour');    // set to now, but with 0 mins, 0 secs, and 0 ms\nfrozenMoment.build().startOf('minute');  // set to now, but with 0 seconds and 0 milliseconds\nfrozenMoment.build().startOf('second');  // same as frozenMoment.build().milliseconds(0);\n```\n\nThese shortcuts are essentially the same as the following.\n\n```javascript\nfrozenMoment.build().startOf('year');\nfrozenMoment.build().month(0).date(1).hours(0).minutes(0).seconds(0).milliseconds(0);\n```\n\n```javascript\nfrozenMoment.build().startOf('hour');\nfrozenMoment.build().minutes(0).seconds(0).milliseconds(0)\n```\n\nAs of version **2.0.0**, `frozenMoment#startOf('day')` replaced `frozenMoment#sod`.\n\n**Note:** `frozenMoment#startOf('week')` was added in version **2.0.0**.\n\nAs of version **2.1.0**, `frozenMoment#startOf('week')` uses the locale aware week start day.\n\n**Note:** `frozenMoment#startOf('isoWeek')` was added in version **2.2.0**.\n",
+                "slug": "manipulating/start-of",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/04-manipulating/03-start-of.md"
+            },
+            {
+                "title": "End of Time",
+                "version": "1.7.0",
+                "signature": "\nfrozenMoment().endOf(String);\n",
+                "body": "\n\n\nMutates the original builder by setting it to the end of a unit of time.\n\nThis is the same as `frozenMoment.build#startOf`, only instead of setting to the start of a unit of time, it sets to the end of a unit of time.\n\n```javascript\nfrozenMoment.build().endOf(\"year\"); // set the moment to 12-31 11:59:59.999 pm this year\n```\n\nAs of version **2.0.0**, `frozenMoment#endOf('day')` replaced `frozenMoment#eod`.\n\n**Note:** `frozenMoment#endOf('week')` was added in version **2.0.0**.\n\nAs of version **2.1.0**, `frozenMoment#endOf('week')` uses the locale aware week start day.\n",
+                "slug": "manipulating/end-of",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/04-manipulating/04-end-of.md"
+            },
+            {
+                "title": "Local",
+                "version": "1.5.0",
+                "signature": "\nfrozenMoment.build().local();\n",
+                "body": "\n\n\nSets a flag on the original builder to internally use `Date#get*` and `Date#set*` instead of `Date#getUTC*` and `Date#setUTC*`.\n\n```javascript\nvar a = frozenMoment.build.utc([2011, 0, 1, 8]);\na.hours(); // 8 UTC\na.local();\na.hours(); // 0 PST\n```\n\nSee [frozenMoment.utc()](#/parsing/utc/) for more information on UTC mode.\n",
+                "slug": "manipulating/local",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/04-manipulating/05-local.md"
+            },
+            {
+                "title": "UTC",
+                "version": "1.5.0",
+                "signature": "\nfrozenMoment.build().utc();\n",
+                "body": "\n\n\nSets a flag on the original builder to internally use `Date#getUTC*` and `Date#setUTC*` instead of `Date#get*` and `Date#set*`.\n\n```javascript\nvar a = frozenMoment.build([2011, 0, 1, 8]);\na.hours(); // 8 PST\na.utc();\na.hours(); // 16 UTC\n```\n\nSee [frozenMoment.utc()](#/parsing/utc/) for more information on UTC mode.\n",
+                "slug": "manipulating/utc",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/04-manipulating/06-utc.md"
+            },
+            {
+                "title": "Timezone Offset",
+                "version": "1.2.0",
+                "signature": "\nfrozenMoment.zone();\nfrozenMoment.build().zone(Number|String);\n",
+                "body": "\n\n\nGet the timezone offset in minutes.\n\n```javascript\nfrozenMoment().zone(); // (60, 120, 240, etc.)\n```\n\nAs of version **2.1.0**, it is possible to set the offset by passing in the number of minutes offset from GMT.\n\n```javascript\nfrozenMoment.build().zone(120);\n```\n\nIf the input is less than `16` and greater than `-16`, it will interpret your input as hours instead.\n\n```javascript\n// these are equivalent\nfrozenMoment.build().zone(480);\nfrozenMoment.build().zone(8);\n```\n\nIt is also possible to set the zone from a string.\n\n```javascript\nfrozenMoment.build().zone(\"-08:00\");\n```\n\n`frozenMoment.build#zone` will search the string for the first match of `+00:00 +0000 -00:00 -0000`, so you can even pass an ISO8601 formatted string and the moment will be changed to that zone.\n\n```javascript\nfrozenMoment.build().zone(\"2013-03-07T07:00:00-08:00\");\n```\n",
+                "slug": "manipulating/timezone-offset",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/04-manipulating/07-timezone-offset.md"
+            }
+        ],
+        "title": "Manipulate"
+    },
+    {
+        "slug": "displaying",
+        "items": [
+            {
+                "title": "Display",
+                "body": "\n\n\nOnce parsing and manipulation are done and you have generated a frozenMoment, you need some way to display the frozenMoment's value.\n",
+                "slug": "displaying/intro",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/05-displaying/00-intro.md"
+            },
+            {
+                "title": "Format",
+                "version": "1.0.0",
+                "signature": "\nfrozenMoment().format();\nfrozenMoment().format(String);\n",
+                "body": "\n\n\nThis is the most robust display option. It takes a string of tokens and replaces them with their corresponding values.\n\n```javascript\nfrozenMoment().format(\"dddd, MMMM Do YYYY, h:mm:ss a\"); // \"Sunday, February 14th 2010, 3:25:50 pm\"\nfrozenMoment().format(\"ddd, hA\");                       // \"Sun, 3PM\"\nfrozenMoment('gibberish').format('YYYY MM DD');         // \"Invalid date\"\n```\n\nThere are a couple conventions used with the naming of the\n\n<table class=\"table table-striped table-bordered\">\n  <tbody>\n    <tr>\n      <th></th>\n      <th>Token</th>\n      <th>Output</th>\n    </tr>\n    <tr>\n      <td><b>Month</b></td>\n      <td>M</td>\n      <td>1 2 ... 11 12</td>\n    </tr>\n    <tr>\n      <td></td>\n      <td>Mo</td>\n      <td>1st 2nd ... 11th 12th</td>\n    </tr>\n    <tr>\n      <td></td>\n      <td>MM</td>\n      <td>01 02 ... 11 12</td>\n    </tr>\n    <tr>\n      <td></td>\n      <td>MMM</td>\n      <td>Jan Feb ... Nov Dec</td>\n    </tr>\n    <tr>\n      <td></td>\n      <td>MMMM</td>\n      <td>January February ... November December</td>\n    </tr>\n    <tr>\n      <td><b>Quarter</b></td>\n      <td>Q</td>\n      <td>1 2 3 4</td>\n    </tr>\n    <tr>\n      <td><b>Day of Month</b></td>\n      <td>D</td>\n      <td>1 2 ... 30 31</td>\n    </tr>\n    <tr>\n      <td></td>\n      <td>Do</td>\n      <td>1st 2nd ... 30th 31st</td>\n    </tr>\n    <tr>\n      <td></td>\n      <td>DD</td>\n      <td>01 02 ... 30 31</td>\n    </tr>\n    <tr>\n      <td><b>Day of Year</b></td>\n      <td>DDD</td>\n      <td>1 2 ... 364 365</td>\n    </tr>\n    <tr>\n      <td></td>\n      <td>DDDo</td>\n      <td>1st 2nd ... 364th 365th</td>\n    </tr>\n    <tr>\n      <td></td>\n      <td>DDDD</td>\n      <td>001 002 ... 364 365</td>\n    </tr>\n    <tr>\n      <td><b>Day of Week</b></td>\n      <td>d</td>\n      <td>0 1 ... 5 6</td>\n    </tr>\n    <tr>\n      <td></td>\n      <td>do</td>\n      <td>0th 1st ... 5th 6th</td>\n    </tr>\n    <tr>\n      <td></td>\n      <td>dd</td>\n      <td>Su Mo ... Fr Sa</td>\n    </tr>\n    <tr>\n      <td></td>\n      <td>ddd</td>\n      <td>Sun Mon ... Fri Sat</td>\n    </tr>\n    <tr>\n      <td></td>\n      <td>dddd</td>\n      <td>Sunday Monday ... Friday Saturday</td>\n    </tr>\n    <tr>\n      <td><b>Day of Week (Locale)</b></td>\n      <td>e</td>\n      <td>0 1 ... 5 6</td>\n    </tr>\n    <tr>\n      <td><b>Day of Week (ISO)</b></td>\n      <td>E</td>\n      <td>1 2 ... 6 7</td>\n    </tr>\n    <tr>\n      <td><b>Week of Year</b></td>\n      <td>w</td>\n      <td>1 2 ... 52 53</td>\n    </tr>\n    <tr>\n      <td></td>\n      <td>wo</td>\n      <td>1st 2nd ... 52nd 53rd</td>\n    </tr>\n    <tr>\n      <td></td>\n      <td>ww</td>\n      <td>01 02 ... 52 53</td>\n    </tr>\n    <tr>\n      <td><b>Week of Year (ISO)</b></td>\n      <td>W</td>\n      <td>1 2 ... 52 53</td>\n    </tr>\n    <tr>\n      <td></td>\n      <td>Wo</td>\n      <td>1st 2nd ... 52nd 53rd</td>\n    </tr>\n    <tr>\n      <td></td>\n      <td>WW</td>\n      <td>01 02 ... 52 53</td>\n    </tr>\n    <tr>\n      <td><b>Year</b></td>\n      <td>YY</td>\n      <td>70 71 ... 29 30</td>\n    </tr>\n    <tr>\n      <td></td>\n      <td>YYYY</td>\n      <td>1970 1971 ... 2029 2030</td>\n    </tr>\n    <tr>\n      <td><b>Week Year</b></td>\n      <td>gg</td>\n      <td>70 71 ... 29 30</td>\n    </tr>\n    <tr>\n      <td></td>\n      <td>gggg</td>\n      <td>1970 1971 ... 2029 2030</td>\n    </tr>\n    <tr>\n      <td><b>Week Year (ISO)</b></td>\n      <td>GG</td>\n      <td>70 71 ... 29 30</td>\n    </tr>\n    <tr>\n      <td></td>\n      <td>GGGG</td>\n      <td>1970 1971 ... 2029 2030</td>\n    </tr>\n    <tr>\n      <td><b>AM/PM</b></td>\n      <td>A</td>\n      <td>AM PM</td>\n    </tr>\n    <tr>\n      <td></td>\n      <td>a</td>\n      <td>am pm</td>\n    </tr>\n    <tr>\n      <td><b>Hour</b></td>\n      <td>H</td>\n      <td>0 1 ... 22 23</td>\n    </tr>\n    <tr>\n      <td></td>\n      <td>HH</td>\n      <td>00 01 ... 22 23</td>\n    </tr>\n    <tr>\n      <td></td>\n      <td>h</td>\n      <td>1 2 ... 11 12</td>\n    </tr>\n    <tr>\n      <td></td>\n      <td>hh</td>\n      <td>01 02 ... 11 12</td>\n    </tr>\n    <tr>\n      <td><b>Minute</b></td>\n      <td>m</td>\n      <td>0 1 ... 58 59</td>\n    </tr>\n    <tr>\n      <td></td>\n      <td>mm</td>\n      <td>00 01 ... 58 59</td>\n    </tr>\n    <tr>\n      <td><b>Second</b></td>\n      <td>s</td>\n      <td>0 1 ... 58 59</td>\n    </tr>\n    <tr>\n      <td></td>\n      <td>ss</td>\n      <td>00 01 ... 58 59</td>\n    </tr>\n    <tr>\n      <td><b>Fractional Second</b></td>\n      <td>S</td>\n      <td>0 1 ... 8 9</td>\n    </tr>\n    <tr>\n      <td></td>\n      <td>SS</td>\n      <td>0 1 ... 98 99</td>\n    </tr>\n    <tr>\n      <td></td>\n      <td>SSS</td>\n      <td>0 1 ... 998 999</td>\n    </tr>\n    <tr>\n      <td><b>Timezone</b></td>\n      <td>z or zz</td>\n      <td>\n        EST CST ... MST PST\n        <br/>\n        <b>Note:</b> as of <b>1.6.0</b>, the z/zz format tokens have been deprecated. <a href=\"https://github.com/moment/moment/issues/162\">Read more about it here.</a>\n      </td>\n    </tr>\n    <tr>\n      <td></td>\n      <td>Z</td>\n      <td>-07:00 -06:00 ... +06:00 +07:00</td>\n    </tr>\n    <tr>\n      <td></td>\n      <td>ZZ</td>\n      <td>\n        -0700 -0600 ... +0600 +0700\n      </td>\n    </tr>\n    <tr>\n      <td><b>Unix Timestamp</b></td>\n      <td>X</td>\n      <td>1360013296</td>\n    </tr>\n  </tbody>\n</table>\n\n`Z ZZ` were added in **1.2.0**.\n\n`S SS SSS` were added in **1.6.0**.\n\n`X` was added in **2.0.0**.\n\n`e E gg gggg GG GGGG` were added in **2.1.0**.\n\n#### Localized formats\n\nBecause preferred formatting differs based on locale, there are a few tokens that can be used to format a moment based on its locale.\n\nThere are upper and lower case variations on the same formats. The lowercase version is intended to be the shortened version of its uppercase counterpart.\n\n<table class=\"table table-striped table-bordered\">\n  <tbody>\n    <tr>\n      <td><b>Time</b></td>\n      <td>LT</td>\n      <td>8:30 PM</td>\n    </tr>\n    <tr>\n      <td><b>Month numeral, day of month, year</b></td>\n      <td>L</td>\n      <td>09/04/1986</td>\n    </tr>\n    <tr>\n      <td></td>\n      <td>l</td>\n      <td>9/4/1986</td>\n    </tr>\n    <tr>\n      <td><b>Month name, day of month, year</b></td>\n      <td>LL</td>\n      <td>September 4 1986</td>\n    </tr>\n    <tr>\n      <td></td>\n      <td>ll</td>\n      <td>Sep 4 1986</td>\n    </tr>\n    <tr>\n      <td><b>Month name, day of month, year, time</b></td>\n      <td>LLL</td>\n      <td>September 4 1986 8:30 PM</td>\n    </tr>\n    <tr>\n      <td></td>\n      <td>lll</td>\n      <td>Sep 4 1986 8:30 PM</td>\n    </tr>\n    <tr>\n      <td><b>Month name, day of month, day of week, year, time</b></td>\n      <td>LLLL</td>\n      <td>Thursday, September 4 1986 8:30 PM</td>\n    </tr>\n    <tr>\n      <td></td>\n      <td>llll</td>\n      <td>Thu, Sep 4 1986 8:30 PM</td>\n    </tr>\n  </tbody>\n</table>\n\n`L LL LLL LLLL LT` are available in version **1.3.0**. `l ll lll llll` are available in **2.0.0**.\n\n#### Escaping characters\n\nTo escape characters in format strings, you can wrap the characters in square brackets.\n\n```javascript\nfrozenMoment().format('[today] dddd'); // 'today Sunday'\n```\n\n#### Similarities and differences with LDML\n\n**Note:** While these date formats are very similar to LDML date formats, there are a few minor differences regarding day of month, day of year, and day of week.\n\nFor a breakdown of a few different date formatting tokens across different locales, see [this chart of date formatting tokens.](https://docs.google.com/spreadsheet/ccc?key=0AtgZluze7WMJdDBOLUZfSFIzenIwOHNjaWZoeGFqbWc&amp;hl=en_US#gid=0)\n\n<!--\n#### Formatting speed\n\nTo compare Moment formatting speed against other libraries, check out [this comparison against other libraries](http://jsperf.com/date-formatting/8).\n-->\n\n#### Other tokens\n\nIf you are more comfortable working with strftime instead of LDML-like parsing tokens, take a look at Ben Oakes' plugin. It hasn't been ported to support FrozenMoment yet, but that effort should be very simple -- contact us if you need help creating a port. [benjaminoakes/moment-strftime](https://github.com/benjaminoakes/moment-strftime).\n\n#### Default format\n\nAs of version **1.5.0**, calling `frozenMoment#format` without a format will default to `frozenMoment.defaultFormat`. Out of the box, `frozenMoment.defaultFormat` is the ISO8601 format `YYYY-MM-DDTHH:mm:ssZ`.\n",
+                "slug": "displaying/format",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/05-displaying/01-format.md"
+            },
+            {
+                "title": "Time from now",
+                "version": "1.0.0",
+                "signature": "\nfrozenMoment().fromNow();\nfrozenMoment().fromNow(Boolean);\n",
+                "body": "\n\n\nA common way of displaying time is handled by `frozenMoment#fromNow`. This is sometimes called timeago or relative time.\n\n```javascript\nfrozenMoment([2007, 0, 29]).fromNow(); // 4 years ago\n```\n\nIf you pass `true`, you can get the value without the suffix.\n\n```javascript\nfrozenMoment([2007, 0, 29]).fromNow();     // 4 years ago\nfrozenMoment([2007, 0, 29]).fromNow(true); // 4 years\n```\n\nThe base strings are [customized by the current locale](#/customize/relative-time/).\n\nThe breakdown of which string is displayed for each length of time is outlined in the table below.\n\n<table class=\"table table-striped table-bordered\">\n  <thead>\n    <tr>\n      <th>Range</th>\n      <th>Key</th>\n      <th>Sample Output</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td>0 to 45 seconds</td>\n      <td>s</td>\n      <td>seconds ago</td>\n    </tr>\n    <tr>\n      <td>45 to 90 seconds</td>\n      <td>m</td>\n      <td>a minute ago</td>\n    </tr>\n    <tr>\n      <td>90 seconds to 45 minutes</td>\n      <td>mm</td>\n      <td>2 minutes ago ... 45 minutes ago</td>\n    </tr>\n    <tr>\n      <td>45 to 90 minutes</td>\n      <td>h</td>\n      <td>an hour ago</td>\n    </tr>\n    <tr>\n      <td>90 minutes to 22 hours </td>\n      <td>hh</td>\n      <td>2 hours ago ... 22 hours ago</td>\n    </tr>\n    <tr>\n      <td>22 to 36 hours</td>\n      <td>d</td>\n      <td>a day ago</td>\n    </tr>\n    <tr>\n      <td>36 hours to 25 days</td>\n      <td>dd</td>\n      <td>2 days ago ... 25 days ago</td>\n    </tr>\n    <tr>\n      <td>25 to 45 days</td>\n      <td>M</td>\n      <td>a month ago</td>\n    </tr>\n    <tr>\n      <td>45 to 345 days</td>\n      <td>MM</td>\n      <td>2 months ago ... 11 months ago</td>\n    </tr>\n    <tr>\n      <td>345 to 547 days (1.5 years)</td>\n      <td>y</td>\n      <td>a year ago</td>\n    </tr>\n    <tr>\n      <td>548 days+</td>\n      <td>yy</td>\n      <td>2 years ago ... 20 years ago</td>\n    </tr>\n  </tbody>\n</table>\n",
+                "slug": "displaying/fromnow",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/05-displaying/02-fromnow.md"
+            },
+            {
+                "title": "Time from X",
+                "version": "1.0.0",
+                "signature": "\nfrozenMoment().from(FrozenMoment|String|Number|Date|Array);\nfrozenMoment().from(FrozenMoment|String|Number|Date|Array, Boolean);\n",
+                "body": "\n\n\nYou may want to display a moment in relation to a time other than now. In that case, you can use `frozenMoment#from`.\n\n```javascript\nvar a = frozenMoment([2007, 0, 29]);\nvar b = frozenMoment([2007, 0, 28]);\na.from(b) // \"a day ago\"\n```\n\nThe first parameter is anything you can pass to `frozenMoment()` or an actual `FrozenMoment`.\n\n```javascript\nvar a = frozenMoment([2007, 0, 29]);\nvar b = frozenMoment([2007, 0, 28]);\na.from(b);                     // \"a day ago\"\na.from([2007, 0, 28]);         // \"a day ago\"\na.from(new Date(2007, 0, 28)); // \"a day ago\"\na.from(\"1-28-2007\");           // \"a day ago\"\n```\n\nLike `frozenMoment#fromNow`, passing `true` as the second parameter returns value without the suffix. This is useful wherever you need to have a human readable length of time.\n\n```javascript\nvar start = frozenMoment([2007, 0, 5]);\nvar end = frozenMoment([2007, 0, 10]);\nstart.from(end);       // \"in 5 days\"\nstart.from(end, true); // \"5 days\"\n```\n",
+                "slug": "displaying/from",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/05-displaying/03-from.md"
+            },
+            {
+                "title": "Calendar Time",
+                "version": "1.3.0",
+                "signature": "\nfrozenMoment().calendar();\nfrozenMoment().calendar(referenceTime);\n",
+                "body": "\n\n\nCalendar time is displays time relative to given `referenceTime` (defaults to now), but slightly differently than `frozenMoment#fromNow`.\n\n`frozenMoment#calendar` will format a date with different strings depending on how close to `referenceTime`'s date (today by default) the date is.\n\n<table class=\"table table-striped table-bordered\">\n  <tr>\n    <td>Last week</td>\n    <td>Last Monday 2:30 AM</td>\n  </tr>\n  <tr>\n    <td>The day before</td>\n    <td>Yesterday 2:30 AM</td>\n  </tr>\n  <tr>\n    <td>The same day</td>\n    <td>Today 2:30 AM</td>\n  </tr>\n  <tr>\n    <td>The next day</td>\n    <td>Tomorrow 2:30 AM</td>\n  </tr>\n  <tr>\n    <td>The next week</td>\n    <td>Sunday 2:30 AM</td>\n  </tr>\n  <tr>\n    <td>Everything else</td>\n    <td>7/10/2011</td>\n  </tr>\n</table>\n\nThese strings are localized, and [can be customized](#/customize/calendar/).\n",
+                "slug": "displaying/calendar-time",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/05-displaying/04-calendar-time.md"
+            },
+            {
+                "title": "Difference",
+                "version": "1.0.0",
+                "signature": "\nfrozenMoment().diff(FrozenMoment|String|Number|Date|Array);\nfrozenMoment().diff(FrozenMoment|String|Number|Date|Array, String);\nfrozenMoment().diff(FrozenMoment|String|Number|Date|Array, String, Boolean);\n",
+                "body": "\n\n\nTo get the difference in milliseconds, use `frozenMoment#diff` like you would use `frozenMoment#from`.\n\n```javascript\nvar a = frozenMoment([2007, 0, 29]);\nvar b = frozenMoment([2007, 0, 28]);\na.diff(b) // 86400000\n```\n\nTo get the difference in another unit of measurement, pass that measurement as the second argument.\n\n```javascript\nvar a = frozenMoment([2007, 0, 29]);\nvar b = frozenMoment([2007, 0, 28]);\na.diff(b, 'days') // 1\n```\n\nThe supported measurements are years, months, weeks, days, hours, minutes, and seconds. For ease of development, the singular forms are supported as of **2.0.0**. Units of measurement other than milliseconds are available in version **1.1.1**.\n\nBy default, `frozenMoment#diff` will return number rounded down. If you want the floating point number, pass `true` as the third argument. Before **2.0.0**, `frozenMoment#diff` returned rounded number, not a rounded *down* number.\n\n```javascript\nvar a = frozenMoment([2008, 6]);\nvar b = frozenMoment([2007, 0]);\na.diff(b, 'years');       // 1\na.diff(b, 'years', true); // 1.5\n```\n\nIf the moment is later than the moment you are passing to `frozenMoment.fn.diff`, the return value will be negative.\n\n```javascript\nvar a = frozenMoment();\nvar b = frozenMoment().add('seconds', 1);\na.diff(b) // -1000\nb.diff(a) // 1000\n```\n\nA easy way to think of this is by replacing `.diff(` with a minus operator.\n\n```javascript\n          // a < b\na.diff(b) // a - b < 0\nb.diff(a) // b - a < 0\n```\n\n#### Month and year diffs\n\n`frozenMoment#diff` has some special handling for month and year diffs. It is optimized to ensure that two months with the same date are always a whole number apart.\n\nSo Jan 15 to Feb 15 should be exactly 1 month.\n\nFeb 28 to Mar 28 should be exactly 1 month.\n\nFeb 28 2011 to Feb 28 2012 should be exactly 1 year.\n\n[See more discussion on the month and year diffs here](https://github.com/moment/moment/pull/571)\n\nThis change to month and year diffs was made in **2.0.0**.\n",
+                "slug": "displaying/difference",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/05-displaying/05-difference.md"
+            },
+            {
+                "title": "Unix Offset (milliseconds)",
+                "version": "1.0.0",
+                "signature": "\nfrozenMoment().valueOf();\n+frozenMoment();\n",
+                "body": "\n\n\n`frozenMoment#valueOf` simply outputs the number of milliseconds since the Unix Epoch, just like `Date#valueOf`.\n\n```javascript\nfrozenMoment(1318874398806).valueOf(); // 1318874398806\n+frozenMoment(1318874398806); // 1318874398806\n```\n\nTo get a Unix timestamp (the number of seconds since the epoch) from a `FrozenMoment`, use `frozenMoment#unix`.\n",
+                "slug": "displaying/unix-offset",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/05-displaying/06-unix-offset.md"
+            },
+            {
+                "title": "Unix Timestamp (seconds)",
+                "version": "1.6.0",
+                "signature": "\nfrozenMoment().unix();\n",
+                "body": "\n\n\n`frozenMoment#unix` outputs a Unix timestamp (the number of seconds since the Unix Epoch).\n\n```javascript\nfrozenMoment(1318874398806).unix(); // 1318874398\n```\n\nThis value is floored to the nearest second, and does not include a milliseconds component.\n",
+                "slug": "displaying/unix-timestamp",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/05-displaying/07-unix-timestamp.md"
+            },
+            {
+                "title": "Days in Month",
+                "version": "1.5.0",
+                "signature": "\nfrozenMoment().daysInMonth();\n",
+                "body": "\n\n\nGet the number of days in the current month.\n\n```javascript\nfrozenMoment(\"2012-02\", \"YYYY-MM\").daysInMonth() // 29\nfrozenMoment(\"2012-01\", \"YYYY-MM\").daysInMonth() // 31\n```\n",
+                "slug": "displaying/days-in-month",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/05-displaying/08-days-in-month.md"
+            },
+            {
+                "title": "As Javascript Date",
+                "version": "1.0.0",
+                "signature": "\nfrozenMoment().toDate();\n",
+                "body": "\n\n\nTo convert a FrozenMoment to a native Date object, use `frozenMoment#toDate`.\n\n**Warning:** For the moment, this returns the `Date` that the moment uses, so any changes to that `Date` will cause the moment to change.  **This will be fixed** to return a copy of the wrapped `Date` object -- feel free to open a pull request if you need this change before we get around to implementing it ourselves.\n",
+                "slug": "displaying/as-javascript-date",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/05-displaying/09-as-javascript-date.md"
+            },
+            {
+                "title": "As Array",
+                "version": "1.7.0",
+                "signature": "\nfrozenMoment().toArray();\n",
+                "body": "\n\n\nThis returns an array that mirrors the parameters from `new Date()`.\n\n```javascript\nfrozenMoment().toArray(); // [2013, 1, 4, 14, 40, 16, 154];\n```\n",
+                "slug": "displaying/as-array",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/05-displaying/10-as-array.md"
+            },
+            {
+                "title": "As JSON",
+                "version": "2.0.0",
+                "signature": "\nfrozenMoment().toJSON();\n",
+                "body": "\n\n\nWhen serializing an object to JSON, if there is a `FrozenMoment` object, it will be represented as an ISO8601 string.\n\n```javascript\nJSON.stringify({\n    postDate : frozenMoment()\n}); // {\"postDate\":\"2013-02-04T22:44:30.652Z\"}\n```\n",
+                "slug": "displaying/as-json",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/05-displaying/11-as-json.md"
+            },
+            {
+                "title": "As ISO 8601 String",
+                "version": "2.1.0",
+                "signature": "\nfrozenMoment().toISOString();\n",
+                "body": "\n\n\nFormats a string to the ISO8601 standard.\n\n```javascript\nfrozenMoment().toISOString() // 2013-02-04T22:44:30.652Z\n```\n",
+                "slug": "displaying/as-iso-string",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/05-displaying/12-as-iso-string.md"
+            }
+        ],
+        "title": "Display"
+    },
+    {
+        "slug": "query",
+        "items": [
+            {
+                "title": "Query",
+                "body": "\n\n\n",
+                "slug": "query/intro",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/06-query/00-intro.md"
+            },
+            {
+                "title": "Is Before",
+                "version": "2.0.0",
+                "signature": "\nfrozenMoment().isBefore(FrozenMoment|String|Number|Date|Array);\nfrozenMoment().isBefore(FrozenMoment|String|Number|Date|Array, String);\n",
+                "body": "\n\n\nCheck if a frozenMoment is before another frozenMoment.\n\n```javascript\nfrozenMoment('2010-10-20').isBefore('2010-10-21'); // true\n```\n\nIf you want to limit the granularity to a unit other than milliseconds, pass the units as the second parameter.\n\n```javascript\nfrozenMoment('2010-10-20').isBefore('2010-12-31', 'year'); // false\nfrozenMoment('2010-10-20').isBefore('2011-01-01', 'year'); // true\n```\n\nLike `frozenMoment#isAfter` and `frozenMoment#isSame`, any of the units of time that are supported for `frozenMoment#startOf` are supported for `frozenMoment#isBefore`. Year, month, week, day, hour, minute, and second.\n\nIf nothing is passed to `frozenMoment#isBefore`, it will default to the current time.\n\n*NOTE*: `frozenMoment().isBefore()` (with no arguments) has undefined behavior and should not be used! If\nthe code runs quickly, the initially created frozenMoment would be the same as the one\ncreated in isBefore to perform the check, so the result would be `false`. But\nif the code runs more slowly, it's possible that the frozenMoment created in isBefore will be\nmeasurably after the one created in `frozenMoment()`, so the call would return\n`true`.\n",
+                "slug": "query/is-before",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/06-query/01-is-before.md"
+            },
+            {
+                "title": "Is Same",
+                "version": "2.0.0",
+                "signature": "\nfrozenMoment().isSame(FrozenMoment|String|Number|Date|Array);\nfrozenMoment().isSame(FrozenMoment|String|Number|Date|Array, String);\n",
+                "body": "\n\n\nCheck if a frozenMoment is the same as another frozenMoment.\n\n```javascript\nfrozenMoment('2010-10-20').isSame('2010-10-20'); // true\n```\n\nIf you want to limit the granularity to a unit other than milliseconds, pass the units as the second parameter.\n\n```javascript\nfrozenMoment('2010-10-20').isSame('2009-12-31', 'year'); // false\nfrozenMoment('2010-10-20').isSame('2010-01-01', 'year'); // true\nfrozenMoment('2010-10-20').isSame('2010-12-31', 'year'); // true\nfrozenMoment('2010-10-20').isSame('2011-01-01', 'year'); // false\n```\n\nLike `frozenMoment#isAfter` and `frozenMoment#isBefore`, any of the units of time that are supported for `frozenMoment#startOf` are supported for `frozenMoment#isSame`. Year, month, week, day, hour, minute, and second.\n\nIf nothing is passed to `frozenMoment#isSame`, it will default to the current time.\n\n```javascript\nfrozenMoment().isSame(); // probably true, depending on how quickly the two frozenMoments are created\n```\n",
+                "slug": "query/is-same",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/06-query/02-is-same.md"
+            },
+            {
+                "title": "Is After",
+                "version": "2.0.0",
+                "signature": "\nfrozenMoment().isAfter(FrozenMoment|String|Number|Date|Array);\nfrozenMoment().isAfter(FrozenMoment|String|Number|Date|Array, String);\n",
+                "body": "\n\n\nCheck if a frozenMoment is after another frozenMoment.\n\n```javascript\nfrozenMoment('2010-10-20').isAfter('2010-10-19'); // true\n```\n\nIf you want to limit the granularity to a unit other than milliseconds, pass the units as the second parameter.\n\n```javascript\nfrozenMoment('2010-10-20').isAfter('2010-01-01', 'year'); // false\nfrozenMoment('2010-10-20').isAfter('2009-12-31', 'year'); // true\n```\n\nLike `frozenMoment#isSame` and `frozenMoment#isBefore`, any of the units of time that are supported for `frozenMoment#startOf` are supported for `frozenMoment#isAfter`. Year, month, week, day, hour, minute, and second.\n\nIf nothing is passed to `frozenMoment#isAfter`, it will default to the current time.\n\n```javascript\nfrozenMoment().isAfter(); // false\n```\n",
+                "slug": "query/is-after",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/06-query/03-is-after.md"
+            },
+            {
+                "title": "Is Leap Year",
+                "version": "1.0.0",
+                "signature": "\nfrozenMoment().isLeapYear();\n",
+                "body": "\n\n\n`frozenMoment#isLeapYear` returns `true` if that year is a leap year, and `false` if it is not.\n\n```javascript\nfrozenMoment([2000]).isLeapYear() // true\nfrozenMoment([2001]).isLeapYear() // false\nfrozenMoment([2100]).isLeapYear() // false\n```\n",
+                "slug": "query/is-leap-year",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/06-query/04-is-leap-year.md"
+            },
+            {
+                "title": "Is Daylight Saving Time",
+                "version": "1.2.0",
+                "signature": "\nfrozenMoment().isDST();\n",
+                "body": "\n\n\n`frozenMoment#isDST` checks if the current moment is in daylight savings time.\n\n```javascript\nfrozenMoment([2011, 2, 12]).isDST(); // false, March 12 2011 is not DST\nfrozenMoment([2011, 2, 14]).isDST(); // true, March 14 2011 is DST\n```\n",
+                "slug": "query/is-daylight-saving-time",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/06-query/05-is-daylight-saving-time.md"
+            },
+            {
+                "title": "Is DST Shifted",
+                "version": "2.3.0",
+                "signature": "\nfrozenMoment('2013-03-10 2:30', 'YYYY-MM-DD HH:mm').isDSTShifted()\n",
+                "body": "\n\n\nAnother important piece of validation is to know if the date has been moved by a DST. For example, in most of the United States:\n\n```javascript\nfrozenMoment('2013-03-10 2:30', 'YYYY-MM-DD HH:mm').format(); //=> '2013-03-10T01:30:00-05:00'\n```\n\nThis is because daylight savings time shifts the time from 2:00 to 3:00, so 2:30 isn't a real time. The resulting time is browser-dependent, either adjusting the time forward or backwards. Use `frozenMoment#isDSTShifted` to test for this condition.\n\n**Note:** before 2.3.0, FrozenMoment objects in this condition always returned `false` for `frozenMoment#isValid`; they now return `true`.\n",
+                "slug": "query/is-dst-shifted",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/06-query/06-is-dst-shifted.md"
+            },
+            {
+                "title": "Is a FrozenMoment",
+                "version": "1.5.0",
+                "signature": "\nfrozenMoment.isMoment(obj);\n",
+                "body": "\n\n\nTo check if a variable is a moment object, use `frozenMoment.isMoment()`.\n\n```javascript\nfrozenMoment.isMoment() // false\nfrozenMoment.isMoment(new Date()) // false\nfrozenMoment.isMoment(frozenMoment()) // true\n```\n",
+                "slug": "query/is-a-moment",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/06-query/07-is-a-moment.md"
+            }
+        ],
+        "title": "Query"
+    },
+    {
+        "slug": "i18n",
+        "items": [
+            {
+                "title": "i18n",
+                "body": "\n\n\nFrozenMoment has robust support for internationalization.\n\nYou can load multiple locales and easily switch between them.\n\nEach new FrozenMoment builder is set to the current default locale at the time the builder is created.  You can then set a different locale before freezing the builder into a FrozenMoment instance.\n\nInstead of setting a specific locale, you can set the builder's locale to \"global\" to create FrozenMoment instances that will always display using the default locale (even if the default locale changes after freezing the instance).\n",
+                "slug": "i18n/intro",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/07-i18n/00-intro.md"
+            },
+            {
+                "title": "Load locale modules (Node.js)",
+                "version": "3.0.0",
+                "signature": "\nfrozenMoment.locale(String);\n",
+                "body": "\n\n\nLoading locales in NodeJS is super easy. If there is a file in `moment/locale/` named after a particular locale key, it will be loaded on the first call to `frozenMoment.locale` with that key.\n\n```javascript\nvar frozenMoment = require('moment');\nfrozenMoment.locale('fr');\nfrozenMoment(1316116057189).fromNow(); // il y a une heure\n```\n\nIf you want your locale supported, create a pull request to the `develop` branch with the [required locale and unit test files](#/i18n/add-locale/).\n",
+                "slug": "i18n/load-nodejs",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/07-i18n/01-load-nodejs.md"
+            },
+            {
+                "title": "Load locale modules (Browser)",
+                "version": "3.0.0",
+                "signature": "\nfrozenMoment.locale(String, Object);\n",
+                "body": "\n\n\nTo load locale modules in the browser, just include their files after the FrozenMoment library.\n\n```html\n<script src=\"frozen-moment.min.js\"></script>\n<script src=\"min/locale/fr.js\"></script>\n<script src=\"min/locale/pt.js\"></script>\n```\n\nThere is a minified version of each locale. There is also a single minified file with all the locale modules bundled together.\n\n```html\n<script src=\"frozen-moment.min.js\"></script>\n<script src=\"locale/all.min.js\"></script>\n```\n\nIdeally, you would bundle all the scripts you need into one file to minimize http requests.\n\n```html\n<script src=\"frozen-moment-fr-it.min.js\"></script>\n```\n\n**Note:** the files in the `/locale/` folder are optimized for use in Node.js. If you want to use locale files in the browser, use the minified versions that are included at `/min/locale/`.\n",
+                "slug": "i18n/load-browser",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/07-i18n/02-load-browser.md"
+            },
+            {
+                "title": "Get the default locale",
+                "version": "3.0.0",
+                "signature": "\nfrozenMoment.locale();\n",
+                "body": "\n\n\nIf you are changing the default locale frequently, you may want to know which locale is currently being used. This is as simple as calling `frozenMoment.locale` without any parameters.\n\n```javascript\nfrozenMoment.locale('en'); // set to english\nfrozenMoment.locale(); // returns 'en'\nfrozenMoment.locale('fr'); // set to french\nfrozenMoment.locale(); // returns 'fr'\n```\n",
+                "slug": "i18n/get-global",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/07-i18n/03-get-global.md"
+            },
+            {
+                "title": "Set the default locale",
+                "version": "3.0.0",
+                "signature": "\nfrozenMoment.locale(String);\nfrozenMoment.locale(String[]);\nfrozenMoment.locale(String, Object);\n",
+                "body": "\n\n\nBy default, FrozenMoment comes with English locale strings. If you need other locales, you can load them into FrozenMoment for later use.\n\nTo load a locale, pass the key and the string values to `frozenMoment.locale`.\n\nMore details on each of the parts of the locale bundle can be found in the [customization](#/customize/) section.\n\n```javascript\nfrozenMoment.locale('fr', {\n    months : \"janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre\".split(\"_\"),\n    monthsShort : \"janv._févr._mars_avr._mai_juin_juil._août_sept._oct._nov._déc.\".split(\"_\"),\n    weekdays : \"dimanche_lundi_mardi_mercredi_jeudi_vendredi_samedi\".split(\"_\"),\n    weekdaysShort : \"dim._lun._mar._mer._jeu._ven._sam.\".split(\"_\"),\n    weekdaysMin : \"Di_Lu_Ma_Me_Je_Ve_Sa\".split(\"_\"),\n    longDateFormat : {\n        LT : \"HH:mm\",\n        L : \"DD/MM/YYYY\",\n        LL : \"D MMMM YYYY\",\n        LLL : \"D MMMM YYYY LT\",\n        LLLL : \"dddd D MMMM YYYY LT\"\n    },\n    calendar : {\n        sameDay: \"[Aujourd'hui à] LT\",\n        nextDay: '[Demain à] LT',\n        nextWeek: 'dddd [à] LT',\n        lastDay: '[Hier à] LT',\n        lastWeek: 'dddd [dernier à] LT',\n        sameElse: 'L'\n    },\n    relativeTime : {\n        future : \"dans %s\",\n        past : \"il y a %s\",\n        s : \"quelques secondes\",\n        m : \"une minute\",\n        mm : \"%d minutes\",\n        h : \"une heure\",\n        hh : \"%d heures\",\n        d : \"un jour\",\n        dd : \"%d jours\",\n        M : \"un mois\",\n        MM : \"%d mois\",\n        y : \"une année\",\n        yy : \"%d années\"\n    },\n    ordinal : function (number) {\n        return number + (number === 1 ? 'er' : 'ème');\n    },\n    week : {\n        dow : 1, // Monday is the first day of the week.\n        doy : 4  // The week that contains Jan 4th is the first week of the year.\n    }\n});\n```\n\nTo change default locales, simply call `frozenMoment.locale` with the key of a loaded locale.\n\n```javascript\nfrozenMoment.locale('fr');\nfrozenMoment(1316116057189).fromNow() // il y a une heure\nfrozenMoment.locale('en');\nfrozenMoment(1316116057189).fromNow() // an hour ago\n```\n\nYou may also specify a list of locales and FrozenMoment will use the first one it has localizations for.\n\n```javascript\nfrozenMoment.locale(['tq', 'fr']); // 'fr'\n```\n\nFrozenMoment will also try locale specifier substrings from most-specific to least-specific until it finds a locale it knows. This is useful when supplying FrozenMoment with a locale string pulled from the user's environment, such as `window.navigator.language`.\n\n```javascript\nfrozenMoment.locale('en-NZ'); // 'en'\n```\n\nFinally, FrozenMoment will search intelligently through an array of locales and their substrings.\n\n```javascript\nfrozenMoment.locale(['en-NZ', 'en-AU']); // 'en-au', not 'en'\n```\n",
+                "slug": "i18n/set-global",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/07-i18n/04-set-global.md"
+            },
+            {
+                "title": "Get an instance’s locale",
+                "version": "3.0.0",
+                "signature": "\nfrozenMoment().locale();\n",
+                "body": "\n\n\nIf you call `frozenMoment#locale` with no parameters, you get back the locale key in use for that frozenMoment.  If the instance is bound to the `\"global\"` locale, this will return the current default locale key (not `\"global\"`).\n\n```javascript\nvar fr = frozenMoment.build().locale('fr').freeze();\nfr.locale();  // \"fr\"\n\nfrozenMoment.locale('de');\nvar global = frozenMoment.build().locale('global').freeze();\nglobal.locale();  // \"de\"\n```\n",
+                "slug": "i18n/get-instance",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/07-i18n/05-get-instance.md"
+            },
+            {
+                "title": "Set an instance’s locale",
+                "version": "3.0.0",
+                "signature": "\nfrozenMoment.build().locale(String);\n",
+                "body": "\n\n\nYou can set an instance specific locale configuration on a builder object.\n\n```javascript\nfrozenMoment.locale('en');    // set the default locale to English\nvar globalLocale = frozenMoment();\nvar localLocale = frozenMoment().thaw().locale('fr').freeze();\nlocalLocale.format('LLLL');   // dimanche 15 juillet 2012 11:01\nglobalLocale.format('LLLL');  // Sunday, July 15 2012 11:01 AM\n\nfrozenMoment.locale('es');    // change the default locale to Spanish; does not affect existing instances\nlocalLocale.format('LLLL');   // dimanche 15 juillet 2012 11:01\nglobalLocale.format('LLLL');  // Sunday, July 15 2012 11:01 AM\n\nglobalLocale = globalLocale.thaw().locale(\"global\").freeze(); // replace with a copy that tracks the default locale setting\nlocalLocale.format('LLLL');   // dimanche 15 juillet 2012 11:01\nglobalLocale.format('LLLL');  // Domingo 15 Julio 2012 11:03\n```\n\nThis is especially useful when you need to build several FrozenMoment instances that display the same moment in time using different locales.\n\n```javascript\nvar builder = frozenMoment.build('2012-07-15T11:01:00');\nvar englishLocale = builder.locale('en').freeze();\nvar frenchLocale = builder.locale('fr').freeze();\nfrenchLocale.format('LLLL');   // dimanche 15 juillet 2012 11:01\nenglishLocale.format('LLLL');  // Sunday, July 15 2012 11:01 AM\n```\n\nYou can also specify an array of locale identifiers, same as the [global locale configuration](#/i18n/set-global/).\n",
+                "slug": "i18n/set-instance",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/07-i18n/06-set-instance.md"
+            },
+            {
+                "title": "List months and weekdays in the default locale",
+                "version": "3.0.0",
+                "signature": "\nfrozenMoment.months()\nfrozenMoment.monthsShort()\nfrozenMoment.weekdays()\nfrozenMoment.weekdaysShort()\nfrozenMoment.weekdaysMin()\n",
+                "body": "\n\n\nIt is sometimes useful to get the list of months or weekdays in a locale, for example when populating a dropdown menu.\n\n```javascript\nfrozenMoment.months();\n```\n\nReturns the list of months in the current locale.\n\n```javascript\n[ 'January',\n  'February',\n  'March',\n  'April',\n  'May',\n  'June',\n  'July',\n  'August',\n  'September',\n  'October',\n  'November',\n  'December' ]\n```\n\nSimilarly, `frozenMoment.monthsShort` returns abbreviated month names, and `frozenMoment.weekdays `frozenMoment.weekdaysShort`, `frozenMoment.weekdaysMin` return lists of weekdays.\n\nYou can pass an integer into each of those functions to get a specific month or weekday.\n\n```javascript\nfrozenMoment.weekdays(3); // 'Wednesday'\n```\n\n**Note:** Currently, weekdays always have Sunday as index 0, regardless of the local first day of the week.\n\nSome locales make special considerations into account when formatting month names. For example, Dutch formats month abbreviations without a trailing period, but only if it's formatting the month between dashes. The `months` method supports passing a format in so that the months will be listed in the proper context.\n\n```javascript\nfrozenMoment.locale('nl');\nfrozenMoment.monthsShort(); // ['jan.', 'feb.', 'mrt.', ...]\nfrozenMoment.monthsShort('-MMM-'); // [ 'jan', 'feb', 'mrt', ...]\n```\n\nAnd finally, you can combine both the format option and the integer option.\n\n```javascript\nfrozenMoment.monthsShort('-MMM-', 3); // 'apr'\n```\n",
+                "slug": "i18n/list-months-weekdays",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/07-i18n/07-list-months-weekdays.md"
+            },
+            {
+                "title": "Access locale specific functionality",
+                "version": "2.2.0",
+                "signature": "\nfrozenMoment.localeData()  // 3.0.0\nfrozenMoment().localeData()  // 3.0.0\nlangData.months()\nlangData.monthsShort()\nlangData.monthsParse()\nlangData.weekdays()\nlangData.weekdaysShort()\nlangData.weekdaysMin()\nlangData.weekdaysParse()\nlangData.longDateFormat()\nlangData.isPM()\nlangData.meridiem()\nlangData.calendar()\nlangData.relativeTime()\nlangData.pastFuture()\nlangData.ordinal()\nlangData.preparse()\nlangData.postformat()\nlangData.weeks()\nlangData.invalidDate()\n",
+                "body": "\n\n\nYou can access the properties of the currently loaded locale through the\n`frozenMoment.localeData(key)` function. It returns the current locale or a locale\nwith the given key:\n\n```javascript\nvar defaultLocale = frozenMoment.localeData();     // current default locale\nvar frenchLocale = frozenMoment.localeData('fr');  // French locale\n```\n\nThe returned object has the following methods:\n\n```javascript\nlangData.months(aFrozenMoment);  // full month name of aFrozenMoment\nlangData.monthsShort(aFrozenMoment);  // short month name of aFrozenMoment\nlangData.monthsParse(longOrShortMonthString);  // returns month id (0 to 11) of input\nlangData.weekdays(aFrozenMoment);  // full weekday name of aFrozenMoment\nlangData.weekdaysShort(aFrozenMoment);  // short weekday name of aFrozenMoment\nlangData.weekdaysMin(aFrozenMoment);  // min weekday name of aFrozenMoment\nlangData.weekdaysParse(minShortOrLongWeekdayString);  // returns weekday id (0 to 6) of input\nlangData.longDateFormat(dateFormat);  // returns the full format of abbreviated date-time formats LT, L, LL and so on\nlangData.isPM(amPmString);  // returns true iff amPmString represents PM\nlangData.meridiem(hours, minutes, isLower);  // returns am/pm string for particular time-of-day in upper/lower case\nlangData.calendar(key, aFrozenMoment);  // returns a format that would be used for calendar representation. Key is one of 'sameDay', 'nextDay', 'lastDay', 'nextWeek', 'prevWeek', 'sameElse'\nlangData.relativeTime(number, withoutSuffix, key, isFuture);  // returns relative time string, key is on of 's', 'm', 'mm', 'h', 'hh', 'd', 'dd', 'M', 'MM', 'y', 'yy'. Single letter when number is 1.\nlangData.pastFuture(diff, relTime);  // convert relTime string to past or future string depending on diff\nlangData.ordinal(number);  // convert number to ordinal string 1 -> 1st\nlangData.preparse(str);  // called before parsing on every input string\nlangData.postformat(str);  // called after formatting on every string\nlangData.week(aFrozenMoment);  // returns week-of-year of aFrozenMoment\nlangData.invalidDate();  // returns a translation of 'Invalid date'\n```\n\nYou can also call `frozenMoment#localeData` on a FrozenMoment to get that instance's locale configuration.\n\n```javascript\nvar fr = frozenMoment.build().locale('fr').freeze();\nfr.locale().months(frozenMoment([2012, 0])) // \"janvier\"\nfr = fr.thaw().locale('en').freeze();\nfr.locale().months(frozenMoment([2012, 0])) // \"January\"\n```\n\nIf you need to access the locale data for a FrozenMoment, this is the preferred way to do so.\n",
+                "slug": "i18n/locale-data",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/07-i18n/08-locale-data.md"
+            },
+            {
+                "title": "Add your locale",
+                "body": "\n\n\nTo add your locale to FrozenMoment, submit a pull request with both a locale file and a test file. You can find examples in `frozen-moment/locale/fr.js` and `frozen-moment/test/locale/fr.js`.\n\nTo run the tests in Node.js, do `npm install`, then `grunt`.\n\nIf all the tests pass, submit a pull request.  Thank you for contributing!\n",
+                "slug": "i18n/add-locale",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/07-i18n/09-add-locale.md"
+            }
+        ],
+        "title": "i18n"
+    },
+    {
+        "slug": "customize",
+        "items": [
+            {
+                "title": "Customize",
+                "body": "\n\n\nFrozenMoment is very easy to customize. In general, you should create a locale setting with your customizations.\n\n```javascript\nfrozenMoment.locale('en-my-settings', {\n    // customizations.\n});\n```\n\nHowever, you can also overwrite an existing locale that has been loaded as well.\n\n```javascript\nfrozenMoment.locale('en', {\n    // customizations\n});\n```\n\nAny settings that are not defined are inherited from the default English settings.\n",
+                "slug": "customize/intro",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/08-customize/00-intro.md"
+            },
+            {
+                "title": "Month Names",
+                "version": "1.0.0",
+                "signature": "\nfrozenMoment.locale('en', {\n    months : String[]\n});\nfrozenMoment.locale('en', {\n    months : Function\n});\n",
+                "body": "\n\n\n`Locale#months` should normally be an array of month names.\n\n```javascript\nfrozenMoment.locale('en', {\n    months : [\n        \"January\", \"February\", \"March\", \"April\", \"May\", \"June\", \"July\",\n        \"August\", \"September\", \"October\", \"November\", \"December\"\n    ]\n});\n```\n\nIf you need more processing to calculate the name of the month -- for example, if your language's grammar changes the spelling of month names in different formatting contexts -- then `Locale#months` can be a callback function with the following signature. It should always return a month name as a string.\n\n```javascript\nfrozenMoment.locale('en', {\n    months : function (momentToFormat, format) {\n        // momentToFormat is the moment currently being formatted\n        // format is the formatting string\n        if (/^MMMM/.test(format)) { // if the format starts with 'MMMM'\n            return nominative[momentToFormat.month()];\n        } else {\n            return subjective[momentToFormat.month()];\n        }\n    }\n});\n```\n",
+                "slug": "customize/month-names",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/08-customize/01-month-names.md"
+            },
+            {
+                "title": "Month Abbreviations",
+                "version": "1.0.0",
+                "signature": "\nfrozenMoment.locale('en', {\n    monthsShort : String[]\n});\nfrozenMoment.locale('en', {\n    monthsShort : Function\n});\n",
+                "body": "\n\n\n`Locale#monthsShort` should normally be an array of month abbreviations.\n\n```javascript\nfrozenMoment.locale('en', {\n    monthsShort : [\n        \"Jan\", \"Feb\", \"Mar\", \"Apr\", \"May\", \"Jun\",\n        \"Jul\", \"Aug\", \"Sep\", \"Oct\", \"Nov\", \"Dec\"\n    ]\n});\n```\n\nLike `Locale#months`, `Locale#monthsShort` can be a callback function.\n\n```javascript\nfrozenMoment.locale('en', {\n    monthsShort : function (momentToFormat, format) {\n        if (/^MMMM/.test(format)) {\n            return nominative[momentToFormat.month()];\n        } else {\n            return subjective[momentToFormat.month()];\n        }\n    }\n});\n```\n",
+                "slug": "customize/month-abbreviations",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/08-customize/02-month-abbreviations.md"
+            },
+            {
+                "title": "Weekday Names",
+                "version": "1.0.0",
+                "signature": "\nfrozenMoment.locale('en', {\n    weekdays : String[]\n});\nfrozenMoment.locale('en', {\n    weekdays : Function\n});\n",
+                "body": "\n\n\n`Locale#weekdays` should normally be an array of weekday names.\n\n```javascript\nfrozenMoment.locale('en', {\n    weekdays : [\n        \"Sunday\", \"Monday\", \"Tuesday\", \"Wednesday\", \"Thursday\", \"Friday\", \"Saturday\"\n    ]\n});\n```\n\n`Locale#weekdays` can also be a callback function.\n\n```javascript\nfrozenMoment.locale('en', {\n    weekdays : function (momentToFormat, format) {\n        return weekdays[momentToFormat.day()];\n    }\n});\n```\n",
+                "slug": "customize/weekday-names",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/08-customize/03-weekday-names.md"
+            },
+            {
+                "title": "Weekday Abbreviations",
+                "version": "1.0.0",
+                "signature": "\nfrozenMoment.locale('en', {\n    weekdaysShort : String[]\n});\nfrozenMoment.locale('en', {\n    weekdaysShort : Function\n});\n",
+                "body": "\n\n\n`Locale#weekdaysShort` should normally be an array of weekday abbreviations.\n\n```javascript\nfrozenMoment.locale('en', {\n    weekdaysShort : [\"Sun\", \"Mon\", \"Tue\", \"Wed\", \"Thu\", \"Fri\", \"Sat\"]\n});\n```\n\n`Locale#weekdaysShort` can also be a callback function.\n\n```javascript\nfrozenMoment.locale('en', {\n    weekdaysShort : function (momentToFormat, format) {\n        return weekdaysShort[momentToFormat.day()];\n    }\n});\n```\n",
+                "slug": "customize/weekday-abbreviations",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/08-customize/04-weekday-abbreviations.md"
+            },
+            {
+                "title": "Minimal Weekday Abbreviations",
+                "version": "1.7.0",
+                "signature": "\nfrozenMoment.locale('en', {\n    weekdaysMin : String[]\n});\nfrozenMoment.locale('en', {\n    weekdaysMin : Function\n});\n",
+                "body": "\n\n\n`Locale#weekdaysMin` should normally be an array of two letter weekday abbreviations. These are used for things like calendar pickers, so they should be as small as possible.\n\n```javascript\nfrozenMoment.locale('en', {\n    weekdaysMin : [\"Su\", \"Mo\", \"Tu\", \"We\", \"Th\", \"Fr\", \"Sa\"]\n});\n```\n\n`Locale#weekdaysMin` can also be a callback function.\n\n```javascript\nfrozenMoment.locale('en', {\n    weekdaysMin : function (momentToFormat, format) {\n        return weekdaysMin[momentToFormat.day()];\n    }\n});\n```\n",
+                "slug": "customize/weekday-min",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/08-customize/05-weekday-min.md"
+            },
+            {
+                "title": "Long Date Formats",
+                "version": "1.1.0",
+                "signature": "\nfrozenMoment.locale('en', {\n    longDateFormat : Object\n});\n",
+                "body": "\n\n\nIf it is specified, `Locale#longDateFormat` must be an object containing a key/value pair for the long date formats: `L LL LLL LLLL LT`. `LT` should be the time format, and is also used for `frozenMoment#calendar`.\n\n```javascript\nfrozenMoment.locale('en', {\n    longDateFormat : {\n        LT: \"h:mm A\",\n        L: \"MM/DD/YYYY\",\n        l: \"M/D/YYYY\",\n        LL: \"MMMM Do YYYY\",\n        ll: \"MMM D YYYY\",\n        LLL: \"MMMM Do YYYY LT\",\n        lll: \"MMM D YYYY LT\",\n        LLLL: \"dddd, MMMM Do YYYY LT\",\n        llll: \"ddd, MMM D YYYY LT\"\n    }\n});\n```\n\nIf you omit the lowercase `l` format strings, they will be created automatically by replacing any long tokens in the uppercase `L` format strings with their corresponding short tokens.\n\n```javascript\nfrozenMoment.locale('en', {\n    longDateFormat : {\n        LT: \"h:mm A\",\n        L: \"MM/DD/YYYY\",\n        LL: \"MMMM Do YYYY\",\n        LLL: \"MMMM Do YYYY LT\",\n        LLLL: \"dddd, MMMM Do YYYY LT\"\n    }\n});\n```\n",
+                "slug": "customize/long-date-formats",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/08-customize/06-long-date-formats.md"
+            },
+            {
+                "title": "Relative Time",
+                "version": "1.0.0",
+                "signature": "\nfrozenMoment.locale('en', {\n    relativeTime : Object\n});\n",
+                "body": "\n\n\n`Locale#relativeTime` should normally be an object of the replacement strings for `frozenMoment#from`.\n\n```javascript\nfrozenMoment.locale('en', {\n    relativeTime : {\n        future: \"in %s\",\n        past:   \"%s ago\",\n        s:  \"seconds\",\n        m:  \"a minute\",\n        mm: \"%d minutes\",\n        h:  \"an hour\",\n        hh: \"%d hours\",\n        d:  \"a day\",\n        dd: \"%d days\",\n        M:  \"a month\",\n        MM: \"%d months\",\n        y:  \"a year\",\n        yy: \"%d years\"\n    }\n});\n```\n\n`Locale#relativeTime.future` specifies a prefix/suffix for future dates, and `Locale#relativeTime.past` specifies a prefix/suffix for past dates. For other `relativeTime` entries, a single character is used to indicate the singular form of that unit, and an double character refers to the plural form.\n\nIf a locale requires additional processing for a token, it can set that token to a callback function. The function will receive the following parameters and should return a localized string.\n\n```javascript\nfunction (number, withoutSuffix, key, isFuture) {\n    return string;\n}\n```\n\nThe `key` argument refers to the replacement key in the `Locale#relativeTime ` object. (eg. `s m mm h`, etc.)\n\nThe `number` argument refers to the number of units for that key. For `m`, the number is the number of minutes, etc.\n\nThe `withoutSuffix` argument will be true if the token will be displayed without a suffix, and false if it will be displayed with a suffix. (The reason for the inverted logic is because the default behavior is to display with the suffix.)\n\nThe `isFuture` argument will be true if it is going to use the future suffix/prefix and false if it is going to use the past prefix/suffix. The `isFuture` argument was added in version **1.6.0**.\n",
+                "slug": "customize/relative-time",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/08-customize/07-relative-time.md"
+            },
+            {
+                "title": "AM/PM",
+                "version": "1.6.0",
+                "signature": "\nfrozenMoment.locale('en', {\n    meridiem : Function\n    meridiemParse : RegExp  // 2.1.0\n    isPM : Function  // 2.1.0\n});\n",
+                "body": "\n\n\nIf it is provided, `Locale#meridiem` must be a callback function that returns the correct strings used in your locale for the `a A` tokenS.  If no value is provided, the default callback returns `'am'` for times before noon and `'pm'` for times after noon.\n\nIf your locale needs any different computation for am/pm, `Locale#meridiem` should be a callback function that returns the correct string based on hour, minute, and upper/lowercase.\n\n```javascript\nfrozenMoment.locale('zh-cn', {\n    meridiem : function (hour, minute, isLowercase) {\n        if (hour < 9) {\n            return \"早上\";\n        } else if (hour < 11 && minute < 30) {\n            return \"上午\";\n        } else if (hour < 13 && minute < 30) {\n            return \"中午\";\n        } else if (hour < 18) {\n            return \"下午\";\n        } else {\n            return \"晚上\";\n        }\n    }\n});\n```\n\nTo configure what input strings should be parsed as am/pm tokens, set the `meridiemParse` property.\n\n```javascript\nfrozenMoment.locale('en', {\n    meridiemParse : /[ap]\\.?m?\\.?/i\n});\n```\n\n`Locale#isPM` is a callback function that accepts an input string and returns true if the input string is past 12 noon. This is used while parsing the `a A` tokens.\n\n```javascript\nfrozenMoment.locale('en', {\n    isPM : function (input) {\n        return ((input + '').toLowerCase()[0] === 'p');\n    }\n});\n```\n",
+                "slug": "customize/am-pm",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/08-customize/08-am-pm.md"
+            },
+            {
+                "title": "Calendar",
+                "version": "1.3.0",
+                "signature": "\nfrozenMoment.locale('en', {\n    calendar : Object\n});\n",
+                "body": "\n\n\n`Locale#calendar` should have the following formatting strings.\n\n```javascript\nfrozenMoment.locale('en', {\n    calendar : {\n        lastDay : '[Yesterday at] LT',\n        sameDay : '[Today at] LT',\n        nextDay : '[Tomorrow at] LT',\n        lastWeek : '[last] dddd [at] LT',\n        nextWeek : 'dddd [at] LT',\n        sameElse : 'L'\n    }\n});\n```\n\nEach of the `Locale#calendar` keys can also be a callback function with the scope of the current frozenMoment. It should return a formatting string.\n\n```javascript\nfunction () {\n    return '[hoy a la' + ((this.hours() !== 1) ? 's' : '') + '] LT';\n},\n```\n",
+                "slug": "customize/calendar",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/08-customize/09-calendar.md"
+            },
+            {
+                "title": "Ordinal",
+                "version": "1.0.0",
+                "signature": "\nfrozenMoment.locale('en', {\n    ordinal : Function\n});\n",
+                "body": "\n\n\n`Locale#ordinal` should be a function that returns the ordinal for a given number.\n\n```javascript\nfrozenMoment.locale('en', {\n    ordinal : function (number, token) {\n        var b = number % 10;\n        var output = (~~ (number % 100 / 10) === 1) ? 'th' :\n            (b === 1) ? 'st' :\n            (b === 2) ? 'nd' :\n            (b === 3) ? 'rd' : 'th';\n        return number + output;\n    }\n});\n```\n\nAs of **2.0.0**, the ordinal function should return a formatted string with both the number and the ordinal. Previously, only the ordinal was returned.\n\nAs of **2.1.0**, the token parameter was added. It is a string of the token that is being ordinalized, for example: `M` or `d`.\n\nFor more information on ordinal numbers, see [wikipedia](http://en.wikipedia.org/wiki/Ordinal_number_%28linguistics%29)\n",
+                "slug": "customize/ordinal",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/08-customize/10-ordinal.md"
+            }
+        ],
+        "title": "Customize"
+    },
+    {
+        "slug": "durations",
+        "items": [
+            {
+                "title": "Durations",
+                "body": "\n\n\nFrozenMoment also has duration objects. Where a moment is defined as single points in time, durations are defined as a length of time.\n\nDurations do not have a defined beginning and end date. They are contextless.\n\nA duration is conceptually more similar to '2 hours' than to 'between 2 and 4 pm today'. As such, they are not a good solution to converting between units that depend on context.\n\nFor example, a year can be defined as 366 days, 365 days, 365.25 days, 12 months, or 52 weeks. Trying to convert years to days makes no sense without context. It is much better to use `frozenMoment#diff` for calculating days or years between two moments than to use `Durations`.\n",
+                "slug": "durations/intro",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/09-durations/00-intro.md"
+            },
+            {
+                "title": "Creating",
+                "version": "1.6.0",
+                "signature": "\nfrozenMoment.duration(Number, String);\nfrozenMoment.duration(Number);\nfrozenMoment.duration(Object);\nfrozenMoment.duration(String);\nfrozenMoment.duration.build(Number, String);\nfrozenMoment.duration.build(Number);\nfrozenMoment.duration.build(Object);\nfrozenMoment.duration.build(String);\n",
+                "body": "\n\n\nTo create a duration, call `frozenMoment.duration()` with the length of time in milliseconds.\n\n```javascript\nfrozenMoment.duration(100);  // 100 milliseconds\n```\n\nIf you want to create a moment with a unit of measurement other than seconds, you can pass the unit of measurement as well.\n\n```javascript\nfrozenMoment.duration(2, 'seconds');\nfrozenMoment.duration(2, 'minutes');\nfrozenMoment.duration(2, 'hours');\nfrozenMoment.duration(2, 'days');\nfrozenMoment.duration(2, 'weeks');\nfrozenMoment.duration(2, 'months');\nfrozenMoment.duration(2, 'years');\n```\n\nThe same shorthand from `frozenMoment.build#add` and `frozenMoment.build#subtract` works here as well.\n\n<table class=\"table table-striped table-bordered\">\n  <tbody>\n    <tr>\n      <th>Key</th>\n      <th>Shorthand</th>\n    </tr>\n    <tr>\n      <td>years</td>\n      <td>y</td>\n    </tr>\n    <tr>\n      <td>months</td>\n      <td>M</td>\n    </tr>\n    <tr>\n      <td>weeks</td>\n      <td>w</td>\n    </tr>\n    <tr>\n      <td>days</td>\n      <td>d</td>\n    </tr>\n    <tr>\n      <td>hours</td>\n      <td>h</td>\n    </tr>\n    <tr>\n      <td>minutes</td>\n      <td>m</td>\n    </tr>\n    <tr>\n      <td>seconds</td>\n      <td>s</td>\n    </tr>\n    <tr>\n      <td>milliseconds</td>\n      <td>ms</td>\n    </tr>\n  </tbody>\n</table>\n\nMuch like `frozenMoment.build#add`, you can pass an object of values if you need multiple different units of measurement.\n\n```javascript\nfrozenMoment.duration({\n    seconds: 2,\n    minutes: 2,\n    hours: 2,\n    days: 2,\n    weeks: 2,\n    months: 2,\n    years: 2\n});\n```\n\nAs of **2.1.0**, moment supports parsing ASP.NET style time spans. The following formats are supported.\n\nThe format is an hour, minute, second string separated by colons like `23:59:59`. The number of days can be prefixed with a dot separator like so `7.23:59:59`. Partial seconds are supported as well `23:59:59.999`.\n\n```javascript\nfrozenMoment.duration('23:59:59');\nfrozenMoment.duration('23:59:59.999');\nfrozenMoment.duration('7.23:59:59.999');\nfrozenMoment.duration('23:59');           //added in 2.3.0\n```\n\nWhen invoked as `frozenMoment.duration.build()`, this API creates a builder object instead of a Duration object.  See `frozenMoment.duration#thaw` for more information about Duration builder objects.\n",
+                "slug": "durations/creating",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/09-durations/01-creating.md"
+            },
+            {
+                "title": "Humanize",
+                "version": "1.6.0",
+                "signature": "\nfrozenMoment.duration().humanize();\n",
+                "body": "\n\n\nSometimes, you want all the goodness of `frozenMoment#from` but you don't want to have to create two moments, you just want to display a length of time.\n\nEnter `frozenMoment.duration().humanize()`.\n\n```javascript\nfrozenMoment.duration(1, \"minutes\").humanize(); // a minute\nfrozenMoment.duration(2, \"minutes\").humanize(); // 2 minutes\nfrozenMoment.duration(24, \"hours\").humanize();  // a day\n```\n\nBy default, the return string is suffixless. If you want a suffix, pass in true as seen below.\n\n```javascript\nfrozenMoment.duration(1, \"minutes\").humanize(true); // in a minute\n```\n\nFor suffixes before now, pass in a negative number.\n\n```javascript\nfrozenMoment.duration(-1, \"minutes\").humanize(true); // a minute ago\n```\n",
+                "slug": "durations/humanize",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/09-durations/02-humanize.md"
+            },
+            {
+                "title": "Milliseconds",
+                "version": "1.6.0",
+                "signature": "\nfrozenMoment.duration().milliseconds();\nfrozenMoment.duration().asMilliseconds();\n",
+                "body": "\n\n\nTo get the number of milliseconds in a duration, use `frozenMoment.duration().milliseconds()`.\n\nIt will return a number between 0 and 999.\n\n```javascript\nfrozenMoment.duration(500).milliseconds(); // 500\nfrozenMoment.duration(1500).milliseconds(); // 500\nfrozenMoment.duration(15000).milliseconds(); // 0\n```\n\nIf you want the length of the duration in milliseconds, use `frozenMoment.duration().asMilliseconds()` instead.\n\n```javascript\nfrozenMoment.duration(500).asMilliseconds(); // 500\nfrozenMoment.duration(1500).asMilliseconds(); // 1500\nfrozenMoment.duration(15000).asMilliseconds(); // 15000\n```\n",
+                "slug": "durations/milliseconds",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/09-durations/03-milliseconds.md"
+            },
+            {
+                "title": "Seconds",
+                "version": "1.6.0",
+                "signature": "\nfrozenMoment.duration().seconds();\nfrozenMoment.duration().asSeconds();\n",
+                "body": "\n\n\nTo get the number of seconds in a duration, use `frozenMoment.duration().seconds()`.\n\nIt will return a number between 0 and 59.\n\n```javascript\nfrozenMoment.duration(500).seconds(); // 0\nfrozenMoment.duration(1500).seconds(); // 1\nfrozenMoment.duration(15000).seconds(); // 15\n```\n\nIf you want the length of the duration in seconds, use `frozenMoment.duration().asSeconds()` instead.\n\n```javascript\nfrozenMoment.duration(500).asSeconds(); // 0.5\nfrozenMoment.duration(1500).asSeconds(); // 1.5\nfrozenMoment.duration(15000).asSeconds(); // 15\n```\n",
+                "slug": "durations/seconds",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/09-durations/04-seconds.md"
+            },
+            {
+                "title": "Minutes",
+                "version": "1.6.0",
+                "signature": "\nfrozenMoment.duration().minutes();\nfrozenMoment.duration().asMinutes();\n",
+                "body": "\n\n\nAs with the other getters for durations, `frozenMoment.duration().minutes()` gets the minutes (0 - 59).\n\n`frozenMoment.duration().asMinutes()` gets the length of the duration in minutes.\n",
+                "slug": "durations/minutes",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/09-durations/05-minutes.md"
+            },
+            {
+                "title": "Hours",
+                "version": "1.6.0",
+                "signature": "\nfrozenMoment.duration().hours();\nfrozenMoment.duration().asHours();\n",
+                "body": "\n\n\nAs with the other getters for durations, `frozenMoment.duration().hours()` gets the hours (0 - 23).\n\n`frozenMoment.duration().asHours()` gets the length of the duration in hours.\n",
+                "slug": "durations/hours",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/09-durations/06-hours.md"
+            },
+            {
+                "title": "Days",
+                "version": "1.6.0",
+                "signature": "\nfrozenMoment.duration().days();\nfrozenMoment.duration().asDays();\n",
+                "body": "\n\n\nAs with the other getters for durations, `frozenMoment.duration().days()` gets the days (0 - 31).\n\n`frozenMoment.duration().asDays()` gets the length of the duration in days.\n",
+                "slug": "durations/days",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/09-durations/07-days.md"
+            },
+            {
+                "title": "Months",
+                "version": "1.6.0",
+                "signature": "\nfrozenMoment.duration().months();\nfrozenMoment.duration().asMonths();\n",
+                "body": "\n\n\nAs with the other getters for durations, `frozenMoment.duration().months()` gets the months (0 - 11).\n\n`frozenMoment.duration().asMonths()` gets the length of the duration in months.\n\n**Note:** A month-long duration is defined as 30 days.\n",
+                "slug": "durations/months",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/09-durations/08-months.md"
+            },
+            {
+                "title": "Years",
+                "version": "1.6.0",
+                "signature": "\nfrozenMoment.duration().years();\nfrozenMoment.duration().asYears();\n",
+                "body": "\n\n\nAs with the other getters for durations, `frozenMoment.duration().years()` gets the years.\n\n`frozenMoment.duration().asYears()` gets the length of the duration in years.\n\n**Note:** A year-long duration is defined as 365 days.\n",
+                "slug": "durations/years",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/09-durations/09-years.md"
+            },
+            {
+                "title": "As Unit of Time",
+                "version": "2.1.0",
+                "signature": "\nfrozenMoment.duration().as(String);\n",
+                "body": "\n\n\nAs an alternate to `Duration#asX`, you can use `Duration#as('x')`. All the [shorthand keys from](#/manipulating/add/) `frozenMoment.build#add` apply here as well.\n\n```javascript\nduration.as('hours');\nduration.as('minutes');\nduration.as('seconds');\nduration.as('milliseconds');\n```\n",
+                "slug": "durations/as",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/09-durations/10-as.md"
+            },
+            {
+                "title": "Get Unit of Time",
+                "version": "2.1.0",
+                "signature": "\nfrozenMoment.duration().get(String);\n",
+                "body": "\n\n\nAs an alternate to `Duration#x()` getters, you can use `Duration#get('x')`. All the [shorthand keys from](#/manipulating/add/) `frozenMoment.build#add` apply here as well.\n\n```javascript\nduration.get('hours');\nduration.get('minutes');\nduration.get('seconds');\nduration.get('milliseconds');\n```\n",
+                "slug": "durations/get",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/09-durations/11-get.md"
+            }
+        ],
+        "title": "Durations"
+    },
+    {
+        "slug": "manipulate-durations",
+        "items": [
+            {
+                "title": "Set and Manipulate Durations",
+                "body": "\n\n\nDuration objects can be thawed into builder objects.  These builders support basic manipulations on the specified duration, and can be frozen back into duration objects for formatting and queries.\n\n```javascript\nvar a = frozenMoment.duration(2, \"hours\").thaw();\na.add(30, \"minutes\");\na.freeze().humanize();  // 2 hours, 30 minutes\n```\n\nIf you don't already have an appropriate Duration, it's more efficient to create a duration builder directly:\n\n```javascript\nvar b = frozenMoment.duration.build(2, \"hours\");\nb.add(30, \"minutes\");\nb.freeze().humanize();  // 2 hours, 30 minutes\n```\n",
+                "slug": "manipulate-durations/intro",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/10-manipulate-durations/00-intro.md"
+            },
+            {
+                "title": "Add Time",
+                "version": "2.1.0",
+                "signature": "\nfrozenMoment.duration.build().add(Number, String);\nfrozenMoment.duration.build().add(Number);\nfrozenMoment.duration.build().add(Duration);\nfrozenMoment.duration.build().add(Object);\n",
+                "body": "\n\n\nMutates the duration to be built by adding time.\n\n```javascript\nvar a = frozenMoment.duration.build(1, 'd');\nvar b = frozenMoment.duration.build(2, 'd');\na.add(b).freeze().days();  // 3\n```\n",
+                "slug": "manipulate-durations/add",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/10-manipulate-durations/01-add.md"
+            },
+            {
+                "title": "Subtract Time",
+                "version": "2.1.0",
+                "signature": "\nfrozenMoment.duration.build().subtract(Number, String);\nfrozenMoment.duration.build().subtract(Number);\nfrozenMoment.duration.build().subtract(Duration);\nfrozenMoment.duration.build().subtract(Object);\n",
+                "body": "\n\n\nMutates the duration to be built by subtracting time.\n\n```javascript\nvar a = frozenMoment.duration.build(3, 'd');\nvar b = frozenMoment.duration.build(2, 'd');\na.subtract(b).freeze().days();  // 1\n```\n",
+                "slug": "manipulate-durations/subtract",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/10-manipulate-durations/02-subtract.md"
+            },
+            {
+                "title": "Absolute Value",
+                "version": "3.0.0",
+                "signature": "\nfrozenMoment.duration.build().abs();\n",
+                "body": "\n\n\nMutates the duration to be built to be the absolute value of the currently\nspecified duration.  That is, builders that build negative durations will now\nbuild positive durations of the same length, and all other builders will not\nchange.\n\n```javascript\nfrozenMoment.duration.build(3, 'days').abs();   // 3 days\nfrozenMoment.duration.build(-3, 'days').abs();  // 3 days\n```\n",
+                "slug": "manipulate-durations/abs",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/10-manipulate-durations/03-abs.md"
+            }
+        ],
+        "title": "Set and Manipulate Durations"
+    },
+    {
+        "slug": "utilities",
+        "items": [
+            {
+                "title": "Utilities",
+                "body": "\n\n\nFrozenMoment exposes some methods which may be useful to people extending the library or writing custom parsers.\n",
+                "slug": "utilities/intro",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/11-utilities/00-intro.md"
+            },
+            {
+                "title": "Normalize Units",
+                "version": "2.3.0",
+                "signature": "\nfrozenMoment.normalizeUnits(String);\n",
+                "body": "\n\n\nMany of FrozenMoment's functions allow the caller to pass in aliases for unit enums. For example, all of the `get`s below are equivalent.\n\n```javascript\nvar m = frozenMoment();\nm.get('y');\nm.get('year');\nm.get('years');\n```\n\nIf you're extending the library, you may want access to FrozenMoment's facilities for that in order to better align your functionality with FrozenMoment's.\n\n```javascript\nfrozenMoment.normalizeUnits('y');      // 'year'\nfrozenMoment.normalizeUnits('Y');      // 'year'\nfrozenMoment.normalizeUnits('year');   // 'year'\nfrozenMoment.normalizeUnits('years');  // 'year'\nfrozenMoment.normalizeUnits('YeARS');  // 'year'\n```\n",
+                "slug": "utilities/normalize-units",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/11-utilities/01-normalize-units.md"
+            },
+            {
+                "title": "Invalid",
+                "version": "2.3.0",
+                "signature": "\nfrozenMoment.invalid(Object);\n",
+                "body": "\n\n\nYou can create your own invalid FrozenMoment objects, which is useful in making your own parser.\n\n```javascript\nvar m = frozenMoment.invalid();\nm.isValid();                      // false\nm.format();                       // 'Invalid date'\nm.parsingFlags().userInvalidated; // true\n```\n\n`invalid` also accepts an object which specifies which parsing flags to set. This will *not* set the `userInvalidated` parsing flag unless it's one of the properties specified.\n\n```javascript\nvar m = frozenMoment.invalid({invalidMonth: 'Actober'});\nm.parsingFlags().invalidMonth; // 'Actober'\n```\n\nYou need not specify parsing flags recognized by FrozenMoment; the FrozenMoment will be invalid nonetheless, and the parsing flags will be returned by `parsingFlags()`.\n",
+                "slug": "utilities/invalid",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/11-utilities/02-invalid.md"
+            }
+        ],
+        "title": "Utilities"
+    },
+    {
+        "slug": "plugins",
+        "items": [
+            {
+                "title": "Plugins",
+                "body": "\n\n\nSome other people have made plugins for Moment.  They will not work without modification, but they are listed below for your reference.\n\nIf you are particularly interested in seeing one of these plugins ported to FrozenMoment, please contact us and/or the original plugin owner.  The porting process should be quite simple in most cases.\n",
+                "slug": "plugins/intro",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/12-plugins/00-intro.md"
+            },
+            {
+                "title": "Strftime",
+                "signature": "\nnpm install moment-strftime\n",
+                "body": "\n\n\nIf you are more comfortable working with strftime instead of LDML-like parsing tokens, you can use Ben Oakes' plugin `moment-strftime`.\n\nThe repository is located at [github.com/benjaminoakes/moment-strftime](https://github.com/benjaminoakes/moment-strftime)\n",
+                "slug": "plugins/strftime",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/12-plugins/01-strftime.md"
+            },
+            {
+                "title": "ISO Calendar",
+                "signature": "\nnpm install moment-isocalendar\n",
+                "body": "\n\n\nIf you are looking for a Python-like isocalendar method, you can use Rocky Meza's plugin\n\n`moment-isocalendar`\n\nCalling the isocalendar method on a moment will return an array like the following:\n\n`[year, week_of_year, day_of_week, minutes_since_midnight]`\n\n\n```javascript\nmoment().isocalendar(); // [2012, 8, 5, 870]\n```\n\nYou can also reconstruct a moment from a isocalendar array.\n\n```javascript\nmoment.fromIsocalendar([2011, 51, 5, 870]).format('LLLL');\n// \"Friday, December 23 2011 2:30 PM\"\n```\n\nThe repository is located at [github.com/fusionbox/moment-isocalendar](https://github.com/fusionbox/moment-isocalendar)\n",
+                "slug": "plugins/isocalendar",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/12-plugins/02-isocalendar.md"
+            },
+            {
+                "title": "Date Ranges",
+                "signature": "\nnpm install moment-range\n",
+                "body": "\n\n\nIf you need to work with date ranges, you can use Gianni Chiappetta's plugin `moment-range`.\n\nDocumentation can be found on the homepage [gf3.github.com/moment-range](http://gf3.github.com/moment-range/).\n\nAnd it is also available for the web at the repository below.\n\nThe repository is located at [github.com/gf3/moment-range](https://github.com/gf3/moment-range)\n",
+                "slug": "plugins/range",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/12-plugins/03-range.md"
+            },
+            {
+                "title": "Twix",
+                "signature": "\nnpm install twix\n",
+                "body": "\n\n\nAnother range plugin is Isaac Cambron's library `Twix`. It has many\nrange-related features and excels at formatting ranges readably. For example,\n\n```javascript\nvar t = moment(\"1/25/1982 9:30 AM\").twix(\"1/25/1982 1:30 PM\");\nt.isCurrent(); // false\nt.count('minutes'); // 241\nt.format();  // 'Jan 25, 1982, 9:30 AM - 1:30 PM'\nt.simpleFormat(\"h:m\"); // '9:30 - 1:30'\n```\n\nFull documentation of all the options and features is [here](http://icambron.github.io/twix.js).\n\nIt's available on npm like so:\n\n```\nnpm install twix\n```\n\nOr just grab the JS file from [here](https://raw.github.com/icambron/twix.js/master/bin/twix.js).\n",
+                "slug": "plugins/twix",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/12-plugins/04-twix.md"
+            },
+            {
+                "title": "Twitter",
+                "body": "\n\n\nIf you're trying to format times for tweets like the way Twitter does, you can use the [moment.twitter](https://github.com/hijonathan/moment.twitter) plugin by [@hijonathan](https://github.com/hijonathan).\n\nIt's a simple way to display both short and long versions of human-readable timestamps.\n\n```javascript\nmoment().subtract('hours', 5).twitter();\n// 5 hours\n```\n\nYes, it does smart pluralization.\n\n```javascript\nmoment().subtract('hour', 1).twitter();\n// 1 hour\n```\n\nNot short enough for you?\n\n```javascript\nmoment().subtract('days', 6).twitterShort();\n// 6d\n```\n",
+                "slug": "plugins/twitter",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/12-plugins/05-twitter.md"
+            },
+            {
+                "title": "Jalaali Calendar",
+                "signature": "\nnpm install moment-jalaali\n",
+                "body": "\n\n\nIf you want to work with Jalaali calendar system (Jalali, Persian, Khorshidi or Shamsi), you can use Behrang Noruzi Niya's plugin `moment-jalaali`.\n\nWhen installed, it will wrap `moment` and moment will be able to format and parse Jalaali years and months. Here is a short example:\n\n```js\nvar m = moment('1360/5/26', 'jYYYY/jM/jD'); // Parse a Jalaali date.\nm.format('jYYYY/jM/jD [is] YYYY/M/D'); // 1360/5/26 is 1981/8/17\n```\n\nThe repository is located at [github.com/behrang/moment-jalaali](https://github.com/behrang/moment-jalaali).\n",
+                "slug": "plugins/jalaali",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/12-plugins/06-jalaali.md"
+            },
+            {
+                "title": "MSDate",
+                "body": "\n\n\nIf you are using OLE Automation dates in .NET check out Markit On Demand's `moment-msdate`. Using this plugin allows you to format OA dates into JavaScript dates and vice-versa.\n\nConvert a `moment` to an OA date:\n\n```javascript\nmoment().toOADate(); // a floating point number\n```\n\nOr, convert an OA date to a `moment`:\n\n```javascript\nmoment.fromOADate(41493); // Wed Aug 07 2013 00:00:00 GMT-0600 (MDT)\n```\n\nMore information and detailed docs can be found on GitHub at [http://markitondemand.github.io/moment-msdate/](http://markitondemand.github.io/moment-msdate/).\n",
+                "slug": "plugins/msdate",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/12-plugins/07-msdate.md"
+            },
+            {
+                "title": "Fiscal Quarters",
+                "body": "\n\n\nIf you ever have need for [Fiscal](http://en.wikipedia.org/wiki/Fiscal_year), Calendar or Academic quarters, you can use the [moment-fquarter](https://github.com/robgallen/moment-fquarter) plugin by [@robgallen](https://github.com/robgallen).\n\nAt it's simplest, just call the fquarter method on any moment object. It returns a formatted string with April being the first quarter.\n\n```javascript\nmoment(\"2013-01-01\").fquarter();\n// Q4 2012/13\n```\n\nYou can pass in any month as the starting quarter, e.g. July\n\n```javascript\nmoment(\"2013-01-01\").fquarter(7);\n// Q3 2012/13\n```\n\nIf you want calendar quarters, start in January\n\n```javascript\nmoment(\"2013-01-01\").fquarter(1);\n// Q1 2013\n```\n",
+                "slug": "plugins/fquarter",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/12-plugins/08-fquarter.md"
+            },
+            {
+                "title": "Precise Range",
+                "body": "\n\n\nThe [Precise Range](http://codebox.org.uk/pages/moment-date-range-plugin) plugin, written by [Rob Dawson](https://github.com/codebox), can be used to display exact, human-readable representations of date/time ranges\n\n```javascript\nmoment(\"2014-01-01 12:00:00\").preciseDiff(\"2015-03-04 16:05:06\");\n // 1 year 2 months 3 days 4 hours 5 minutes 6 seconds\n```\n\n```javascript\nmoment.preciseDiff(\"2014-01-01 12:00:00\", \"2014-04-20 12:00:00\");\n// 3 months 19 days\n```\n",
+                "slug": "plugins/preciserange",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/12-plugins/09-preciserange.md"
+            },
+            {
+                "title": "Recur",
+                "signature": "\nnpm install moment-recur\n",
+                "body": "\n\n\nIf you need to work with recurring dates, you can use Casey Trimm's plugin `moment-recur`.\n\nThis plugin will allow you to create length-based intervals (days, weeks, etc.) and calendar-based intervals (daysOfMonth, monthsOfYear, etc.). \n\nIt provides a `matches` function to test whether a date recurs according to the rules set, as well as generator functions to get the next and previous dates in a series.\n\nThe repository, documentation, and many more examples can be found at [github.com/c-trimm/moment-recur](https://github.com/c-trimm/moment-recur)\n\n```js\nvar interval = moment( \"01/01/2014\" ).recur().every(2).days(); // Length Interval\ninterval.matches( \"01/03/2014\" ); // true\ninterval.next( 2, \"L\" ); // [\"01/03/2014\", \"01/05/2014\"]\ninterval.forget( \"days\" ); // Remove a rule\ninterval.dayOfMonth( 10 ); // Calendar Interval\ninterval.matches( \"05/10/2014\" ); // true\ninterval.previous( 2, \"L\" ); // [\"12/10/2013\", \"11/10/2013\"]\n```",
+                "slug": "plugins/recur",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/12-plugins/10-recur.md"
+            },
+            {
+                "title": "Parse Date Format",
+                "signature": "\nnpm install moment-parseformat\n",
+                "body": "\n\n\nThis plugin extracts the format of a date/time string. \n\n```javascript\nvar format = moment.parseFormat('Thursday, February 6th, 2014 9:20pm');\n// dddd, MMMM Do, YYYY h:mma\nmoment().format(format); // format\n```\n\nThat allows to create smart date inputs that let your users set a\nDate/Time and lets you extract the user's preferred format for future usage.\nFind an example usage of it at [minutes.io](https://minutes.io/new/Meeting).\n\nThe Plugin has been authored by [@gr2m](https://github.com/gr2m).\nLinks: [Demo](http://gr2m.github.io/moment.parseFormat/) |\n[Source](https://github.com/gr2m/moment.parseFormat)",
+                "slug": "plugins/parseformat",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/12-plugins/11-parseformat.md"
+            },
+            {
+                "title": "Java DateFormat Parser",
+                "signature": "\nnpm install moment-jdateformatparser\n",
+                "body": "\n\n\nIf you want to work with the `java.text.DateFormat` you can use this plugin. \n\n\nFor example,\n\n```javascript\nmoment(\"2013-12-24 14:30\").formatWithJavaDateFormat(\"dd.MM.yyyy\");  // returns the formatted date \"24.12.2013\"\nmoment().toJavaDateFormatString(\"DD.MM.YYYY\");  // returns the Java format pattern \"dd.MM.yyyy\"\n```\n\nIt's available on npm like so:\n\n```\nnpm install moment-jdateformatparser\n```\n\nThe repository is located at [github.com/MadMG/moment-jdateformatparser](https://github.com/MadMG/moment-jdateformatparser)",
+                "slug": "plugins/jdateformatparser",
+                "edit": "https://github.com/WhoopInc/frozen-moment/blob/docs/docs/moment/12-plugins/12-jdateformatparser.md"
+            }
+        ],
+        "title": "Plugins"
+    }
+]
