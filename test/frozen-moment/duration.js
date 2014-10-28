@@ -636,7 +636,7 @@ exports.duration = {
     },
 
     "JSON.stringify duration" : function (test) {
-        var d = moment.duration(1024, 'h');
+        var d = frozenMoment.duration(1024, 'h');
 
         test.expect(1);
         test.equal(JSON.stringify(d), '"' + d.toISOString() + '"', "JSON.stringify on duration should return ISO string");
