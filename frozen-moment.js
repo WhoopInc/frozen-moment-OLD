@@ -2930,7 +2930,7 @@
         }
     });
 
-    moment.duration.fn.toString = moment.duration.fn.toISOString;
+    frozenMoment.duration.fn.toString = frozenMoment.duration.fn.toISOString;
 
     function makeDurationGetter(name) {
         frozenMoment.duration.fn[name] = function () {

@@ -377,12 +377,12 @@ exports.duration = {
 
     'toString acts as toISOString' : function (test) {
         test.expect(6);
-        test.equal(moment.duration({y: 1, M: 2, d: 3, h: 4, m: 5, s: 6}).toString(), 'P1Y2M3DT4H5M6S', 'all fields');
-        test.equal(moment.duration({M: -1}).toString(), '-P1M', 'one month ago');
-        test.equal(moment.duration({m: -1}).toString(), '-PT1M', 'one minute ago');
-        test.equal(moment.duration({s: -0.5}).toString(), '-PT0.5S', 'one half second ago');
-        test.equal(moment.duration({y: -0.5, M: 1}).toString(), '-P5M', 'a month after half a year ago');
-        test.equal(moment.duration({}).toString(), 'P0D', 'zero duration');
+        test.equal(frozenMoment.duration({y: 1, M: 2, d: 3, h: 4, m: 5, s: 6}).toString(), 'P1Y2M3DT4H5M6S', 'all fields');
+        test.equal(frozenMoment.duration({M: -1}).toString(), '-P1M', 'one month ago');
+        test.equal(frozenMoment.duration({m: -1}).toString(), '-PT1M', 'one minute ago');
+        test.equal(frozenMoment.duration({s: -0.5}).toString(), '-PT0.5S', 'one half second ago');
+        test.equal(frozenMoment.duration({y: -0.5, M: 1}).toString(), '-P5M', 'a month after half a year ago');
+        test.equal(frozenMoment.duration({}).toString(), 'P0D', 'zero duration');
         test.done();
     },
 
