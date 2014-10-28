@@ -2605,32 +2605,29 @@
         },
 
         isAfter: function (input, units) {
-            units = normalizeUnits(typeof units !== 'undefined' ? units : 'millisecond');
+            units = normalizeUnits(units || 'millisecond');
             if (units === 'millisecond') {
-                input = moment.isMoment(input) ? input : moment(input);
-                return +this > +input;
+                return +this > +frozenMoment(input);
             } else {
-                return +this.startOf(units) > +moment(input).startOf(units);
+                return +this.thaw().startOf(units).freeze() > +momentBuilder(input).startOf(units).freeze();
             }
         },
 
         isBefore: function (input, units) {
-            units = normalizeUnits(typeof units !== 'undefined' ? units : 'millisecond');
+            units = normalizeUnits(units || 'millisecond');
             if (units === 'millisecond') {
-                input = moment.isMoment(input) ? input : moment(input);
-                return +this < +input;
+                return +this < +frozenMoment(input);
             } else {
-                return +this.startOf(units) < +moment(input).startOf(units);
+                return +this.thaw().startOf(units).freeze() < +momentBuilder(input).startOf(units).freeze();
             }
         },
 
         isSame: function (input, units) {
             units = normalizeUnits(units || 'millisecond');
             if (units === 'millisecond') {
-                input = moment.isMoment(input) ? input : moment(input);
-                return +this === +input;
+                return +this === +frozenMoment(input);
             } else {
-                return +this.startOf(units) === +makeAs(input, this).startOf(units);
+                return +this.thaw().startOf(units).freeze() === +makeAsBuilder(input, this).startOf(units).freeze();
             }
         },
 
