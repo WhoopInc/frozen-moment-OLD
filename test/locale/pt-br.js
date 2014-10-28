@@ -318,8 +318,8 @@ exports['locale:pt-br'] = {
     'lenient ordinal parsing' : function (test) {
         var i, ordinalStr, testMoment;
         for (i = 1; i <= 31; ++i) {
-            ordinalStr = moment([2014, 0, i]).format('YYYY MM Do');
-            testMoment = moment(ordinalStr, 'YYYY MM Do');
+            ordinalStr = frozenMoment([2014, 0, i]).format('YYYY MM Do');
+            testMoment = frozenMoment(ordinalStr, 'YYYY MM Do');
             test.equal(testMoment.year(), 2014,
                     'lenient ordinal parsing ' + i + ' year check');
             test.equal(testMoment.month(), 0,
@@ -333,7 +333,7 @@ exports['locale:pt-br'] = {
     'lenient ordinal parsing of number' : function (test) {
         var i, testMoment;
         for (i = 1; i <= 31; ++i) {
-            testMoment = moment('2014 01 ' + i, 'YYYY MM Do');
+            testMoment = frozenMoment('2014 01 ' + i, 'YYYY MM Do');
             test.equal(testMoment.year(), 2014,
                     'lenient ordinal parsing of number ' + i + ' year check');
             test.equal(testMoment.month(), 0,
@@ -347,8 +347,8 @@ exports['locale:pt-br'] = {
     'strict ordinal parsing' : function (test) {
         var i, ordinalStr, testMoment;
         for (i = 1; i <= 31; ++i) {
-            ordinalStr = moment([2014, 0, i]).format('YYYY MM Do');
-            testMoment = moment(ordinalStr, 'YYYY MM Do', true);
+            ordinalStr = frozenMoment([2014, 0, i]).format('YYYY MM Do');
+            testMoment = frozenMoment(ordinalStr, 'YYYY MM Do', true);
             test.ok(testMoment.isValid(), 'strict ordinal parsing ' + i);
         }
         test.done();

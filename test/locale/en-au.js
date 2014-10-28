@@ -321,8 +321,8 @@ exports['locale:en-au'] = {
     'lenient ordinal parsing' : function (test) {
         var i, ordinalStr, testStr;
         for (i = 1; i <= 31; ++i) {
-            ordinalStr = moment([2014, 0, i]).format('YYYY MM Do');
-            testStr = moment(ordinalStr, 'YYYY MM Do').format('YYYY MM D');
+            ordinalStr = frozenMoment([2014, 0, i]).format('YYYY MM Do');
+            testStr = frozenMoment(ordinalStr, 'YYYY MM Do').format('YYYY MM D');
             test.equal(testStr, '2014 01 ' + i, 'lenient ordinal parsing ' + i);
         }
         test.done();
@@ -331,7 +331,7 @@ exports['locale:en-au'] = {
     'lenient ordinal parsing of number' : function (test) {
         var i, testStr;
         for (i = 1; i <= 31; ++i) {
-            testStr = moment('2014 01 ' + i, 'YYYY MM Do').format('YYYY MM D');
+            testStr = frozenMoment('2014 01 ' + i, 'YYYY MM Do').format('YYYY MM D');
             test.equal(testStr, '2014 01 ' + i,
                     'lenient ordinal parsing of number ' + i);
         }
@@ -341,8 +341,8 @@ exports['locale:en-au'] = {
     'strict ordinal parsing' : function (test) {
         var i, ordinalStr, testMoment;
         for (i = 1; i <= 31; ++i) {
-            ordinalStr = moment([2014, 0, i]).format('YYYY MMM Do');
-            testMoment = moment(ordinalStr, 'YYYY MMM Do', true);
+            ordinalStr = frozenMoment([2014, 0, i]).format('YYYY MMM Do');
+            testMoment = frozenMoment(ordinalStr, 'YYYY MMM Do', true);
             test.ok(testMoment.isValid(), 'strict ordinal parsing ' + i);
         }
         test.done();
