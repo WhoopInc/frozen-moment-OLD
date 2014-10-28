@@ -59,8 +59,9 @@ exports.create = {
                 [{year: 2010, month: 1, day: 14, hour: 15, minute: 25, second: 50, millisecond: 125}, '2010-02-14 15:25:50.125'],
                 [{y: 2010, M: 1, d: 14, h: 15, m: 25, s: 50, ms: 125}, '2010-02-14 15:25:50.125']
             ], i;
+        test.expect(13);
         for (i = 0; i < tests.length; ++i) {
-            test.equal(moment(tests[i][0]).format(fmt), tests[i][1]);
+            test.equal(frozenMoment(tests[i][0]).format(fmt), tests[i][1]);
         }
         test.done();
     },
