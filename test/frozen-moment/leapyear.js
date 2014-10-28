@@ -1,14 +1,14 @@
-var frozenMoment = require("../../frozen-moment");
+var frozenMoment = require('../../frozen-moment');
 
 exports.leapyear = {
     setUp : function (done) {
         frozenMoment.createFromInputFallback = function () {
-            throw new Error("input not handled by frozenMoment");
+            throw new Error('input not handled by frozenMoment');
         };
         done();
     },
 
-    "leap year" : function (test) {
+    'leap year' : function (test) {
         test.expect(4);
 
         test.equal(frozenMoment([2010, 0, 1]).isLeapYear(), false, '2010');

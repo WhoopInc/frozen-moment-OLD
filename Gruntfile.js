@@ -121,52 +121,52 @@ module.exports = function (grunt) {
             }
         },
         nodeunit : {
-            all : ["test/frozen-moment/**/*.js", "test/locale/**/*.js"],
-            core : ["test/frozen-moment/**/*.js"]
+            all : ['test/frozen-moment/**/*.js', 'test/locale/**/*.js'],
+            core : ['test/frozen-moment/**/*.js']
         },
         jshint: {
             all: [
-                "Gruntfile.js", "frozen-moment.js", "locale/**/*.js", "test/**/*.js",
-                "!test/browser*.js"
+                'Gruntfile.js', 'frozen-moment.js', 'locale/**/*.js', 'test/**/*.js',
+                '!test/browser*.js'
             ],
             options: {
-                "node"     : true,
-                "browser"  : true,
-                "boss"     : false,
-                "curly"    : true,
-                "debug"    : false,
-                "devel"    : false,
-                "eqeqeq"   : true,
-                "eqnull"   : true,
-                "evil"     : false,
-                "forin"    : false,
-                "immed"    : false,
-                "laxbreak" : false,
-                "newcap"   : true,
-                "noarg"    : true,
-                "noempty"  : false,
-                "nonew"    : false,
-                "onevar"   : true,
-                "plusplus" : false,
-                "regexp"   : false,
-                "undef"    : true,
-                "sub"      : true,
-                "strict"   : false,
-                "white"    : true,
-                "es3"      : true,
-                "camelcase" : true,
-                "globals": {
-                    "define": false
+                'node'     : true,
+                'browser'  : true,
+                'boss'     : false,
+                'curly'    : true,
+                'debug'    : false,
+                'devel'    : false,
+                'eqeqeq'   : true,
+                'eqnull'   : true,
+                'evil'     : false,
+                'forin'    : false,
+                'immed'    : false,
+                'laxbreak' : false,
+                'newcap'   : true,
+                'noarg'    : true,
+                'noempty'  : false,
+                'nonew'    : false,
+                'onevar'   : true,
+                'plusplus' : false,
+                'regexp'   : false,
+                'undef'    : true,
+                'sub'      : true,
+                'strict'   : false,
+                'white'    : true,
+                'es3'      : true,
+                'camelcase' : true,
+                'globals': {
+                    'define': false
                 }
             }
         },
         jscs: {
             all: [
-                "Gruntfile.js", "frozen-moment.js", "locale/**/*.js",
-                "test/**/*.js", "!test/browser*.js"
+                'Gruntfile.js', 'frozen-moment.js', 'locale/**/*.js',
+                'test/**/*.js', '!test/browser*.js'
             ],
             options: {
-                config: ".jscs.json"
+                config: '.jscs.json'
             }
         },
         watch : {
@@ -195,7 +195,7 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.loadTasks("tasks");
+    grunt.loadTasks('tasks');
 
     // These plugins provide necessary tasks.
     require('load-grunt-tasks')(grunt);

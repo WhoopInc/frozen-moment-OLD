@@ -1,14 +1,14 @@
-var frozenMoment = require("../../frozen-moment");
+var frozenMoment = require('../../frozen-moment');
 
 exports.stringPrototype = {
     setUp : function (done) {
         frozenMoment.createFromInputFallback = function () {
-            throw new Error("input not handled by frozenMoment");
+            throw new Error('input not handled by frozenMoment');
         };
         done();
     },
 
-    "string prototype overrides call" : function (test) {
+    'string prototype overrides call' : function (test) {
         test.expect(1);
 
         frozenMoment.locale('en');

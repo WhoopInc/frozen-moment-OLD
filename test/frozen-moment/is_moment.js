@@ -3,12 +3,12 @@ var frozenMoment = require('../../frozen-moment');
 exports.isMoment = {
     setUp : function (done) {
         frozenMoment.createFromInputFallback = function () {
-            throw new Error("input not handled by frozenMoment");
+            throw new Error('input not handled by frozenMoment');
         };
         done();
     },
 
-    "is frozenMoment object": function (test) {
+    'is frozenMoment object': function (test) {
         test.expect(13);
 
         var MyObj = function () {},

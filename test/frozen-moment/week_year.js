@@ -1,14 +1,14 @@
-var frozenMoment = require("../../frozen-moment");
+var frozenMoment = require('../../frozen-moment');
 
 exports.weekYear = {
     setUp : function (done) {
         frozenMoment.createFromInputFallback = function () {
-            throw new Error("input not handled by frozenMoment");
+            throw new Error('input not handled by frozenMoment');
         };
         done();
     },
 
-    "iso week year": function (test) {
+    'iso week year': function (test) {
         test.expect(19);
 
         // Some examples taken from http://en.wikipedia.org/wiki/ISO_week
@@ -35,7 +35,7 @@ exports.weekYear = {
         test.done();
     },
 
-    "week year": function (test) {
+    'week year': function (test) {
         test.expect(31);
 
         // Some examples taken from http://en.wikipedia.org/wiki/ISO_week

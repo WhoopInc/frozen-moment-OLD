@@ -1,14 +1,14 @@
-var frozenMoment = require("../../frozen-moment");
+var frozenMoment = require('../../frozen-moment');
 
 exports.invalid = {
     setUp : function (done) {
         frozenMoment.createFromInputFallback = function () {
-            throw new Error("input not handled by frozenMoment");
+            throw new Error('input not handled by frozenMoment');
         };
         done();
     },
 
-    "invalid" : function (test) {
+    'invalid' : function (test) {
         var m = frozenMoment.invalid();
         test.equals(m.isValid(), false);
         test.equals(m.parsingFlags().userInvalidated, true);
@@ -16,7 +16,7 @@ exports.invalid = {
         test.done();
     },
 
-    "invalid with existing flag" : function (test) {
+    'invalid with existing flag' : function (test) {
         var m = frozenMoment.invalid({invalidMonth : 'whatchamacallit'});
         test.equals(m.isValid(), false);
         test.equals(m.parsingFlags().userInvalidated, false);
@@ -25,7 +25,7 @@ exports.invalid = {
         test.done();
     },
 
-    "invalid with custom flag" : function (test) {
+    'invalid with custom flag' : function (test) {
         var m = frozenMoment.invalid({tooBusyWith : 'reiculating splines'});
         test.equals(m.isValid(), false);
         test.equals(m.parsingFlags().userInvalidated, false);

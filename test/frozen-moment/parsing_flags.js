@@ -6,7 +6,7 @@ var frozenMoment = require('../../frozen-moment'),
 exports.parsingFlags = {
     setUp : function (done) {
         frozenMoment.createFromInputFallback = function () {
-            throw new Error("input not handled by frozenMoment");
+            throw new Error('input not handled by frozenMoment');
         };
         done();
     },

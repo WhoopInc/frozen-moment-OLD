@@ -89,7 +89,7 @@
             ['HH', /(T| )\d\d/]
         ],
 
-        // timezone chunker "+10:00" > ["10", "00"] or "-1530" > ["-15", "30"]
+        // timezone chunker '+10:00' > ['10', '00'] or '-1530' > ['-15', '30']
         parseTimezoneChunker = /([\+\-]|\d\d)/gi,
 
         // getter and setter names
@@ -314,7 +314,7 @@
     function printMsg(msg) {
         if (frozenMoment.suppressDeprecationWarnings === false &&
                 typeof console !== 'undefined' && console.warn) {
-            console.warn("Deprecation warning: " + msg);
+            console.warn('Deprecation warning: ' + msg);
         }
     }
 
@@ -1558,7 +1558,7 @@
             config._pf.iso = true;
             for (i = 0, l = isoDates.length; i < l; i++) {
                 if (isoDates[i][1].exec(string)) {
-                    // match[5] should be "T" or undefined
+                    // match[5] should be 'T' or undefined
                     config._f = isoDates[i][0] + (match[6] || ' ');
                     break;
                 }
@@ -1773,7 +1773,7 @@
             return input;
         }
 
-        if (typeof(locale) === "boolean") {
+        if (typeof(locale) === 'boolean') {
             strict = locale;
             locale = undefined;
         }
@@ -1834,7 +1834,7 @@
     frozenMoment.utc = function (input, format, locale, strict) {
         var c;
 
-        if (typeof(locale) === "boolean") {
+        if (typeof(locale) === 'boolean') {
             strict = locale;
             locale = undefined;
         }
@@ -1973,7 +1973,7 @@
     frozenMoment.locale = function (key, values) {
         var data;
         if (key) {
-            if (typeof(values) !== "undefined") {
+            if (typeof(values) !== 'undefined') {
                 data = frozenMoment.defineLocale(key, values);
             }
             else {
@@ -2394,8 +2394,8 @@
             }
         }
 
-        maxDate = daysInMonth(rawGetter(mom, "FullYear"), value);
-        dayOfMonth = Math.min(maxDate, rawGetter(mom, "Date"));
+        maxDate = daysInMonth(rawGetter(mom, 'FullYear'), value);
+        dayOfMonth = Math.min(maxDate, rawGetter(mom, 'Date'));
         mom._d['set' + (mom._isUTC ? 'UTC' : '') + 'Month'](value, dayOfMonth);
         return mom;
     }

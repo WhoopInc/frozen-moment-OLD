@@ -1,14 +1,14 @@
-var frozenMoment = require("../../frozen-moment");
+var frozenMoment = require('../../frozen-moment');
 
 exports.add = {
     setUp : function (done) {
         frozenMoment.createFromInputFallback = function () {
-            throw new Error("input not handled by frozenMoment");
+            throw new Error('input not handled by frozenMoment');
         };
         done();
     },
 
-    "add short args" : function (test) {
+    'add short args' : function (test) {
         test.expect(16);
 
         var a = frozenMoment.build(), b, c, d;
@@ -44,7 +44,7 @@ exports.add = {
         test.done();
     },
 
-    "add long args" : function (test) {
+    'add long args' : function (test) {
         test.expect(9);
 
         var a = frozenMoment.build();
@@ -68,7 +68,7 @@ exports.add = {
         test.done();
     },
 
-    "add long singular args" : function (test) {
+    'add long singular args' : function (test) {
         test.expect(9);
 
         var a = frozenMoment.build();
@@ -92,7 +92,7 @@ exports.add = {
         test.done();
     },
 
-    "add string long singular" : function (test) {
+    'add string long singular' : function (test) {
         test.expect(9);
 
         var a = frozenMoment.build();
@@ -116,7 +116,7 @@ exports.add = {
         test.done();
     },
 
-    "add string long" : function (test) {
+    'add string long' : function (test) {
         test.expect(9);
 
         var a = frozenMoment.build();
@@ -140,7 +140,7 @@ exports.add = {
         test.done();
     },
 
-    "add string short" : function (test) {
+    'add string short' : function (test) {
         test.expect(9);
 
         var a = frozenMoment.build();
@@ -164,7 +164,7 @@ exports.add = {
         test.done();
     },
 
-    "add strings string short" : function (test) {
+    'add strings string short' : function (test) {
         test.expect(9);
 
         var a = frozenMoment.build();
@@ -188,7 +188,7 @@ exports.add = {
         test.done();
     },
 
-    "subtract strings string short" : function (test) {
+    'subtract strings string short' : function (test) {
         test.expect(9);
 
         var a = frozenMoment.build();
@@ -212,7 +212,7 @@ exports.add = {
         test.done();
     },
 
-    "add across DST" : function (test) {
+    'add across DST' : function (test) {
         // Detect Safari bug and bail. Hours on 13th March 2011 are shifted
         // with 1 ahead.
         if (new Date(2011, 2, 13, 5, 0, 0).getHours() !== 5) {

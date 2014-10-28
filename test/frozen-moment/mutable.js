@@ -1,14 +1,14 @@
-var frozenMoment = require("../../frozen-moment");
+var frozenMoment = require('../../frozen-moment');
 
 exports.mutable = {
     setUp : function (done) {
         frozenMoment.createFromInputFallback = function () {
-            throw new Error("input not handled by frozenMoment");
+            throw new Error('input not handled by frozenMoment');
         };
         done();
     },
 
-    "mutation methods" : function (test) {
+    'mutation methods' : function (test) {
         var m = frozenMoment.build();
 
         test.equal(m, m.year(2011), 'year() should be mutable');
@@ -27,9 +27,9 @@ exports.mutable = {
         test.done();
     },
 
-    "non-mutation methods" : function (test) {
+    'non-mutation methods' : function (test) {
         var m = frozenMoment.build();
-        test.notEqual(m, m.clone(), "clone() should not be mutable");
+        test.notEqual(m, m.clone(), 'clone() should not be mutable');
 
         test.done();
     }
