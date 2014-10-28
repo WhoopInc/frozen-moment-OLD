@@ -64,7 +64,7 @@ exports['locale:gl'] = {
                 ['lll',                                '14 Feb. 2010 15:25'],
                 ['llll',                               'Dom. 14 Feb. 2010 15:25']
             ],
-            b = moment(new Date(2010, 1, 14, 15, 25, 50, 125)),
+            b = frozenMoment(new Date(2010, 1, 14, 15, 25, 50, 125)),
             i;
         for (i = 0; i < a.length; i++) {
             test.equal(b.format(a[i][0]), a[i][1], a[i][0] + ' ---> ' + a[i][1]);
