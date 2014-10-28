@@ -428,11 +428,11 @@ exports.endStartOf = {
     },
 
     'endOf millisecond and no-arg' : function (test) {
-        var m = moment();
-        test.equal(+m, +m.clone().endOf(), 'endOf without argument should change time');
-        test.equal(+m, +m.clone().endOf('ms'), 'endOf with ms argument should change time');
-        test.equal(+m, +m.clone().endOf('millisecond'), 'endOf with millisecond argument should change time');
-        test.equal(+m, +m.clone().endOf('milliseconds'), 'endOf with milliseconds argument should change time');
+        var m = frozenMoment();
+        test.equal(+m, +m.thaw().endOf().freeze(), 'endOf without argument should change time');
+        test.equal(+m, +m.thaw().endOf('ms').freeze(), 'endOf with ms argument should change time');
+        test.equal(+m, +m.thaw().endOf('millisecond').freeze(), 'endOf with millisecond argument should change time');
+        test.equal(+m, +m.thaw().endOf('milliseconds').freeze(), 'endOf with milliseconds argument should change time');
         test.done();
     }
 };
