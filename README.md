@@ -1,3 +1,23 @@
+# OLD VERSION — NOT MAINTAINED
+
+**This repository contains the original, abandoned version of Frozen Moment.**
+It works, and it's seen some light real-world use.  Unfortunately, this forked
+version is clunky to use because it only supports mutation via a builder API.
+In addition, even though the locale system should work, this fork provides just
+a single locale (US English), and it has not been tested with other locales.
+
+**Current development is focusing on a rewrite.
+[The current version is WhoopInc/frozen-moment.][frozen-moment]  That new
+repository is architected as a plugin for [Moment](http://momentjs.com/) itself.**
+As a plugin, the new version will easily maintain feature parity with upstream
+Moment, and users can more easily take advantage of the wider Moment ecosystem.
+Again, you should really check out [the new Frozen Moment plugin][frozen-moment]
+instead of using this repository's code if at all possible.
+
+[frozen-moment]: https://github.com/WhoopInc/frozen-moment
+
+Here is the unmodified README for this old, unmaintained version of Frozen Moment:
+
 # frozen-moment
 
 <!--[![NPM version][npm-version-image]][npm-url] [![NPM downloads][npm-downloads-image]][npm-url]-->
@@ -8,7 +28,7 @@
 
 A lightweight javascript date library for parsing, validating, manipulating, and formatting dates.
 
-This is a recent fork of [Moment.js](https://github.com/moment/moment).  Whereas Moment provides a mutable wrapper over the native JavaScript Date API, this project seeks to provide an immutable API for working with moments in time that can be created with a chainable builder API.  We aim to maintain general feature parity with the upstream Moment API.
+This is a 2014 fork of [Moment.js](https://github.com/moment/moment).  Whereas Moment provides a mutable wrapper over the native JavaScript Date API, this project seeks to provide an immutable API for working with moments in time that can be created with a chainable builder API.  We aim to maintain general feature parity with the upstream Moment API.
 
 ## [Documentation](http://whoopinc.github.io/frozen-moment/docs/)
 
